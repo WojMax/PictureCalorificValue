@@ -1,4 +1,9 @@
-import { FontAwesome } from "@expo/vector-icons";
+import {
+  FontAwesome,
+  FontAwesome5,
+  MaterialCommunityIcons,
+  MaterialIcons,
+} from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
   NavigationContainer,
@@ -11,10 +16,11 @@ import { ColorSchemeName, Pressable } from "react-native";
 
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
-import ModalScreen from "../screens/ModalScreen";
+import SettingsScreen from "../screens/SettingsScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
-import TabOneScreen from "../screens/TabOneScreen";
-import TabTwoScreen from "../screens/TabTwoScreen";
+import HomeScreen from "../screens/HomeScreen";
+import FavoritesScreen from "../screens/FavoritesScreen";
+import ProfileScreen from "../screens/ProfileScreen";
 import {
   RootStackParamList,
   RootTabParamList,
@@ -53,7 +59,7 @@ function RootNavigator() {
         options={{ title: "Oops!" }}
       />
       <Stack.Group screenOptions={{ presentation: "modal" }}>
-        <Stack.Screen name="Modal" component={ModalScreen} />
+        <Stack.Screen name="Settings" component={SettingsScreen} />
       </Stack.Group>
     </Stack.Navigator>
   );
@@ -66,52 +72,70 @@ function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="TabOne"
+      initialRouteName="Home"
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint,
       }}
     >
       <BottomTab.Screen
-        name="TabOne"
-        component={TabOneScreen}
-        options={({ navigation }: RootTabScreenProps<"TabOne">) => ({
-          title: "Tab One",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+        name="Home"
+        component={HomeScreen}
+        options={{
+          title: "Home",
+          headerShown: false,
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons
+              name="silverware-fork-knife"
+              size={20}
+              color={color}
+            />
+          ),
+          tabBarItemStyle: {
+            marginBottom: 3,
+          },
+        }}
+      />
+      <BottomTab.Screen
+        name="Favorites"
+        component={FavoritesScreen}
+        options={{
+          title: "Favorites",
+          tabBarIcon: ({ color }) => (
+            <MaterialIcons name="favorite" size={22} color={color} />
+          ),
+          tabBarItemStyle: {
+            marginBottom: 3,
+          },
+        }}
+      />
+      <BottomTab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={({ navigation }: RootTabScreenProps<"Profile">) => ({
+          title: "Profile",
+          tabBarIcon: ({ color }) => (
+            <FontAwesome5 name="user-alt" size={20} color={color} />
+          ),
+          tabBarItemStyle: {
+            marginBottom: 3,
+          },
           headerRight: () => (
             <Pressable
-              onPress={() => navigation.navigate("Modal")}
+              onPress={() => navigation.navigate("Settings")}
               style={({ pressed }) => ({
                 opacity: pressed ? 0.5 : 1,
               })}
             >
               <FontAwesome
-                name="info-circle"
-                size={25}
+                name="gear"
+                size={22}
                 color={Colors[colorScheme].text}
-                style={{ marginRight: 15 }}
+                style={{ marginRight: 20 }}
               />
             </Pressable>
           ),
         })}
       />
-      <BottomTab.Screen
-        name="TabTwo"
-        component={TabTwoScreen}
-        options={{
-          title: "Tab Two",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
-      />
     </BottomTab.Navigator>
   );
-}
-
-/**
- * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
- */
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>["name"];
-  color: string;
-}) {
-  return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
 }
