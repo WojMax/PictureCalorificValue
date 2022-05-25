@@ -5,7 +5,7 @@ import { Text, View } from "../components/Themed";
 export default function ProfileScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Favorites</Text>
+      <Text style={styles.title}>Profile</Text>
     </View>
   );
 }

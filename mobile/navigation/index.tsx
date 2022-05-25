@@ -128,7 +128,7 @@ function BottomTabNavigator() {
             >
               <FontAwesome
                 name="gear"
-                size={22}
+                size={24}
                 color={Colors[colorScheme].text}
                 style={{ marginRight: 20 }}
               />

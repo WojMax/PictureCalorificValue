@@ -1,19 +1,23 @@
-const tintColorLight = "#2f95dc";
-const tintColorDark = "#fff";
+var colors = {
+  mainAccent: "#4685E7",
+};
 
 export default {
   light: {
     text: "#000",
     background: "#fff",
-    tint: tintColorLight,
+    tint: colors.mainAccent,
     tabIconDefault: "#ccc",
-    tabIconSelected: tintColorLight,
+    tabIconSelected: colors.mainAccent,
   },
   dark: {
     text: "#fff",
     background: "#000",
-    tint: tintColorDark,
+    tint: colors.mainAccent,
     tabIconDefault: "#ccc",
-    tabIconSelected: tintColorDark,
+    tabIconSelected: colors.mainAccent,
+  },
+  general: {
+    button: colors.mainAccent,
   },
 };
