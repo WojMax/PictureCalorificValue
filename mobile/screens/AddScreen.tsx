@@ -1,17 +1,10 @@
 import { StyleSheet } from "react-native";
-
 import { Text, View } from "../components/Themed";
-import { HomeTabScreenProps, RootTabScreenProps } from "../types";
-import ButtonBasic from "../Elements/ButtonBasic";
 
-export default function HomeScreen({ navigation }: HomeTabScreenProps<"Home">) {
+export default function AddScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Home</Text>
-      <ButtonBasic
-        title={"Add product"}
-        onPress={() => navigation.navigate("Add")}
-      />
+      <Text style={styles.title}>Add</Text>
     </View>
   );
 }

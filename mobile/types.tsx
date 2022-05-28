@@ -1,8 +1,3 @@
-/**
- * Learn more about using TypeScript with React Navigation:
- * https://reactnavigation.org/docs/typescript/
- */
-
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import {
   CompositeScreenProps,
@@ -26,13 +21,24 @@ export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
   NativeStackScreenProps<RootStackParamList, Screen>;
 
 export type RootTabParamList = {
-  Home: undefined;
-  Favorites: undefined;
-  Profile: undefined;
+  HomeStack: undefined;
+  FavoritesStack: undefined;
+  ProfileStack: undefined;
 };
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
   CompositeScreenProps<
     BottomTabScreenProps<RootTabParamList, Screen>,
+    NativeStackScreenProps<RootStackParamList>
+  >;
+
+export type HomeTabParamList = {
+  Home: undefined;
+  Add: undefined;
+};
+
+export type HomeTabScreenProps<Screen extends keyof HomeTabParamList> =
+  CompositeScreenProps<
+    BottomTabScreenProps<HomeTabParamList, Screen>,
     NativeStackScreenProps<RootStackParamList>
   >;

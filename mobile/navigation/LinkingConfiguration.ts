@@ -9,25 +9,25 @@ const linking: LinkingOptions<RootStackParamList> = {
     screens: {
       Root: {
         screens: {
-          Home: {
+          HomeStack: {
             screens: {
               HomeScreen: "home",
+              AddScreen: "add",
             },
           },
-          Favorites: {
+          FavoritesStack: {
             screens: {
               FavoritesScreen: "favorites",
             },
           },
-          Profile: {
+          ProfileStack: {
             screens: {
               ProfileScreen: "profile",
+              SettingsScreen: "settings",
             },
           },
         },
       },
-      Settings: "settings",
-      NotFound: "*",
     },
   },
 };
