@@ -24,6 +24,7 @@ import { RootTabParamList } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 import AddFormScreen from "../screens/AddFormScreen";
 import AddScreen from "../screens/AddScreen";
+import CameraScreen from "../screens/CameraScreen";
 
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
@@ -101,6 +102,7 @@ function HomeStackNavigator() {
       />
       <HomeStack.Screen name="Add" component={AddScreen} />
       <HomeStack.Screen name="AddForm" component={AddFormScreen} />
+      <HomeStack.Screen name="Camera" component={CameraScreen} />
     </HomeStack.Navigator>
   );
 }

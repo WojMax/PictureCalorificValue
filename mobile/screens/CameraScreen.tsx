@@ -1,21 +1,11 @@
 import { StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
-import ButtonBasic from "../Elements/ButtonBasic";
-import { HomeTabScreenProps } from "../types";
+import CalorieCamera from "../components/Camera/CalorieCamera";
 
-export default function AddFormScreen({
-  navigation,
-}: HomeTabScreenProps<"Home">) {
+export default function CameraScreen() {
   return (
     <View style={styles.container}>
-      <ButtonBasic
-        title={"Take photo"}
-        onPress={() => navigation.navigate("Camera")}
-      />
-      <ButtonBasic
-        title={"Add meal"}
-        onPress={() => navigation.navigate("AddForm")}
-      />
+      <CalorieCamera />
     </View>
   );
 }

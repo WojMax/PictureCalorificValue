@@ -18,6 +18,6 @@ export default {
     tabIconSelected: colors.mainAccent,
   },
   general: {
-    button: colors.mainAccent,
+    accent: colors.mainAccent,
   },
 };

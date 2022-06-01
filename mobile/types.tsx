@@ -36,6 +36,7 @@ export type HomeTabParamList = {
   Home: undefined;
   Add: undefined;
   AddForm: undefined;
+  Camera: undefined;
 };
 
 export type HomeTabScreenProps<Screen extends keyof HomeTabParamList> =

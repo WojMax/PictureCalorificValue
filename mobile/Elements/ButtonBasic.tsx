@@ -10,7 +10,7 @@ export default function ButtonBasic(props: Props) {
   return (
     <Button
       buttonStyle={{ width: 150 }}
-      color={Colors.general.button}
+      color={Colors.general.accent}
       containerStyle={styles}
       title={props.title}
       onPress={props.onPress}
