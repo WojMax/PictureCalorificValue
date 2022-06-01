@@ -22,6 +22,7 @@ import FavoritesScreen from "../screens/FavoritesScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import { RootTabParamList } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
+import AddFormScreen from "../screens/AddFormScreen";
 import AddScreen from "../screens/AddScreen";
 
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
@@ -99,6 +100,7 @@ function HomeStackNavigator() {
         }}
       />
       <HomeStack.Screen name="Add" component={AddScreen} />
+      <HomeStack.Screen name="AddForm" component={AddFormScreen} />
     </HomeStack.Navigator>
   );
 }

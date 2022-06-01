@@ -35,6 +35,7 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
 export type HomeTabParamList = {
   Home: undefined;
   Add: undefined;
+  AddForm: undefined;
 };
 
 export type HomeTabScreenProps<Screen extends keyof HomeTabParamList> =
