@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
-import ButtonBasic from "../Elements/ButtonBasic";
+import ButtonBasic from "../elements/ButtonBasic";
 import { HomeTabScreenProps } from "../types";
 
 export default function AddFormScreen({

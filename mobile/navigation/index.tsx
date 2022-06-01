@@ -20,71 +20,94 @@ import SettingsScreen from "../screens/SettingsScreen";
 import HomeScreen from "../screens/HomeScreen";
 import FavoritesScreen from "../screens/FavoritesScreen";
 import ProfileScreen from "../screens/ProfileScreen";
-import { RootTabParamList } from "../types";
+import { RootStackParamList, RootTabParamList } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 import AddFormScreen from "../screens/AddFormScreen";
 import AddScreen from "../screens/AddScreen";
 import CameraScreen from "../screens/CameraScreen";
 
-const BottomTab = createBottomTabNavigator<RootTabParamList>();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function Navigation({
   colorScheme,
 }: {
   colorScheme: ColorSchemeName;
 }) {
-  const iconMargin = 3;
   return (
     <NavigationContainer
       linking={LinkingConfiguration}
       theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
     >
-      <BottomTab.Navigator screenOptions={{ headerShown: false }}>
-        <BottomTab.Screen
-          name="HomeStack"
-          component={HomeStackNavigator}
-          options={{
-            title: "Home",
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons
-                name="silverware-fork-knife"
-                size={size - 3}
-                color={color}
-              />
-            ),
-            tabBarItemStyle: {
-              marginBottom: iconMargin,
-            },
-          }}
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Root"
+          component={BottomTabNavigator}
+          options={{ headerShown: false }}
         />
-        <BottomTab.Screen
-          name="FavoritesStack"
-          component={FavoritesStackNavigator}
-          options={{
-            title: "Favorites",
-            tabBarIcon: ({ color, size }) => (
-              <MaterialIcons name="favorite" size={size - 3} color={color} />
-            ),
-            tabBarItemStyle: {
-              marginBottom: iconMargin,
-            },
-          }}
-        />
-        <BottomTab.Screen
-          name="ProfileStack"
-          component={ProfileStackNavigator}
-          options={{
-            title: "Profile",
-            tabBarIcon: ({ color, size }) => (
-              <FontAwesome5 name="user-alt" size={size - 3} color={color} />
-            ),
-            tabBarItemStyle: {
-              marginBottom: iconMargin,
-            },
-          }}
-        />
-      </BottomTab.Navigator>
+        <Stack.Screen name="Camera" component={CameraScreen} />
+      </Stack.Navigator>
     </NavigationContainer>
+  );
+}
+
+const BottomTab = createBottomTabNavigator<RootTabParamList>();
+
+function BottomTabNavigator() {
+  const colorScheme = useColorScheme();
+  const iconMargin = 3;
+
+  return (
+    <BottomTab.Navigator
+      initialRouteName="HomeStack"
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: Colors[colorScheme].accent,
+      }}
+    >
+      <BottomTab.Screen
+        name="HomeStack"
+        component={HomeStackNavigator}
+        options={{
+          title: "Home",
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons
+              name="silverware-fork-knife"
+              size={size - 3}
+              color={color}
+            />
+          ),
+          tabBarItemStyle: {
+            marginBottom: iconMargin,
+          },
+        }}
+      />
+      <BottomTab.Screen
+        name="FavoritesStack"
+        component={FavoritesStackNavigator}
+        options={{
+          title: "Favorites",
+          tabBarIcon: ({ color, size }) => (
+            <MaterialIcons name="favorite" size={size - 3} color={color} />
+          ),
+          tabBarItemStyle: {
+            marginBottom: iconMargin,
+          },
+        }}
+      />
+      <BottomTab.Screen
+        name="ProfileStack"
+        component={ProfileStackNavigator}
+        options={{
+          title: "Profile",
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome5 name="user-alt" size={size - 3} color={color} />
+          ),
+          tabBarItemStyle: {
+            marginBottom: iconMargin,
+          },
+        }}
+      />
+    </BottomTab.Navigator>
   );
 }
 
@@ -102,7 +125,6 @@ function HomeStackNavigator() {
       />
       <HomeStack.Screen name="Add" component={AddScreen} />
       <HomeStack.Screen name="AddForm" component={AddFormScreen} />
-      <HomeStack.Screen name="Camera" component={CameraScreen} />
     </HomeStack.Navigator>
   );
 }

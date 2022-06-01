@@ -12,8 +12,8 @@ const linking: LinkingOptions<RootStackParamList> = {
           HomeStack: {
             screens: {
               HomeScreen: "home",
-              Add: "add",
-              AddScreen: "addForm",
+              AddForm: "addForm",
+              AddScreen: "add",
             },
           },
           FavoritesStack: {
@@ -29,6 +29,7 @@ const linking: LinkingOptions<RootStackParamList> = {
           },
         },
       },
+      Camera: "camera",
     },
   },
 };
