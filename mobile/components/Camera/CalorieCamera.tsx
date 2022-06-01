@@ -1,18 +1,26 @@
 import React, { useState, useEffect } from "react";
+import { Text, View } from "../../components/Themed";
 import {
-  Text,
-  View,
-  TouchableOpacity,
   Dimensions,
   Platform,
+  ImageBackground,
+  SafeAreaView,
+  TouchableOpacity,
 } from "react-native";
 import { Camera } from "expo-camera";
 import { styles } from "./style.camera";
+import { MaterialIcons } from "@expo/vector-icons";
+
+type Photo = {
+  uri: string;
+  height: number;
+  width: number;
+};
 
 export default function CalorieCamera() {
   //permissions
   const [hasPermission, setHasPermission] = useState(false);
-  const [camera, setCamera] = useState(null);
+  const [camera, setCamera] = useState();
 
   //screen ratio and padding
   const [imagePadding, setImagePadding] = useState(0);
@@ -20,6 +28,10 @@ export default function CalorieCamera() {
   const { height, width } = Dimensions.get("window");
   const screenRatio = height / width;
   const [isRatioSet, setIsRatioSet] = useState(false);
+
+  const [type, setType] = useState(Camera.Constants.Type.back);
+  const [showPreview, setShowPreview] = useState(false);
+  const [photo, setPhoto] = useState<Photo>();
 
   const getSize = () => {
     return {
@@ -71,24 +83,59 @@ export default function CalorieCamera() {
     }
   };
 
+  const takePhoto = async () => {
+    // @ts-ignore
+    const photo = await camera.takePictureAsync();
+    setPhoto(photo);
+  };
+
   if (hasPermission == null) {
+    return <View />;
+  } else if (!hasPermission) {
     return <Text>No access to camera</Text>;
+  } else {
+    return (
+      <SafeAreaView style={styles.container}>
+        <Camera
+          onCameraReady={setCameraReady}
+          ratio={ratio}
+          type={type}
+          ref={(ref: any) => {
+            setCamera(ref);
+          }}
+          style={styles.container}
+        >
+          <View style={styles.container}>
+            <View style={styles.topContainer} />
+            <View style={styles.bottomContainer}>
+              <View style={styles.buttonContainer}>
+                <View style={styles.button}>
+                  <TouchableOpacity>
+                    <MaterialIcons
+                      name="flip-camera-android"
+                      size={28}
+                      color="white"
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  style={styles.takePhotoButton}
+                  onPress={takePhoto}
+                />
+              </View>
+              <View style={styles.buttonContainer}>
+                <View style={styles.button}>
+                  <TouchableOpacity>
+                    <MaterialIcons name="flash-on" size={28} color="white" />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </View>
+        </Camera>
+      </SafeAreaView>
+    );
   }
-  if (!hasPermission) {
-    return <Text>No access to camera</Text>;
-  }
-  return (
-    <View>
-      <Camera
-        onCameraReady={setCameraReady}
-        ratio={ratio}
-        type={Camera.Constants.Type.back}
-        ref={(ref: any) => {
-          setCamera(ref);
-        }}
-      >
-        <View style={getSize()} />
-      </Camera>
-    </View>
-  );
 }

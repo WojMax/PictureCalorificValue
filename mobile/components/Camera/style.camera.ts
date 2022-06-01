@@ -1,19 +1,43 @@
 import { StyleSheet } from "react-native";
-import { Dimensions } from "react-native";
-const width = Dimensions.get("window").width; //full width
-const height = Dimensions.get("window").height; //full height
+import Colors from "../../constants/Colors";
 
 export const styles = StyleSheet.create({
-  information: {
-    flex: 1,
-    height: height,
-  },
   container: {
-    flex: 1,
-    alignSelf: "stretch",
-    textAlign: "center",
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "transparent",
   },
-  cameraPreview: {
-    flex: 1,
+  topContainer: {
+    flex: 5,
+    backgroundColor: "transparent",
+  },
+  bottomContainer: {
+    flex: 2,
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    backgroundColor: "transparent",
+  },
+  buttonContainer: {
+    flex: 0,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "transparent",
+  },
+  takePhotoButton: {
+    width: 70,
+    height: 70,
+    bottom: 0,
+    borderRadius: 50,
+    borderWidth: 4,
+    backgroundColor: "white",
+    borderColor: Colors.general.cameraGray,
+  },
+  button: {
+    borderWidth: 10,
+    borderRadius: 50,
+    backgroundColor: Colors.general.cameraGray,
+    borderColor: Colors.general.cameraGray,
+  },
+  text: {
+    fontSize: 18,
   },
 });
