@@ -1,0 +1,10 @@
+.ipynb_checkpoints
+/venv
+/.vscode
+/data
+.idea
+__pycache__
+*.log
+venv
+.DS_Store
+/paper
