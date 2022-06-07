@@ -4,6 +4,7 @@ import useColorScheme from "../hooks/useColorScheme";
 
 type Props = {
   title: string;
+  color?: string;
   onPress: () => void;
 };
 
@@ -12,8 +13,8 @@ export default function ButtonBasic(props: Props) {
 
   return (
     <Button
-      buttonStyle={{ width: 150 }}
-      color={Colors[colorScheme].accent}
+      buttonStyle={{ paddingHorizontal: 20 }}
+      color={props.color ? props.color : Colors[colorScheme].accent}
       containerStyle={styles}
       title={props.title}
       onPress={props.onPress}
@@ -23,5 +24,5 @@ export default function ButtonBasic(props: Props) {
 
 const styles = {
   margin: 5,
-  borderRadius: 10,
+  borderRadius: 50,
 };

@@ -1,6 +1,7 @@
 var colors = {
-  mainAccent: "#4685E7",
-  surface: "#282828",
+  mainAccent: "#448aff",
+  surface: "#121212",
+  topSurface: "#282828",
 };
 
 export default {
@@ -10,6 +11,7 @@ export default {
     //areas
     background: "#fff",
     surface: colors.surface,
+    topSurface: colors.topSurface,
     //mainColors
     accent: colors.mainAccent,
     //navButtons
@@ -22,6 +24,7 @@ export default {
     //areas
     background: "#000",
     surface: colors.surface,
+    topSurface: colors.topSurface,
     //mainColors
     accent: colors.mainAccent,
     //navButtons
@@ -31,5 +34,8 @@ export default {
   general: {
     accent: colors.mainAccent,
     cameraGray: colors.surface,
+    topSurface: colors.topSurface,
+    green: "#0F9D58",
+    red: "#ef5350",
   },
 };

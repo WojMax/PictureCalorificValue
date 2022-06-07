@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 
 import { Text, View } from "../components/Themed";
-import { HomeTabScreenProps, RootTabScreenProps } from "../types";
+import { HomeTabScreenProps } from "../types";
 import ButtonBasic from "../elements/ButtonBasic";
 
 export default function HomeScreen({ navigation }: HomeTabScreenProps<"Home">) {

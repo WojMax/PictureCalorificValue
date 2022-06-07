@@ -2,10 +2,10 @@ import { StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
 import CalorieCamera from "../components/Camera/CalorieCamera";
 
-export default function CameraScreen() {
+export default function CameraScreen({ navigation }: any) {
   return (
     <View style={styles.container}>
-      <CalorieCamera />
+      <CalorieCamera navigation={navigation} />
     </View>
   );
 }
@@ -15,14 +15,5 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
   },
 });

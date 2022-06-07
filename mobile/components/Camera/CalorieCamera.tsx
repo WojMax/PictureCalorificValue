@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, View } from "../../components/Themed";
+import { Text, View } from "../Themed";
 import {
   Dimensions,
   Platform,
@@ -10,6 +10,8 @@ import {
 import { Camera } from "expo-camera";
 import { styles } from "./style.camera";
 import { MaterialIcons } from "@expo/vector-icons";
+import ButtonBasic from "../../elements/ButtonBasic";
+import Colors from "../../constants/Colors";
 
 type Photo = {
   uri: string;
@@ -17,13 +19,15 @@ type Photo = {
   width: number;
 };
 
-export default function CalorieCamera() {
+type Props = {
+  navigation: any;
+};
+
+export default function CalorieCamera(props: Props) {
   //permissions
   const [hasPermission, setHasPermission] = useState(false);
   const [camera, setCamera] = useState();
-
   //screen ratio and padding
-  const [imagePadding, setImagePadding] = useState(0);
   const [ratio, setRatio] = useState("4:3");
   const { height, width } = Dimensions.get("window");
   const screenRatio = height / width;
@@ -32,13 +36,7 @@ export default function CalorieCamera() {
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [showPreview, setShowPreview] = useState(false);
   const [photo, setPhoto] = useState<Photo>();
-
-  const getSize = () => {
-    return {
-      width: Dimensions.get("window").width,
-      height: Dimensions.get("window").height,
-    };
-  };
+  const [calories, setCalories] = useState(0);
 
   //check permission
   useEffect(() => {
@@ -87,12 +85,64 @@ export default function CalorieCamera() {
     // @ts-ignore
     const photo = await camera.takePictureAsync();
     setPhoto(photo);
+    setCalories(123);
+    setShowPreview(true);
+  };
+
+  const retakePhoto = () => {
+    setShowPreview(false);
+  };
+
+  const addMeal = () => {
+    props.navigation.navigate("AddForm", { url: "HomeStack" });
+  };
+
+  const closeCamera = () => {
+    props.navigation.pop();
   };
 
   if (hasPermission == null) {
     return <View />;
   } else if (!hasPermission) {
     return <Text>No access to camera</Text>;
+  } else if (showPreview) {
+    return (
+      <ImageBackground
+        source={{ uri: photo && photo.uri }}
+        style={styles.container}
+      >
+        <View style={styles.container}>
+          <View style={styles.caloriesTopContainer} />
+          <View style={styles.caloriesMidContainer}>
+            <Text style={styles.text}>{calories} kcal/100g</Text>
+          </View>
+          <View style={styles.caloriesBottomContainer}>
+            <View style={styles.buttonContainer}>
+              <ButtonBasic
+                title={"Return"}
+                onPress={closeCamera}
+                color={"white"}
+                outline={true}
+              />
+            </View>
+            <View style={styles.buttonContainer}>
+              <ButtonBasic
+                title={"Retake photo"}
+                onPress={retakePhoto}
+                outline={true}
+              />
+            </View>
+            <View style={styles.buttonContainer}>
+              <ButtonBasic
+                title={"Add meal"}
+                onPress={addMeal}
+                color={Colors.general.green}
+              />
+            </View>
+          </View>
+        </View>
+      </ImageBackground>
+    );
   } else {
     return (
       <SafeAreaView style={styles.container}>

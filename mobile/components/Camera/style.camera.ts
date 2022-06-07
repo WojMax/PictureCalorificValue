@@ -22,6 +22,22 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "transparent",
   },
+  caloriesTopContainer: {
+    flex: 28,
+    backgroundColor: "transparent",
+  },
+  caloriesMidContainer: {
+    flex: 4,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(40, 40, 40, 0.6)",
+  },
+  caloriesBottomContainer: {
+    flex: 5,
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    backgroundColor: Colors.dark.surface,
+  },
   takePhotoButton: {
     width: 70,
     height: 70,
@@ -38,6 +54,12 @@ export const styles = StyleSheet.create({
     borderColor: Colors.general.cameraGray,
   },
   text: {
-    fontSize: 18,
+    flex: 0,
+    fontSize: 35,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    color: "white",
+    textAlign: "center",
   },
 });
