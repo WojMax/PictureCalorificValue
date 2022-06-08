@@ -34,6 +34,8 @@ export default function CalorieCamera(props: Props) {
   const [isRatioSet, setIsRatioSet] = useState(false);
 
   const [type, setType] = useState(Camera.Constants.Type.back);
+  const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
+
   const [showPreview, setShowPreview] = useState(false);
   const [photo, setPhoto] = useState<Photo>();
   const [calories, setCalories] = useState(0);
@@ -150,6 +152,7 @@ export default function CalorieCamera(props: Props) {
           onCameraReady={setCameraReady}
           ratio={ratio}
           type={type}
+          flashMode={flash}
           ref={(ref: any) => {
             setCamera(ref);
           }}
@@ -160,7 +163,15 @@ export default function CalorieCamera(props: Props) {
             <View style={styles.bottomContainer}>
               <View style={styles.buttonContainer}>
                 <View style={styles.button}>
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setType(
+                        type === Camera.Constants.Type.back
+                          ? Camera.Constants.Type.front
+                          : Camera.Constants.Type.back
+                      );
+                    }}
+                  >
                     <MaterialIcons
                       name="flip-camera-android"
                       size={28}
@@ -177,8 +188,20 @@ export default function CalorieCamera(props: Props) {
               </View>
               <View style={styles.buttonContainer}>
                 <View style={styles.button}>
-                  <TouchableOpacity>
-                    <MaterialIcons name="flash-on" size={28} color="white" />
+                  <TouchableOpacity
+                    onPress={() => {
+                      setFlash(
+                        flash === Camera.Constants.FlashMode.off
+                          ? Camera.Constants.FlashMode.torch
+                          : Camera.Constants.FlashMode.off
+                      );
+                    }}
+                  >
+                    {flash === Camera.Constants.FlashMode.off ? (
+                      <MaterialIcons name="flash-off" size={28} color="white" />
+                    ) : (
+                      <MaterialIcons name="flash-on" size={28} color="white" />
+                    )}
                   </TouchableOpacity>
                 </View>
               </View>
