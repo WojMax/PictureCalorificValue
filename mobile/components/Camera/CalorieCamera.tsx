@@ -10,7 +10,7 @@ import {
 import { Camera } from "expo-camera";
 import { styles } from "./style.camera";
 import { MaterialIcons } from "@expo/vector-icons";
-import ButtonBasic from "../../elements/ButtonBasic";
+import Button from "../../elements/Button";
 import Colors from "../../constants/Colors";
 
 type Photo = {
@@ -120,7 +120,7 @@ export default function CalorieCamera(props: Props) {
           </View>
           <View style={styles.caloriesBottomContainer}>
             <View style={styles.buttonContainer}>
-              <ButtonBasic
+              <Button
                 title={"Return"}
                 onPress={closeCamera}
                 color={"white"}
@@ -128,14 +128,14 @@ export default function CalorieCamera(props: Props) {
               />
             </View>
             <View style={styles.buttonContainer}>
-              <ButtonBasic
+              <Button
                 title={"Retake photo"}
                 onPress={retakePhoto}
                 outline={true}
               />
             </View>
             <View style={styles.buttonContainer}>
-              <ButtonBasic
+              <Button
                 title={"Add meal"}
                 onPress={addMeal}
                 color={Colors.general.green}
