@@ -124,7 +124,13 @@ function HomeStackNavigator() {
         }}
       />
       <HomeStack.Screen name="Add" component={AddScreen} />
-      <HomeStack.Screen name="AddForm" component={AddFormScreen} />
+      <HomeStack.Screen
+        name="AddForm"
+        component={AddFormScreen}
+        options={{
+          title: "Add product",
+        }}
+      />
     </HomeStack.Navigator>
   );
 }

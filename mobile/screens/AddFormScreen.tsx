@@ -1,10 +1,38 @@
 import { StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
+import Input from "../elements/Input";
+import Button from "../elements/Button";
+import { HomeTabScreenProps } from "../types";
 
-export default function AddFormScreen() {
+export default function AddFormScreen({
+  navigation,
+}: HomeTabScreenProps<"Home">) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>AddForm</Text>
+      <View style={styles.inputContainer}>
+        <Input label={"Name"} placeholder={"Enter name"} />
+        <Input
+          label={"Calories"}
+          placeholder={"Enter calories for 100g"}
+          keyboardType={"numeric"}
+        />
+        <Input
+          label={"Weight"}
+          placeholder={"Enter weight in grams"}
+          keyboardType={"numeric"}
+        />
+        <Input
+          label={"Sum of calories"}
+          placeholder={"Ender consumed calories"}
+          keyboardType={"numeric"}
+        />
+      </View>
+      <View style={styles.buttonContainer}>
+        <Button
+          title={"Add product"}
+          onPress={() => navigation.navigate("Home")}
+        />
+      </View>
     </View>
   );
 }
@@ -12,16 +40,13 @@ export default function AddFormScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
   },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
+  inputContainer: {
+    paddingTop: 10,
   },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
+  buttonContainer: {
+    justifyContent: "flex-end",
+    flexDirection: "row",
+    paddingHorizontal: 10,
   },
 });

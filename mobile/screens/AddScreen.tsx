@@ -9,12 +9,12 @@ export default function AddFormScreen({
   return (
     <View style={styles.container}>
       <Button
-        title={"Take photo"}
-        onPress={() => navigation.navigate("Camera")}
+        title={"Add product"}
+        onPress={() => navigation.navigate("AddForm")}
       />
       <Button
-        title={"Add meal"}
-        onPress={() => navigation.navigate("AddForm")}
+        title={"Take photo"}
+        onPress={() => navigation.navigate("Camera")}
       />
     </View>
   );
@@ -23,6 +23,7 @@ export default function AddFormScreen({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
   },
