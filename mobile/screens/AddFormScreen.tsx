@@ -2,11 +2,16 @@ import { StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
 import Input from "../elements/Input";
 import Button from "../elements/Button";
-import { HomeTabScreenProps } from "../types";
+import { useState } from "react";
 
-export default function AddFormScreen({
-  navigation,
-}: HomeTabScreenProps<"Home">) {
+export default function AddFormScreen(props: any) {
+  const [calories, setCalories] = useState(
+    props.route.params
+      ? props.route.params.calories
+        ? props.route.params.calories.toString()
+        : ""
+      : ""
+  );
   return (
     <View style={styles.container}>
       <View style={styles.inputContainer}>
@@ -15,6 +20,8 @@ export default function AddFormScreen({
           label={"Calories"}
           placeholder={"Enter calories for 100g"}
           keyboardType={"numeric"}
+          value={calories}
+          onChangeText={(value: string) => setCalories(value)}
         />
         <Input
           label={"Weight"}
@@ -30,7 +37,7 @@ export default function AddFormScreen({
       <View style={styles.buttonContainer}>
         <Button
           title={"Add product"}
-          onPress={() => navigation.navigate("Home")}
+          onPress={() => props.navigation.navigate("Home")}
         />
       </View>
     </View>

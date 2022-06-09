@@ -7,7 +7,8 @@ type Props = {
   placeholder?: string;
   keyboardType?: string;
   outline?: boolean;
-  onPress?: () => void;
+  onChangeText?: (text: any) => void;
+  value?: any;
 };
 
 export default function Input(props: Props) {
@@ -15,6 +16,8 @@ export default function Input(props: Props) {
 
   return (
     <ElementsInput
+      value={props.value}
+      onChangeText={props.onChangeText}
       label={props.label}
       placeholder={props.placeholder}
       // @ts-ignore

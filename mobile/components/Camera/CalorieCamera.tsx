@@ -96,7 +96,7 @@ export default function CalorieCamera(props: Props) {
   };
 
   const addMeal = () => {
-    props.navigation.navigate("AddForm", { url: "HomeStack" });
+    props.navigation.navigate("AddForm", { url: "HomeStack", calories: 123 });
   };
 
   const closeCamera = () => {
