@@ -2,6 +2,7 @@ import { StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
 import Button from "../elements/Button";
 import { HomeTabScreenProps } from "../types";
+import AddButtons from "../components/AddButtons/AddButtons"
 import t from "../services/translations";
 
 export default function AddFormScreen({
@@ -9,14 +10,9 @@ export default function AddFormScreen({
 }: HomeTabScreenProps<"Home">) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{t("common.addProduct")}</Text>
-      <Button
-        title={"Add product"}
-        onPress={() => navigation.navigate("AddForm")}
-      />
-      <Button
-        title={"Take photo"}
-        onPress={() => navigation.navigate("Camera")}
+      <AddButtons 
+        AddFoodOnPress={() => navigation.navigate("AddForm")}
+        CameraOnPress={() => navigation.navigate("Camera")}
       />
     </View>
   );
