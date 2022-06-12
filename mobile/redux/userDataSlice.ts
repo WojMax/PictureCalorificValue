@@ -3,14 +3,15 @@ import {
   ColorSchemeName,
   useColorScheme as _useColorScheme,
 } from "react-native";
+import i18n from "i18n-js";
 
 interface UserState {
-  colorScheme: NonNullable<ColorSchemeName>;
+  colorScheme: string;
   lang: string;
 }
 
 const initialState: UserState = {
-  colorScheme: _useColorScheme() as NonNullable<ColorSchemeName>,
+  colorScheme: "",
   lang: "",
 };
 
@@ -18,10 +19,11 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setLang: (state, action: PayloadAction<string>) => {
+    setLangReducer: (state, action: PayloadAction<string>) => {
       state.lang = action.payload;
+      i18n.locale = action.payload;
     },
-    setColorScheme: (
+    setColorSchemeReducer: (
       state,
       action: PayloadAction<NonNullable<ColorSchemeName>>
     ) => {
@@ -30,6 +32,6 @@ export const userSlice = createSlice({
   },
 });
 
-export const { setLang } = userSlice.actions;
+export const { setLangReducer, setColorSchemeReducer } = userSlice.actions;
 
 export default userSlice.reducer;

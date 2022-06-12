@@ -2,12 +2,14 @@ import { StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
 import Button from "../elements/Button";
 import { HomeTabScreenProps } from "../types";
+import t from "../services/translations";
 
 export default function AddFormScreen({
   navigation,
 }: HomeTabScreenProps<"Home">) {
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>{t("common.addProduct")}</Text>
       <Button
         title={"Add product"}
         onPress={() => navigation.navigate("AddForm")}

@@ -1,15 +1,17 @@
 import { StyleSheet } from "react-native";
-
 import { Text, View } from "../components/Themed";
 import { HomeTabScreenProps } from "../types";
 import Button from "../elements/Button";
+import * as Localisation from "expo-localization";
+import i18n from "i18n-js";
+import t from "../services/translations";
 
 export default function HomeScreen({ navigation }: HomeTabScreenProps<"Home">) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Home</Text>
+      <Text style={styles.title}>{i18n.t("common.addProduct")}</Text>
       <Button
-        title={"Add product"}
+        title={t("common.addProduct")}
         onPress={() => navigation.navigate("Add")}
       />
     </View>

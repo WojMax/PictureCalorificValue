@@ -16,12 +16,12 @@ export default function App() {
     return null;
   } else {
     return (
-      <SafeAreaProvider>
-        <Provider store={store}>
+      <Provider store={store}>
+        <SafeAreaProvider>
           <Navigation colorScheme={colorScheme} />
           <StatusBar />
-        </Provider>
-      </SafeAreaProvider>
+        </SafeAreaProvider>
+      </Provider>
     );
   }
 }
