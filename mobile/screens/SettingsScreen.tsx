@@ -5,14 +5,22 @@ import * as SecureStore from "expo-secure-store";
 import Button from "../elements/Button";
 import t from "../services/translations";
 import { useAppDispatch, useAppSelector } from "../hooks/useRedux";
-import { setLangReducer } from "../redux/userDataSlice";
+import { setColorSchemeReducer, setLangReducer } from "../redux/userDataSlice";
+import i18n from "i18n-js";
+import Colors from "../constants/Colors";
+import Switch from "../elements/Switch";
 
 export default function SettingsScreen() {
   const dispatch = useAppDispatch();
 
   const [lang, setLang] = useState(useAppSelector((state) => state.user.lang));
+  const [colorScheme, setColorScheme] = useState<string>(
+    useAppSelector((state) => state.user.colorScheme)
+  );
+  const [darkColorScheme, setDarkColorScheme] = useState(colorScheme == "dark");
 
   useEffect(() => {
+    //langs
     SecureStore.getItemAsync("lang").then((userLang) => {
       if (userLang != null) {
         setLang(userLang);
@@ -32,9 +40,30 @@ export default function SettingsScreen() {
     setLang(userLang);
   };
 
+  const changeColorScheme = async () => {
+    if (darkColorScheme) {
+      dispatch(setColorSchemeReducer("dark"));
+      await SecureStore.setItemAsync("colorScheme", "dark");
+    } else {
+      dispatch(setColorSchemeReducer("light"));
+      await SecureStore.setItemAsync("colorScheme", "light");
+    }
+    setDarkColorScheme(!darkColorScheme);
+  };
+
   return (
     <View style={styles.container}>
-      <Button title={t("common.addProduct")} onPress={changeLang} />
+      <View style={styles.settingContainer}>
+        <Text style={styles.title}>{"Change language"}</Text>
+        <Button title={t("common.addProduct")} onPress={changeLang} />
+      </View>
+      <View style={styles.settingContainer}>
+        <Text style={styles.title}>{"Dark mode"}</Text>
+        <Switch
+          value={darkColorScheme}
+          onValueChange={() => changeColorScheme()}
+        />
+      </View>
     </View>
   );
 }
@@ -42,12 +71,17 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: "flex-start",
+  },
+  settingContainer: {
+    flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 10,
+    paddingBottom: 5,
   },
   title: {
-    fontSize: 20,
-    fontWeight: "bold",
+    fontSize: 16,
   },
   separator: {
     marginVertical: 30,
