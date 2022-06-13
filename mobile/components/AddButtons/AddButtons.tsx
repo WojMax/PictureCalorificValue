@@ -21,12 +21,10 @@ type Props = {
 };
 
 export default function AddButtons(props: Props) {
-
   const [image, setImage] = useState<string | undefined>();
-  const colorScheme = useColorScheme();
 
   const backgroundColor = useThemeColor(
-    { light: Colors.light.background, dark: Colors.dark.background },
+    { light: Colors.light.surface, dark: Colors.dark.surface },
     "background"
   );
 
@@ -35,33 +33,31 @@ export default function AddButtons(props: Props) {
   }
 
   const closeCamera = () => {
-    props.navigation.pop();
+    setImage(undefined);
   };
 
   const addMeal = () => {
     props.navigation.navigate("AddForm", { url: "HomeStack", calories: 294 });
   };
-  
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [1, 1],
       quality: 1,
     });
 
     if (!result.cancelled) {
       setImage(result.uri);
     }
+    if (!image?.includes(".jpg") || image == "undefined") {
+      showToast();
+    }
   };
 
-  console.log(image);
-
-  if (!image?.includes(".jpg") || image == "undefined") {
-    showToast();
-  } else {
+  if (image?.includes(".jpg") && image != "undefined") {
     return (
       <ImageBackground source={{ uri: image }} style={styles.container}>
         <View style={styles.container}>
