@@ -1,6 +1,7 @@
 import { StyleSheet } from "react-native";
-import { Text, View } from "../components/Themed";
+import { Text, View} from "../components/Themed";
 import { useEffect, useState } from "react";
+import { Picker } from "@react-native-picker/picker";
 import * as SecureStore from "expo-secure-store";
 import Button from "../elements/Button";
 import t from "../services/translations";
@@ -9,11 +10,14 @@ import { setColorSchemeReducer, setLangReducer } from "../redux/userDataSlice";
 import i18n from "i18n-js";
 import Colors from "../constants/Colors";
 import Switch from "../elements/Switch";
+import useColorScheme from "../hooks/useColorScheme";
 
 export default function SettingsScreen() {
   const dispatch = useAppDispatch();
-
+  const [chosenLang, setChosenLang] = useState('Unknown');
+  const colo1Scheme=useColorScheme();
   const [lang, setLang] = useState(useAppSelector((state) => state.user.lang));
+  
   const [colorScheme, setColorScheme] = useState<string>(
     useAppSelector((state) => state.user.colorScheme)
   );
@@ -28,17 +32,15 @@ export default function SettingsScreen() {
     });
   }, []);
 
-  const changeLang = async () => {
-    let userLang = "";
-    if (lang === "en-US") {
-      userLang = "pl-PL";
-    } else {
-      userLang = "en-US";
-    }
-    dispatch(setLangReducer(userLang));
-    await SecureStore.setItemAsync("lang", userLang);
-    setLang(userLang);
-  };
+  
+  // let userLang = "";
+  // if (chosenLang!="Unknown") {
+  //   userLang=chosenLang
+    
+  // };
+  // dispatch(setLangReducer(userLang));
+  // SecureStore.setItemAsync("lang", userLang);
+  // setLang(userLang);
 
   const changeColorScheme = async () => {
     if (darkColorScheme) {
@@ -55,7 +57,18 @@ export default function SettingsScreen() {
     <View style={styles.container}>
       <View style={styles.settingContainer}>
         <Text style={styles.title}>{"Change language"}</Text>
-        <Button title={t("common.addProduct")} onPress={changeLang} />
+      </View>
+      <View style={styles.settingContainer}>
+        <Picker
+          selectedValue={chosenLang}
+          onValueChange={(value, index) => [setChosenLang(value),dispatch(setLangReducer(value)),setLang(value)]}
+          mode="dropdown" // Android only
+          style={[{color: Colors[colo1Scheme].text},styles.picker]}
+        >
+        <Picker.Item label="Select language" value="Unknown" />
+        <Picker.Item label="English" value="en-US" />
+        <Picker.Item label="Polish" value="pl-PL" />
+        </Picker>
       </View>
       <View style={styles.settingContainer}>
         <Text style={styles.title}>{"Dark mode"}</Text>
@@ -87,5 +100,11 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     height: 1,
     width: "80%",
+  },
+  picker: {
+    width: "80%",
+    padding: 10,
+    borderWidth: 1,
+    
   },
 });
