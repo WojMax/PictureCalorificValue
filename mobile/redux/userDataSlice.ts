@@ -4,6 +4,7 @@ import {
   useColorScheme as _useColorScheme,
 } from "react-native";
 import i18n from "i18n-js";
+import * as SecureStore from "expo-secure-store";
 
 interface UserState {
   colorScheme: string;
@@ -11,7 +12,7 @@ interface UserState {
 }
 
 const initialState: UserState = {
-  colorScheme: "",
+  colorScheme: "dark",
   lang: "",
 };
 

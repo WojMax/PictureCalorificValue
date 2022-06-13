@@ -9,6 +9,7 @@ import { setColorSchemeReducer, setLangReducer } from "../redux/userDataSlice";
 import i18n from "i18n-js";
 import Colors from "../constants/Colors";
 import Switch from "../elements/Switch";
+import { changeColorScheme } from "../hooks/useColorScheme";
 
 export default function SettingsScreen() {
   const dispatch = useAppDispatch();
@@ -17,9 +18,10 @@ export default function SettingsScreen() {
   const [colorScheme, setColorScheme] = useState<string>(
     useAppSelector((state) => state.user.colorScheme)
   );
-  const [darkColorScheme, setDarkColorScheme] = useState(colorScheme == "dark");
+  const [darkColorScheme, setDarkColorScheme] = useState(true);
 
   useEffect(() => {
+    setDarkColorScheme(colorScheme == "dark");
     //langs
     SecureStore.getItemAsync("lang").then((userLang) => {
       if (userLang != null) {
@@ -40,15 +42,17 @@ export default function SettingsScreen() {
     setLang(userLang);
   };
 
-  const changeColorScheme = async () => {
-    if (darkColorScheme) {
+  const changeColor = async () => {
+    setDarkColorScheme(!darkColorScheme);
+    if (!darkColorScheme) {
       dispatch(setColorSchemeReducer("dark"));
+      changeColorScheme("dark");
       await SecureStore.setItemAsync("colorScheme", "dark");
     } else {
       dispatch(setColorSchemeReducer("light"));
+      changeColorScheme("light");
       await SecureStore.setItemAsync("colorScheme", "light");
     }
-    setDarkColorScheme(!darkColorScheme);
   };
 
   return (
@@ -59,10 +63,7 @@ export default function SettingsScreen() {
       </View>
       <View style={styles.settingContainer}>
         <Text style={styles.title}>{"Dark mode"}</Text>
-        <Switch
-          value={darkColorScheme}
-          onValueChange={() => changeColorScheme()}
-        />
+        <Switch value={darkColorScheme} onValueChange={() => changeColor()} />
       </View>
     </View>
   );
