@@ -24,7 +24,7 @@ export default function AddButtons(props: Props) {
   const [image, setImage] = useState<string | undefined>();
 
   const backgroundColor = useThemeColor(
-    { light: Colors.light.surface, dark: Colors.dark.surface },
+    { light: Colors.light.background, dark: Colors.dark.surface },
     "background"
   );
 
