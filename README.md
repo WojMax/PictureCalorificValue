@@ -15,23 +15,33 @@ This project is an mobile application for calorie-counting based on machinery le
 7.  Open "mobile" directory in VS Code 
 
     1.  Press ctrl+shift+` for opening a terminal
-    2.  Run "npm install" command
-    3.  Run "expo start" command for starting developers server
+    2.  Run 
+		```
+		npm install
+		```
+    3.  For starting developers server run
+		```
+		expo start
+		```
     4.  In Expo's app scan QR Code which should appear in VS Code terminal
 	
 	
 ## How to start developing machine learning
 
 1.  Clone repository
-2.  Run command "pip install -r "pic2kcal-master/requirements.txt"
+2.  Run command
+	```
+	pip install -r "pic2kcal-master/requirements.txt
+	```
 3.  Open Open any Python Code editor, at your discretion
 
-## How to start developing machine learning
+## How to start developing server
 
 1.  Clone repository
-2.  Run command "pip install -r "server/requirements.txt"
+2.  Run command 
+	```
+	pip install -r "server/requirements.txt
+	```
 3.  Open Open any Python Code editor, at your discretion
 	
 	
-
-
