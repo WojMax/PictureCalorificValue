@@ -6,19 +6,19 @@ export const pl = {
     addMeal: "Dodaj posiłek",
     toast: "Proszę wybrać zdjęcie",
     error: "Błąd",
-    add:"Dodaj"
+    add: "Dodaj",
   },
   navigation: {
-    home: "Dom",
+    home: "Strona Główna",
     favorites: "Ulubione",
     profile: "Profil",
     settings: "Ustawienia",
-    camera:"Aparat"
+    camera: "Aparat",
   },
   camera: {
     return: "Powrót",
     retakePhoto: "Zrób ponownie",
-    noAccess: "Brak dostępu do kamery"
+    noAccess: "Brak dostępu do kamery",
   },
   addScreen: {
     name: "Nazwa",
@@ -28,13 +28,13 @@ export const pl = {
     weight: "Waga",
     enterWeight: "Podaj wagę",
     toastWeight: "Wprowadź wagę posiłku",
-    toastCalories: "Wprowadź kaloryczność posiłku"
+    toastCalories: "Wprowadź kaloryczność posiłku",
   },
   settings: {
     changeLang: "Zmień język",
     selectLang: "Wybierz język",
     eng: "Angielski",
     pl: "Polski",
-    darkMode: "Tryb ciemny"
+    darkMode: "Tryb ciemny",
   },
 };
