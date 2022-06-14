@@ -12,6 +12,7 @@ import { styles } from "./style.camera";
 import { MaterialIcons } from "@expo/vector-icons";
 import Button from "../../elements/Button";
 import Colors from "../../constants/Colors";
+import { t } from "i18n-js";
 
 type Photo = {
   uri: string;
@@ -106,7 +107,7 @@ export default function CalorieCamera(props: Props) {
   if (hasPermission == null) {
     return <View />;
   } else if (!hasPermission) {
-    return <Text>No access to camera</Text>;
+    return <Text>t("camera.noAccess")</Text>;
   } else if (showPreview) {
     return (
       <ImageBackground
@@ -121,7 +122,7 @@ export default function CalorieCamera(props: Props) {
           <View style={styles.caloriesBottomContainer}>
             <View style={styles.buttonContainer}>
               <Button
-                title={"Return"}
+                title={t("camera.return")}
                 onPress={closeCamera}
                 color={"white"}
                 outline={true}
@@ -129,14 +130,14 @@ export default function CalorieCamera(props: Props) {
             </View>
             <View style={styles.buttonContainer}>
               <Button
-                title={"Retake photo"}
+                title={t("camera.retakePhoto")}
                 onPress={retakePhoto}
                 outline={true}
               />
             </View>
             <View style={styles.buttonContainer}>
               <Button
-                title={"Add meal"}
+                title={t("common.addMeal")}
                 onPress={addMeal}
                 color={Colors.general.green}
               />

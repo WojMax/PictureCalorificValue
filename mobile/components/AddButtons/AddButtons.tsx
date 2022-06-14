@@ -13,6 +13,8 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import * as ImagePicker from "expo-image-picker";
+import i18n from "i18n-js";
+import t from "../../services/translations";
 
 type Props = {
   AddFoodOnPress: () => void;
@@ -29,7 +31,7 @@ export default function AddButtons(props: Props) {
   );
 
   function showToast() {
-    ToastAndroid.show("Please choose an image", ToastAndroid.SHORT);
+    ToastAndroid.show(t("common.toast"), ToastAndroid.SHORT);
   }
 
   const closeCamera = () => {
@@ -68,7 +70,7 @@ export default function AddButtons(props: Props) {
           <View style={styles.caloriesBottomContainer}>
             <View style={styles.buttonContainer}>
               <Button
-                title={"Return"}
+                title={t("camera.return")}
                 onPress={closeCamera}
                 color={"white"}
                 outline={true}
@@ -76,14 +78,14 @@ export default function AddButtons(props: Props) {
             </View>
             <View style={styles.buttonContainer}>
               <Button
-                title={"Rechoose photo"}
+                title={t("camera.retakePhoto")}
                 onPress={pickImage}
                 outline={true}
               />
             </View>
             <View style={styles.buttonContainer}>
               <Button
-                title={"Add meal"}
+                title={t("common.addMeal")}
                 onPress={addMeal}
                 color={Colors.general.green}
               />
@@ -106,7 +108,7 @@ export default function AddButtons(props: Props) {
             color={Colors.general.accent}
             style={{ paddingBottom: 2.7 }}
           />
-          <Text style={styles.Text}>Take photo</Text>
+          <Text style={styles.Text}>{t("common.takePhoto")}</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.View}>
@@ -120,7 +122,7 @@ export default function AddButtons(props: Props) {
             color={Colors.general.accent}
             style={{ paddingBottom: 2.7 }}
           />
-          <Text style={styles.Text}>Add photo</Text>
+          <Text style={styles.Text}>{t("common.addPhoto")}</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.View}>
@@ -133,7 +135,7 @@ export default function AddButtons(props: Props) {
             size={40}
             color={Colors.general.accent}
           />
-          <Text style={styles.Text}>Add meal</Text>
+          <Text style={styles.Text}>{t("common.addMeal")}</Text>
         </TouchableOpacity>
       </View>
     </View>

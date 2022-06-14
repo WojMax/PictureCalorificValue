@@ -1,11 +1,13 @@
 import { StyleSheet } from "react-native";
 
 import { Text, View } from "../components/Themed";
+import i18n from "i18n-js";
+import t from "../services/translations";
 
 export default function ProfileScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Profile</Text>
+      <Text style={styles.title}>{t("navigation.favorites")}</Text>
     </View>
   );
 }

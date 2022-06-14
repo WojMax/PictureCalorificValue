@@ -25,6 +25,8 @@ import LinkingConfiguration from "./LinkingConfiguration";
 import AddFormScreen from "../screens/AddFormScreen";
 import AddScreen from "../screens/AddScreen";
 import CameraScreen from "../screens/CameraScreen";
+import i18n from "i18n-js";
+import t from "../services/translations";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -68,7 +70,7 @@ function BottomTabNavigator() {
         name="HomeStack"
         component={HomeStackNavigator}
         options={{
-          title: "Home",
+          title: t("navigation.home"),
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
               name="silverware-fork-knife"
@@ -85,7 +87,7 @@ function BottomTabNavigator() {
         name="FavoritesStack"
         component={FavoritesStackNavigator}
         options={{
-          title: "Favorites",
+          title: t("navigation.favorites"),
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons name="favorite" size={size - 3} color={color} />
           ),
@@ -98,7 +100,7 @@ function BottomTabNavigator() {
         name="ProfileStack"
         component={ProfileStackNavigator}
         options={{
-          title: "Profile",
+          title: t("navigation.profile"),
           tabBarIcon: ({ color, size }) => (
             <FontAwesome5 name="user-alt" size={size - 3} color={color} />
           ),
@@ -123,12 +125,18 @@ function HomeStackNavigator() {
           headerShown: false,
         }}
       />
-      <HomeStack.Screen name="Add" component={AddScreen} />
+      <HomeStack.Screen
+        name="Add"
+        component={AddScreen}
+        options={{
+          title: t("common.add"),
+        }}
+      />
       <HomeStack.Screen
         name="AddForm"
         component={AddFormScreen}
         options={{
-          title: "Add product",
+          title: t("common.addProduct"),
         }}
       />
     </HomeStack.Navigator>

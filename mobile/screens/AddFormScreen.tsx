@@ -4,6 +4,8 @@ import Input from "../elements/Input";
 import Button from "../elements/Button";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import i18n from "i18n-js";
+import t from "../services/translations";
 
 export default function AddFormScreen(props: any) {
   const [name, setName] = useState("");
@@ -19,11 +21,11 @@ export default function AddFormScreen(props: any) {
 
   const save = () => {
     if (weight == 0) {
-      ToastAndroid.show("Provide meal weight", ToastAndroid.SHORT);
+      ToastAndroid.show(t("addScreen.toastWeight"), ToastAndroid.SHORT);
       return;
     }
     if (calories == 0) {
-      ToastAndroid.show("Provide meal calories", ToastAndroid.SHORT);
+      ToastAndroid.show(t("addScreen.toastCalories"), ToastAndroid.SHORT);
       return;
     }
     const meal = {
@@ -51,7 +53,7 @@ export default function AddFormScreen(props: any) {
       })
       .catch((er) => {
         console.log(er);
-        ToastAndroid.show("ERROR", ToastAndroid.SHORT);
+        ToastAndroid.show(t("common.error"), ToastAndroid.SHORT);
       });
   };
 
@@ -59,26 +61,26 @@ export default function AddFormScreen(props: any) {
     <View style={styles.container}>
       <View style={styles.inputContainer}>
         <Input
-          label={"Name"}
-          placeholder={"Enter name"}
+          label={t("addScreen.name")}
+          placeholder={t("addScreen.enterName")}
           onChangeText={(value: string) => setName(value)}
         />
         <Input
-          label={"Calories"}
-          placeholder={"Enter calories for 100g"}
+          label={t("addScreen.calories")}
+          placeholder={t("addScreen.enterCalories")}
           keyboardType={"numeric"}
           value={calories}
           onChangeText={(value: string) => setCalories(value)}
         />
         <Input
-          label={"Weight"}
-          placeholder={"Enter weight in grams"}
+          label={t("addScreen.weight")}
+          placeholder={t("addScreen.enterWeight")}
           keyboardType={"numeric"}
           onChangeText={(value: number) => setWeight(value)}
         />
       </View>
       <View style={styles.buttonContainer}>
-        <Button title={"Add product"} onPress={() => save()} />
+        <Button title={t("common.addProduct")} onPress={() => save()} />
       </View>
     </View>
   );
