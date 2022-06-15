@@ -24,9 +24,9 @@ export default {
   },
   dark: {
     //text
-    text: "#fafafa",
-    textLight: "#eceff1",
-    textDark: "#babdbe",
+    text: "#e2f1f8",
+    textLight: "#babdbe",
+    textDark: "#8a8d8e",
     //areas
     background: "#000",
     surface: colors.surface,

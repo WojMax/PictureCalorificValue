@@ -1,18 +1,47 @@
-import { StyleSheet } from "react-native";
+import { FlatList, StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
 import { HomeTabScreenProps } from "../types";
 import Button from "../elements/Button";
-import * as Localisation from "expo-localization";
-import i18n from "i18n-js";
 import t from "../services/translations";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import MealsHomeList from "../components/MealsHomeList/MealsHomeList";
 
-export default function HomeScreen({ navigation }: HomeTabScreenProps<"Home">) {
+type Meal = {
+  calories: number;
+  calories_on_100g: number;
+  meal_name: string;
+};
+
+export default function HomeScreen(props: any) {
+  const [meals, setMeals] = useState(Array<Meal>());
+
+  useEffect(() => {
+    console.log("start");
+    axios
+      .get(
+        "http://calorieappserverinz-env.eba-5zgigd3w.eu-central-1.elasticbeanstalk.com/meals/15a227be-8a9e-438f-85b9-8abc7f6832bc"
+      )
+      .then((res) => {
+        setMeals(res.data);
+      })
+      .catch((er) => {
+        console.log(er);
+      });
+  }, [props]);
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{i18n.t("common.addProduct")}</Text>
-      <Button
-        title={t("common.addProduct")}
-        onPress={() => navigation.navigate("Add")}
+      <View style={styles.container2}>
+        <Button
+          title={t("common.addProduct")}
+          onPress={() => props.navigation.navigate("Add")}
+        />
+      </View>
+      <FlatList
+        data={meals}
+        renderItem={({ item }) => <MealsHomeList meal={item} />}
+        keyExtractor={(item, index) => index.toString()}
       />
     </View>
   );
@@ -21,16 +50,9 @@ export default function HomeScreen({ navigation }: HomeTabScreenProps<"Home">) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingTop: 30,
+  },
+  container2: {
     alignItems: "center",
-    justifyContent: "center",
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
   },
 });

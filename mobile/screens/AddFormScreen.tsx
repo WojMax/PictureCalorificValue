@@ -20,14 +20,6 @@ export default function AddFormScreen(props: any) {
   const [sumOfCalories, setSumOfCalories] = useState(0);
 
   const save = () => {
-    if (weight == 0) {
-      ToastAndroid.show(t("addScreen.toastWeight"), ToastAndroid.SHORT);
-      return;
-    }
-    if (calories == 0) {
-      ToastAndroid.show(t("addScreen.toastCalories"), ToastAndroid.SHORT);
-      return;
-    }
     const meal = {
       userID: "15a227be-8a9e-438f-85b9-8abc7f6832bc",
       mealName: name,
@@ -41,19 +33,16 @@ export default function AddFormScreen(props: any) {
         new Date().getDate(),
       category: "breakfast",
     };
-    console.log(meal);
     axios
       .put(
         "http://calorieappserverinz-env.eba-5zgigd3w.eu-central-1.elasticbeanstalk.com/meal",
         meal
       )
       .then((res) => {
-        console.log(res);
-        props.navigation.navigate("Home");
+        props.navigation.navigate("Home", {});
       })
       .catch((er) => {
         console.log(er);
-        ToastAndroid.show(t("common.error"), ToastAndroid.SHORT);
       });
   };
 
