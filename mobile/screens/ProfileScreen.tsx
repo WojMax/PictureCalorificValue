@@ -7,7 +7,7 @@ import t from "../services/translations";
 export default function ProfileScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{t("navigation.favorites")}</Text>
+      <Text style={styles.title}>{t("navigation.profile")}</Text>
     </View>
   );
 }

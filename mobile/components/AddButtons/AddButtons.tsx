@@ -5,6 +5,7 @@ import {
   ImageBackground,
 } from "react-native";
 import Button from "../../elements/Button";
+import Preview from "../Camera/PhotoPreview";
 import { Text, View, useThemeColor } from "../Themed";
 import Colors from "../../constants/Colors";
 import { styles } from "./style.AddButtons";
@@ -13,7 +14,6 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import * as ImagePicker from "expo-image-picker";
-import i18n from "i18n-js";
 import t from "../../services/translations";
 
 type Props = {
@@ -24,9 +24,10 @@ type Props = {
 
 export default function AddButtons(props: Props) {
   const [image, setImage] = useState<string | undefined>();
+  const colorScheme = useColorScheme();
 
   const backgroundColor = useThemeColor(
-    { light: Colors.light.background, dark: Colors.dark.surface },
+    { light: Colors.light.background, dark: Colors.dark.background },
     "background"
   );
 
@@ -35,7 +36,7 @@ export default function AddButtons(props: Props) {
   }
 
   const closeCamera = () => {
-    setImage(undefined);
+    props.navigation.pop();
   };
 
   const addMeal = () => {
@@ -47,7 +48,7 @@ export default function AddButtons(props: Props) {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [1, 1],
+      aspect: [4, 3],
       quality: 1,
     });
 
@@ -59,42 +60,17 @@ export default function AddButtons(props: Props) {
     }
   };
 
-  if (image?.includes(".jpg") && image != "undefined") {
+  if (!(image?.includes(".jpg") && image != "undefined")) {
+  } else {
     return (
-      <ImageBackground source={{ uri: image }} style={styles.container}>
-        <View style={styles.container}>
-          <View style={styles.caloriesTopContainer} />
-          <View style={styles.caloriesMidContainer}>
-            <Text style={styles.text}>294 kcal/100g</Text>
-          </View>
-          <View style={styles.caloriesBottomContainer}>
-            <View style={styles.buttonContainer}>
-              <Button
-                title={t("camera.return")}
-                onPress={closeCamera}
-                color={"white"}
-                outline={true}
-              />
-            </View>
-            <View style={styles.buttonContainer}>
-              <Button
-                title={t("camera.retakePhoto")}
-                onPress={pickImage}
-                outline={true}
-              />
-            </View>
-            <View style={styles.buttonContainer}>
-              <Button
-                title={t("common.addMeal")}
-                onPress={addMeal}
-                color={Colors.general.green}
-              />
-            </View>
-          </View>
-        </View>
-      </ImageBackground>
+      <Preview
+        img={image}
+        navigation={props.navigation}
+        retake={pickImage}
+      ></Preview>
     );
   }
+
   return (
     <View style={styles.mainView}>
       <View style={styles.View}>

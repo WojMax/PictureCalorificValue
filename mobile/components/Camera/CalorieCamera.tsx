@@ -7,12 +7,14 @@ import {
   SafeAreaView,
   TouchableOpacity,
 } from "react-native";
+import Preview from "./PhotoPreview";
 import { Camera } from "expo-camera";
 import { styles } from "./style.camera";
 import { MaterialIcons } from "@expo/vector-icons";
 import Button from "../../elements/Button";
 import Colors from "../../constants/Colors";
-import { t } from "i18n-js";
+import t from "../../services/translations";
+import Navigation from "../../navigation";
 
 type Photo = {
   uri: string;
@@ -96,55 +98,17 @@ export default function CalorieCamera(props: Props) {
     setShowPreview(false);
   };
 
-  const addMeal = () => {
-    props.navigation.navigate("AddForm", { url: "HomeStack", calories: 123 });
-  };
-
-  const closeCamera = () => {
-    props.navigation.pop();
-  };
-
   if (hasPermission == null) {
     return <View />;
   } else if (!hasPermission) {
-    return <Text>t("camera.noAccess")</Text>;
+    return <Text>{t("camera.noAccess")}</Text>;
   } else if (showPreview) {
     return (
-      <ImageBackground
-        source={{ uri: photo && photo.uri }}
-        style={styles.container}
-      >
-        <View style={styles.container}>
-          <View style={styles.caloriesTopContainer} />
-          <View style={styles.caloriesMidContainer}>
-            <Text style={styles.text}>{calories} kcal/100g</Text>
-          </View>
-          <View style={styles.caloriesBottomContainer}>
-            <View style={styles.buttonContainer}>
-              <Button
-                title={t("camera.return")}
-                onPress={closeCamera}
-                color={"white"}
-                outline={true}
-              />
-            </View>
-            <View style={styles.buttonContainer}>
-              <Button
-                title={t("camera.retakePhoto")}
-                onPress={retakePhoto}
-                outline={true}
-              />
-            </View>
-            <View style={styles.buttonContainer}>
-              <Button
-                title={t("common.addMeal")}
-                onPress={addMeal}
-                color={Colors.general.green}
-              />
-            </View>
-          </View>
-        </View>
-      </ImageBackground>
+      <Preview
+        photo={photo}
+        navigation={props.navigation}
+        retake={retakePhoto}
+      ></Preview>
     );
   } else {
     return (
