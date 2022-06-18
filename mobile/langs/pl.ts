@@ -17,7 +17,7 @@ export const pl = {
   },
   camera: {
     return: "Powrót",
-    retakePhoto: "Zrób ponownie",
+    retakePhoto: "Ponów",
     noAccess: "Brak dostępu do kamery",
   },
   addScreen: {

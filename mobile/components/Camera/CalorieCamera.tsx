@@ -11,10 +11,7 @@ import Preview from "./PhotoPreview";
 import { Camera } from "expo-camera";
 import { styles } from "./style.camera";
 import { MaterialIcons } from "@expo/vector-icons";
-import Button from "../../elements/Button";
-import Colors from "../../constants/Colors";
 import t from "../../services/translations";
-import Navigation from "../../navigation";
 
 type Photo = {
   uri: string;
@@ -40,7 +37,7 @@ export default function CalorieCamera(props: Props) {
   const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
 
   const [showPreview, setShowPreview] = useState(false);
-  const [photo, setPhoto] = useState<Photo>();
+  const [photo, setPhoto] = useState<string>();
   const [calories, setCalories] = useState(0);
 
   //check permission
@@ -89,13 +86,21 @@ export default function CalorieCamera(props: Props) {
   const takePhoto = async () => {
     // @ts-ignore
     const photo = await camera.takePictureAsync();
-    setPhoto(photo);
+    setPhoto(photo.uri);
     setCalories(123);
     setShowPreview(true);
   };
 
   const retakePhoto = () => {
     setShowPreview(false);
+  };
+
+  const addMeal = () => {
+    props.navigation.navigate("AddForm", { url: "HomeStack", calories: 123 });
+  };
+
+  const closeCamera = () => {
+    props.navigation.pop();
   };
 
   if (hasPermission == null) {
@@ -105,10 +110,12 @@ export default function CalorieCamera(props: Props) {
   } else if (showPreview) {
     return (
       <Preview
-        photo={photo}
-        navigation={props.navigation}
+        uri={photo}
+        calories={123}
+        close={closeCamera}
         retake={retakePhoto}
-      ></Preview>
+        addMeal={addMeal}
+      />
     );
   } else {
     return (

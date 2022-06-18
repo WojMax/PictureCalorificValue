@@ -5,42 +5,27 @@ import { styles } from "./style.camera";
 import Colors from "../../constants/Colors";
 import { t } from "i18n-js";
 
-type Photo = {
-  uri: string;
-  height: number;
-  width: number;
-};
-
 type Props = {
-  photo?: Photo;
-  img?: string | undefined;
-  navigation: any;
+  uri: string | undefined;
+  calories: number;
+  addMeal: () => void;
+  close: () => void;
   retake: () => void;
 };
 
 export default function Preview(props: Props) {
-  const addMeal = () => {
-    props.navigation.navigate("AddForm", { url: "HomeStack", calories: 123 });
-  };
-  var Photo = props.photo && props.photo.uri;
-  const closeCamera = () => {
-    props.navigation.pop();
-  };
-  if (props.photo == undefined) {
-    Photo = props.img;
-  }
   return (
-    <ImageBackground source={{ uri: Photo }} style={styles.container}>
+    <ImageBackground source={{ uri: props.uri }} style={styles.container}>
       <View style={styles.container}>
         <View style={styles.caloriesTopContainer} />
         <View style={styles.caloriesMidContainer}>
-          <Text style={styles.text}>294 kcal/100g</Text>
+          <Text style={styles.text}>{props.calories} kcal/100g</Text>
         </View>
         <View style={styles.caloriesBottomContainer}>
           <View style={styles.buttonContainer}>
             <Button
               title={t("camera.return")}
-              onPress={closeCamera}
+              onPress={props.close}
               color={"white"}
               outline={true}
             />
@@ -55,7 +40,7 @@ export default function Preview(props: Props) {
           <View style={styles.buttonContainer}>
             <Button
               title={t("common.addMeal")}
-              onPress={addMeal}
+              onPress={props.addMeal}
               color={Colors.general.green}
             />
           </View>

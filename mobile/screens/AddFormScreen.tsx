@@ -9,12 +9,12 @@ import t from "../services/translations";
 
 export default function AddFormScreen(props: any) {
   const [name, setName] = useState("");
-  const [calories, setCalories] = useState(
+  const [calories, setCalories] = useState<number>(
     props.route.params
       ? props.route.params.calories
         ? props.route.params.calories
-        : ""
-      : ""
+        : 0
+      : 0
   );
   const [weight, setWeight] = useState(0);
   const [sumOfCalories, setSumOfCalories] = useState(0);
@@ -59,7 +59,7 @@ export default function AddFormScreen(props: any) {
           placeholder={t("addScreen.enterCalories")}
           keyboardType={"numeric"}
           value={calories}
-          onChangeText={(value: string) => setCalories(value)}
+          onChangeText={(value: number) => setCalories(value)}
         />
         <Input
           label={t("addScreen.weight")}
