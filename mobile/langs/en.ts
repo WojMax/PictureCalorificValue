@@ -29,7 +29,7 @@ export const en = {
     enterWeight: "Enter weight in grams",
     toastWeight: "Provide meal weight",
     toastCalories: "Provide meal calories",
-    loader: "Calorie estimation is in progress...",
+    loader: "Calorie estimation in progress...",
   },
   settings: {
     changeLang: "Change language",

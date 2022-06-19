@@ -1,11 +1,9 @@
 import { Platform, StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
 import Preview from "../components/Camera/PhotoPreview";
-import { HomeTabScreenProps } from "../types";
 import AddButtons from "../components/AddButtons/AddButtons";
 import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
-import { ImagePickerCancelledResult } from "expo-image-picker";
 import axios from "axios";
 import ActivityIndicator from "../elements/ActivityIndicator";
 import { t } from "i18n-js";

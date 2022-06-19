@@ -13,6 +13,7 @@ import { styles } from "./style.camera";
 import { MaterialIcons } from "@expo/vector-icons";
 import t from "../../services/translations";
 import ActivityIndicator from "../../elements/ActivityIndicator";
+import axios from "axios";
 
 type Photo = {
   uri: string;
@@ -37,7 +38,7 @@ export default function CalorieCamera(props: Props) {
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
 
-  const [showPreview, setShowPreview] = useState(false);
+  const [screen, setScreen] = useState<string>("main");
   const [photo, setPhoto] = useState<string>();
   const [calories, setCalories] = useState(0);
 
@@ -86,14 +87,24 @@ export default function CalorieCamera(props: Props) {
 
   const takePhoto = async () => {
     // @ts-ignore
-    const photo = await camera.takePictureAsync();
-    setPhoto(photo.uri);
-    setCalories(123);
-    setShowPreview(true);
+    const photo = await camera.takePictureAsync({ base64: true });
+    setScreen("loading");
+    axios
+      .post("https://w-maksim-aihrnabprzjvqez9.socketxp.com/picture", photo)
+      .then((res) => {
+        console.log(res.data);
+        setCalories(res.data.calories);
+        setPhoto(photo.uri);
+        setScreen("preview");
+      })
+      .catch((er) => {
+        console.log(er);
+        setScreen("main");
+      });
   };
 
   const retakePhoto = () => {
-    setShowPreview(false);
+    setScreen("main");
   };
 
   const addMeal = () => {
@@ -111,7 +122,9 @@ export default function CalorieCamera(props: Props) {
     return <View />;
   } else if (!hasPermission) {
     return <ActivityIndicator />;
-  } else if (showPreview) {
+  } else if (screen == "loading") {
+    return <ActivityIndicator text={"Calorie estimation is in progress..."} />;
+  } else if (screen == "preview") {
     return (
       <Preview
         uri={photo}
