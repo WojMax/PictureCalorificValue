@@ -2,7 +2,7 @@ export const pl = {
   common: {
     addProduct: "Dodaj produkt",
     takePhoto: "Zrób zdjęcie",
-    addPhoto: "Dodaj zdjęcie",
+    addPhoto: "Wybierz zdjęcie",
     addMeal: "Dodaj posiłek",
     toast: "Proszę wybrać zdjęcie",
     error: "Błąd",

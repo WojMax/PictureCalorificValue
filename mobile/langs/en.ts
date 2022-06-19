@@ -2,23 +2,23 @@ export const en = {
   common: {
     addProduct: "Add product",
     takePhoto: "Take photo",
-    addPhoto: "Add photo",
+    addPhoto: "Choose photo",
     addMeal: "Add meal",
     toast: "Please choose an image",
     error: "Error",
-    add:"Add"
+    add: "Add",
   },
   navigation: {
     home: "Home",
     favorites: "Favorites",
     profile: "Profile",
     settings: "Settings",
-    camera:"Camera"
+    camera: "Camera",
   },
   camera: {
     return: "Return",
     retakePhoto: "Retake photo",
-    noAccess: "No access to camera"
+    noAccess: "No access to camera",
   },
   addScreen: {
     name: "Name",
@@ -28,13 +28,13 @@ export const en = {
     weight: "Weight",
     enterWeight: "Enter weight in grams",
     toastWeight: "Provide meal weight",
-    toastCalories: "Provide meal calories"
+    toastCalories: "Provide meal calories",
   },
   settings: {
     changeLang: "Change language",
     selectLang: "Select language",
     eng: "English",
     pl: "Polish",
-    darkMode: "Dark mode"
+    darkMode: "Dark mode",
   },
 };

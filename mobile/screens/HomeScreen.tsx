@@ -16,7 +16,7 @@ type Meal = {
 export default function HomeScreen(props: any) {
   const [meals, setMeals] = useState(Array<Meal>());
 
-  /* useEffect(() => {
+  useEffect(() => {
     axios
       .get(
         "http://calorieappserverinz-env.eba-5zgigd3w.eu-central-1.elasticbeanstalk.com/meals/15a227be-8a9e-438f-85b9-8abc7f6832bc"
@@ -27,21 +27,23 @@ export default function HomeScreen(props: any) {
       .catch((er) => {
         console.log(er);
       });
-  }, [props]);*/
+  }, [props]);
 
   return (
     <View style={styles.container}>
       <View style={styles.container2}>
+        <FlatList
+          data={meals}
+          renderItem={({ item }) => <MealsHomeList meal={item} />}
+          keyExtractor={(item, index) => index.toString()}
+        />
+      </View>
+      <View style={styles.container3}>
         <Button
           title={t("common.addProduct")}
           onPress={() => props.navigation.navigate("Add")}
         />
       </View>
-      <FlatList
-        data={meals}
-        renderItem={({ item }) => <MealsHomeList meal={item} />}
-        keyExtractor={(item, index) => index.toString()}
-      />
     </View>
   );
 }
@@ -52,6 +54,10 @@ const styles = StyleSheet.create({
     paddingTop: 30,
   },
   container2: {
-    alignItems: "center",
+    flex: 9,
+  },
+  container3: {
+    flex: 1,
+    justifyContent: "center",
   },
 });
