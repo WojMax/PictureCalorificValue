@@ -1,6 +1,5 @@
 import { FlatList, StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
-import { HomeTabScreenProps } from "../types";
 import Button from "../elements/Button";
 import t from "../services/translations";
 import { useEffect, useState } from "react";

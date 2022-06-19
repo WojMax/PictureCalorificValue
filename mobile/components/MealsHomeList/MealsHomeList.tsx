@@ -43,7 +43,7 @@ export default function MealsHomeList({ meal }: Props) {
         <Text
           style={[listStyles.calText, { color: Colors[colorScheme].textLight }]}
         >
-          {meal.calories}
+          {meal.calories} Kcal
         </Text>
       </View>
     </View>

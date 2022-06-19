@@ -29,6 +29,7 @@ export const pl = {
     enterWeight: "Podaj wagę",
     toastWeight: "Wprowadź wagę posiłku",
     toastCalories: "Wprowadź kaloryczność posiłku",
+    loader: "Trwa szacowanie kalorii...",
   },
   settings: {
     changeLang: "Zmień język",

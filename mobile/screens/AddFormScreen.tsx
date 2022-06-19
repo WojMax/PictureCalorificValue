@@ -4,7 +4,6 @@ import Input from "../elements/Input";
 import Button from "../elements/Button";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import i18n from "i18n-js";
 import t from "../services/translations";
 
 export default function AddFormScreen(props: any) {
@@ -12,14 +11,14 @@ export default function AddFormScreen(props: any) {
   const [calories, setCalories] = useState<number>(
     props.route.params
       ? props.route.params.calories
-        ? props.route.params.calories
-        : 0
-      : 0
+        ? props.route.params.calories.toString()
+        : ""
+      : ""
   );
   const [weight, setWeight] = useState(0);
-  const [sumOfCalories, setSumOfCalories] = useState(0);
 
   const save = () => {
+    console.log(calories);
     const meal = {
       userID: "15a227be-8a9e-438f-85b9-8abc7f6832bc",
       mealName: name,

@@ -12,6 +12,7 @@ import { Camera } from "expo-camera";
 import { styles } from "./style.camera";
 import { MaterialIcons } from "@expo/vector-icons";
 import t from "../../services/translations";
+import ActivityIndicator from "../../elements/ActivityIndicator";
 
 type Photo = {
   uri: string;
@@ -96,7 +97,10 @@ export default function CalorieCamera(props: Props) {
   };
 
   const addMeal = () => {
-    props.navigation.navigate("AddForm", { url: "HomeStack", calories: 123 });
+    props.navigation.navigate("AddForm", {
+      url: "HomeStack",
+      calories: calories,
+    });
   };
 
   const closeCamera = () => {
@@ -106,12 +110,12 @@ export default function CalorieCamera(props: Props) {
   if (hasPermission == null) {
     return <View />;
   } else if (!hasPermission) {
-    return <Text>{t("camera.noAccess")}</Text>;
+    return <ActivityIndicator />;
   } else if (showPreview) {
     return (
       <Preview
         uri={photo}
-        calories={123}
+        calories={calories}
         close={closeCamera}
         retake={retakePhoto}
         addMeal={addMeal}

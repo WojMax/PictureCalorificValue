@@ -7,62 +7,63 @@ import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
 import { ImagePickerCancelledResult } from "expo-image-picker";
 import axios from "axios";
-//import ImageResizer from "react-native-image-resizer";
+import ActivityIndicator from "../elements/ActivityIndicator";
+import { t } from "i18n-js";
 
 export default function AddFormScreen({ navigation }: any) {
-  const [showPreview, setShowPreview] = useState<boolean>(false);
+  const [screen, setScreen] = useState<string>("main");
   const [uri, setUri] = useState("");
+  const [calories, setCalories] = useState(0);
   const [imageData, setImageData] = useState();
 
-  //w tej funkcji działaj wszystkie ruchy dozwolone
   const pickImage = async () => {
-    let resoult = await ImagePicker.launchImageLibraryAsync({
+    setScreen("loading");
+    let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [3, 2],
-      base64: true, ///na razie tak działa wysyłanie trzeb kombinować ze zmniejszeniem bloba albo FormData
+      base64: true,
     });
-
-    console.log(resoult);
-
-    //ta biblioteka nie działa jak coś już ci mówię
-    // // @ts-ignore
-    // let res = await ImageResizer.createResizedImage(
-    //   // @ts-ignore
-    //   "data:image/png" + JSON.stringify(resoult.base64),
-    //   600,
-    //   400,
-    //   "JPEG",
-    //   60,
-    //   0
-    // );
-    //
-
-    //wysyłanie na serwer podstawiaj w resoult nie dostaniesz za dużo w odpowiedzi i tak xD
-    axios
-      .post("https://w-maksim-te6it8o1971pd5y4.socketxp.com/picture", resoult)
-      .then((res) => {
-        console.log("**********************************");
-        console.log(res.data);
-      })
-      .catch((er) => console.log(er));
+    if (!result.cancelled) {
+      axios
+        .post("https://w-maksim-aihrnabprzjvqez9.socketxp.com/picture", result)
+        .then((res) => {
+          console.log(res.data);
+          setCalories(res.data.calories);
+          // @ts-ignore
+          setUri(result.uri);
+          setScreen("preview");
+        })
+        .catch((er) => {
+          console.log(er);
+          setScreen("main");
+        });
+    } else {
+      setScreen("main");
+    }
   };
 
   const addMeal = () => {
-    navigation.navigate("AddForm", { url: "HomeStack", calories: "123" });
-    setShowPreview(false);
+    navigation.navigate("AddForm", { url: "HomeStack", calories: calories });
+    setScreen("main");
   };
 
-  if (showPreview) {
+  const close = () => {
+    setScreen("main");
+  };
+
+  if (screen == "preview") {
     return (
       <Preview
         uri={uri}
-        calories={123}
+        calories={calories}
         close={close}
         retake={pickImage}
         addMeal={addMeal}
       />
     );
+  } else if (screen === "loading") {
+    return <ActivityIndicator text={t("addScreen.loader")} />;
   } else {
     return (
       <View style={styles.container}>
