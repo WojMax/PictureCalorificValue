@@ -148,7 +148,13 @@ const FavoritesStack = createNativeStackNavigator();
 function FavoritesStackNavigator() {
   return (
     <FavoritesStack.Navigator>
-      <FavoritesStack.Screen name="Favorites" component={FavoritesScreen} />
+      <FavoritesStack.Screen
+        name="Favorites"
+        component={FavoritesScreen}
+        options={{
+          title: t("navigation.favorites"),
+        }}
+      />
     </FavoritesStack.Navigator>
   );
 }
@@ -164,6 +170,7 @@ function ProfileStackNavigator() {
         name="Profile"
         component={ProfileScreen}
         options={({ navigation }) => ({
+          title: t("navigation.profile"),
           headerRight: () => (
             <Pressable
               onPress={() => navigation.navigate("Settings")}
@@ -181,7 +188,13 @@ function ProfileStackNavigator() {
           ),
         })}
       />
-      <ProfileStack.Screen name="Settings" component={SettingsScreen} />
+      <ProfileStack.Screen
+        name="Settings"
+        component={SettingsScreen}
+        options={{
+          title: t("navigation.settings"),
+        }}
+      />
     </ProfileStack.Navigator>
   );
 }
