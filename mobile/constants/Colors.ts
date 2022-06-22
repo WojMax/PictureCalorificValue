@@ -10,12 +10,12 @@ export default {
   light: {
     //text
     text: "#000",
-    textLight: "#eceff1",
-    textDark: "#babdbe",
+    textLight: "#6d6d6d",
+    textDark: "#424242",
     //areas
     background: "#fff",
-    surface: colors.surface,
-    topSurface: colors.topSurface,
+    surface: "#cfd8dc",
+    topSurface: "#9ea7aa",
     //mainColors
     accent: colors.mainAccent,
     //navButtons
@@ -29,8 +29,8 @@ export default {
     textDark: "#8a8d8e",
     //areas
     background: "#000",
-    surface: colors.surface,
-    topSurface: colors.topSurface,
+    surface: "#121212",
+    topSurface: "#282828",
     //mainColors
     accent: colors.mainAccent,
     //navButtons

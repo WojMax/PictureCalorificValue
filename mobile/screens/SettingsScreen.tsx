@@ -57,13 +57,6 @@ export default function SettingsScreen() {
         <Text style={styles.title}>{t("settings.changeLang")}</Text>
         <Button title={t("settings.changeLang")} onPress={changeLang} />
       </View>
-      <View style={styles.settingContainer}>
-        <Text style={styles.title}>{t("settings.darkMode")}</Text>
-        <Switch
-          value={darkColorScheme}
-          onValueChange={() => changeColorScheme()}
-        />
-      </View>
     </View>
   );
 }
