@@ -27,6 +27,7 @@ import AddScreen from "../screens/AddScreen";
 import CameraScreen from "../screens/CameraScreen";
 import i18n from "i18n-js";
 import t from "../services/translations";
+import EditFormScreen from "../screens/EditFormScreen";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -153,6 +154,13 @@ function FavoritesStackNavigator() {
         component={FavoritesScreen}
         options={{
           title: t("navigation.favorites"),
+        }}
+      />
+      <FavoritesStack.Screen
+        name="Edit"
+        component={EditFormScreen}
+        options={{
+          title: t("common.addFav"),
         }}
       />
     </FavoritesStack.Navigator>

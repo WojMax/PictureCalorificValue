@@ -4,6 +4,7 @@ export const en = {
     takePhoto: "Take photo",
     addPhoto: "Choose photo",
     addMeal: "Add meal",
+    addFav:"Add to favourites",
     toast: "Please choose an image",
     error: "Error",
     add: "Add",
@@ -30,6 +31,14 @@ export const en = {
     toastWeight: "Provide meal weight",
     toastCalories: "Provide meal calories",
     loader: "Calorie estimation in progress...",
+  },
+  editScreen: {
+    name: "Name",
+    calories: "Calories",
+    category: "Category",
+    edit:"Edit",
+    editMeal:"Edit meal",
+    delete:"Delete meal"
   },
   settings: {
     changeLang: "Change language",

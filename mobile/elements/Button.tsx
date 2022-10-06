@@ -5,6 +5,7 @@ import useColorScheme from "../hooks/useColorScheme";
 type Props = {
   title: string;
   color?: string;
+  disabled?: boolean | undefined;
   outline?: boolean;
   onPress: () => void;
 };
@@ -29,6 +30,7 @@ export default function Button(props: Props) {
             : { color: Colors[colorScheme].accent }
           : null
       }
+      disabled={props.disabled}
       title={props.title}
       type={props.outline ? "outline" : "solid"}
       onPress={props.onPress}

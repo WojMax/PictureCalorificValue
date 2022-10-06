@@ -4,6 +4,7 @@ export const pl = {
     takePhoto: "Zrób zdjęcie",
     addPhoto: "Wybierz zdjęcie",
     addMeal: "Dodaj posiłek",
+    addFav:"Dodaj do ulubionych",
     toast: "Proszę wybrać zdjęcie",
     error: "Błąd",
     add: "Dodaj",
@@ -30,6 +31,14 @@ export const pl = {
     toastWeight: "Wprowadź wagę posiłku",
     toastCalories: "Wprowadź kaloryczność posiłku",
     loader: "Trwa szacowanie kalorii...",
+  },
+  editScreen: {
+    name: "Nazwa",
+    calories: "Kalorie",
+    category: "Kategoria",
+    edit:"Edytuj",
+    editMeal:"Edytuj potrawę",
+    delete:"Usuń potrawę"
   },
   settings: {
     changeLang: "Zmień język",

@@ -6,7 +6,13 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import t from "../services/translations";
 
-export default function AddFormScreen(props: any) {
+type Meal = {
+  meal_name: string;
+  calories: number;
+  category: string;
+};
+
+export default function EditFormScreen(props: any) {
   const [name, setName] = useState("");
   const [calories, setCalories] = useState<number>(
     props.route.params
@@ -15,48 +21,47 @@ export default function AddFormScreen(props: any) {
         : ""
       : ""
   );
-  const [weight, setWeight] = useState(0);
-
-  const save = () => {
+  const [category, setCategory] = useState("");
+  const editFav = () => {
     console.log(calories);
     const meal = {
       userID: "15a227be-8a9e-438f-85b9-8abc7f6832bc",
-      mealName: name,
-      calories: calories,
-      mealWeight: weight,
-      dateCreated:
-        new Date().getFullYear() +
-        "-" +
-        (new Date().getMonth() + 1) +
-        "-" +
-        new Date().getDate(),
-      category: "breakfast",
+      mealName: props.route.params.name,
+      calories: props.route.params.calories,
+      category: props.route.params.category,
+      newMealName: name,
+      newCalories: calories,
+      newCategory: category,
     };
     axios
-      .put(
-        "http://calorieappserverinz-env.eba-5zgigd3w.eu-central-1.elasticbeanstalk.com/meal",
+      .post(
+        "http://calorieappserverinz-env.eba-5zgigd3w.eu-central-1.elasticbeanstalk.com/favourites",
         meal
       )
       .then((res) => {
-        props.navigation.navigate("Home", {});
+        props.navigation.navigate("Favorites", {});
       })
       .catch((er) => {
         console.log(er);
       });
   };
-  const saveFav = () => {
+
+  const deleteFav = () => {
     console.log(calories);
-    const mealFav = {
+    const meal = {
       userID: "15a227be-8a9e-438f-85b9-8abc7f6832bc",
-      mealName: name,
-      calories: calories,
-      category: "breakfast",
+      mealName: props.route.params.name,
+      calories: props.route.params.calories,
+      category: props.route.params.category,
     };
     axios
-      .put(
+      .delete(
         "http://calorieappserverinz-env.eba-5zgigd3w.eu-central-1.elasticbeanstalk.com/favourites",
-        mealFav
+        { data: meal }
       )
+      .then((res) => {
+        props.navigation.navigate("Favorites", {});
+      })
       .catch((er) => {
         console.log(er);
       });
@@ -66,31 +71,30 @@ export default function AddFormScreen(props: any) {
     <View style={styles.container}>
       <View style={styles.inputContainer}>
         <Input
-          label={t("addScreen.name")}
-          placeholder={t("addScreen.enterName")}
+          label={t("editScreen.name")}
+          placeholder={props.route.params.name}
           onChangeText={(value: string) => setName(value)}
         />
         <Input
-          label={t("addScreen.calories")}
-          placeholder={t("addScreen.enterCalories")}
+          label={t("editScreen.calories")}
+          placeholder={props.route.params.calories.toString()}
           keyboardType={"numeric"}
           value={calories}
           onChangeText={(value: number) => setCalories(value)}
         />
         <Input
-          label={t("addScreen.weight")}
-          placeholder={t("addScreen.enterWeight")}
-          keyboardType={"numeric"}
-          onChangeText={(value: number) => setWeight(value)}
+          label={t("editScreen.category")}
+          placeholder={props.route.params.category}
+          onChangeText={(value: string) => setCategory(value)}
         />
       </View>
       <View style={styles.buttonContainer}>
         <Button
-          title={t("common.addFav")}
-          disabled={!name || !calories}
-          onPress={() => saveFav()}
+          title={t("editScreen.delete")}
+          color="#ef5350"
+          onPress={() => deleteFav()}
         />
-        <Button title={t("common.addProduct")} onPress={() => save()} />
+        <Button title={t("editScreen.edit")} onPress={() => editFav()} />
       </View>
     </View>
   );
