@@ -49,5 +49,6 @@ export const en = {
     eng: "English",
     pl: "Polish",
     darkMode: "Dark mode",
+    logOut: "Log out",
   },
 };

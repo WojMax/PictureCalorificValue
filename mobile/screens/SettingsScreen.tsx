@@ -9,6 +9,7 @@ import { setColorSchemeReducer, setLangReducer } from "../redux/userDataSlice";
 import i18n from "i18n-js";
 import Colors from "../constants/Colors";
 import Switch from "../elements/Switch";
+import { Auth } from "aws-amplify";
 
 export default function SettingsScreen() {
   const dispatch = useAppDispatch();
@@ -51,11 +52,18 @@ export default function SettingsScreen() {
     setDarkColorScheme(!darkColorScheme);
   };
 
+  const singOut = async () => {
+    await Auth.signOut();
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.settingContainer}>
         <Text style={styles.title}>{t("settings.changeLang")}</Text>
         <Button title={t("settings.changeLang")} onPress={changeLang} />
+      </View>
+      <View style={styles.settingContainer}>
+        <Button title={t("settings.logOut")} onPress={singOut} />
       </View>
     </View>
   );

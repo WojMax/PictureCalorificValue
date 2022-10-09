@@ -1,0 +1,15 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-calera-staging-153426-authRole",
+      "UnauthRoleArn": "arn:aws:iam::480450113451:role/amplify-calera-staging-153426-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::480450113451:role/amplify-calera-staging-153426-authRole",
+      "Region": "eu-central-1",
+      "DeploymentBucketName": "amplify-calera-staging-153426-deployment",
+      "UnauthRoleName": "amplify-calera-staging-153426-unauthRole",
+      "StackName": "amplify-calera-staging-153426",
+      "StackId": "arn:aws:cloudformation:eu-central-1:480450113451:stack/amplify-calera-staging-153426/5b3cf820-4a43-11ed-a8d1-06e061ee7b0e",
+      "AmplifyAppId": "d2q5v3gwiysi63"
+    }
+  }
+}
