@@ -2,6 +2,9 @@ import { View, Text } from "../Themed";
 import listStyles from "./style.MealsHomeList";
 import Colors from "../../constants/Colors";
 import useColorScheme from "../../hooks/useColorScheme";
+import Button from "../../elements/Button";
+import t from "../../services/translations";
+import { TouchableOpacity } from "react-native";
 
 type Meal = {
   calories: number;
@@ -11,23 +14,28 @@ type Meal = {
 
 type Props = {
   meal: Meal;
+  EditFoodOnPress: () => void;
 };
 
-export default function MealsHomeList({ meal }: Props) {
+export default function MealsHomeList({ meal, EditFoodOnPress }: Props) {
   const colorScheme = useColorScheme();
   return (
-    <View
+    <TouchableOpacity
+      onPress={EditFoodOnPress}
       style={[
         listStyles.container,
         { borderColor: Colors[colorScheme].surface },
       ]}
     >
-      <View>
-        <View>
+      <TouchableOpacity onPress={EditFoodOnPress}>
+        <TouchableOpacity onPress={EditFoodOnPress}>
           <Text style={listStyles.nameText}>{meal.meal_name}</Text>
-        </View>
-        <View>
-          <View style={listStyles.containerBottom}>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={EditFoodOnPress}>
+          <TouchableOpacity
+            onPress={EditFoodOnPress}
+            style={listStyles.containerBottom}
+          >
             <Text
               style={[
                 listStyles.kcal100Text,
@@ -36,16 +44,19 @@ export default function MealsHomeList({ meal }: Props) {
             >
               {meal.calories_on_100g} Kcal/100g
             </Text>
-          </View>
-        </View>
-      </View>
-      <View style={listStyles.containerCalories}>
+          </TouchableOpacity>
+        </TouchableOpacity>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={EditFoodOnPress}
+        style={listStyles.containerCalories}
+      >
         <Text
           style={[listStyles.calText, { color: Colors[colorScheme].textLight }]}
         >
           {meal.calories} Kcal
         </Text>
-      </View>
-    </View>
+      </TouchableOpacity>
+    </TouchableOpacity>
   );
 }

@@ -10,6 +10,8 @@ type Meal = {
   calories: number;
   calories_on_100g: number;
   meal_name: string;
+  mealWeight: number;
+  navigation: any;
 };
 
 export default function HomeScreen(props: any) {
@@ -33,7 +35,18 @@ export default function HomeScreen(props: any) {
       <View style={styles.container2}>
         <FlatList
           data={meals}
-          renderItem={({ item }) => <MealsHomeList meal={item} />}
+          renderItem={({ item }) => (
+            <MealsHomeList
+              meal={item}
+              EditFoodOnPress={() =>
+                props.navigation.navigate("Edit", {
+                  name: item.meal_name,
+                  weight: item.mealWeight,
+                  calories: item.calories_on_100g,
+                })
+              }
+            />
+          )}
           keyExtractor={(item, index) => index.toString()}
         />
       </View>

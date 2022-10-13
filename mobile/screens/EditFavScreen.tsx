@@ -9,7 +9,7 @@ import t from "../services/translations";
 type Meal = {
   meal_name: string;
   calories: number;
-  mealWeight: number;
+  category: string;
 };
 
 export default function EditFormScreen(props: any) {
@@ -21,7 +21,7 @@ export default function EditFormScreen(props: any) {
         : ""
       : ""
   );
-  const [weight, setWeight] = useState<number>();
+  const [category, setCategory] = useState("");
   const editFav = () => {
     console.log(calories);
     const meal = {
@@ -31,6 +31,7 @@ export default function EditFormScreen(props: any) {
       category: props.route.params.category,
       newMealName: name,
       newCalories: calories,
+      newCategory: category,
     };
     axios
       .post(
@@ -82,9 +83,9 @@ export default function EditFormScreen(props: any) {
           onChangeText={(value: number) => setCalories(value)}
         />
         <Input
-          label={t("editScreen.weight")}
-          placeholder={props.route.params.weight}
-          onChangeText={(value: number) => setWeight(value)}
+          label={t("editScreen.category")}
+          placeholder={props.route.params.category}
+          onChangeText={(value: string) => setCategory(value)}
         />
       </View>
       <View style={styles.buttonContainer}>

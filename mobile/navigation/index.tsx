@@ -23,11 +23,13 @@ import ProfileScreen from "../screens/ProfileScreen";
 import { RootStackParamList, RootTabParamList } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 import AddFormScreen from "../screens/AddFormScreen";
+import AddFavScreen from "../screens/AddFavScreen";
 import AddScreen from "../screens/AddScreen";
 import CameraScreen from "../screens/CameraScreen";
 import i18n from "i18n-js";
 import t from "../services/translations";
 import EditFormScreen from "../screens/EditFormScreen";
+import EditFavScreen from "../screens/EditFavScreen";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -140,6 +142,13 @@ function HomeStackNavigator() {
           title: t("common.addProduct"),
         }}
       />
+      <HomeStack.Screen
+        name="Edit"
+        component={EditFormScreen}
+        options={{
+          title: t("editScreen.edit"),
+        }}
+      />
     </HomeStack.Navigator>
   );
 }
@@ -158,7 +167,14 @@ function FavoritesStackNavigator() {
       />
       <FavoritesStack.Screen
         name="Edit"
-        component={EditFormScreen}
+        component={EditFavScreen}
+        options={{
+          title: t("common.addFav"),
+        }}
+      />
+      <FavoritesStack.Screen
+        name="AddFav"
+        component={AddFavScreen}
         options={{
           title: t("common.addFav"),
         }}

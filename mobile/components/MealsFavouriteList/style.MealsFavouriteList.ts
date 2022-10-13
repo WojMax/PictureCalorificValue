@@ -18,9 +18,6 @@ const listStyles = StyleSheet.create({
     fontSize: 16,
   },
   calText: {
-    fontSize: 16,
-  },
-  category: {
     fontSize: 14,
   },
 });

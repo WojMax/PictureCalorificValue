@@ -4,6 +4,8 @@ import listStyles from "./style.MealsFavouriteList";
 import Colors from "../../constants/Colors";
 import useColorScheme from "../../hooks/useColorScheme";
 import t from "../../services/translations";
+import { Entypo } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native";
 
 type Meal = {
   meal_name: string;
@@ -19,39 +21,43 @@ type Props = {
 export default function MealsFavouriteList({ meal, EditFoodOnPress }: Props) {
   const colorScheme = useColorScheme();
   return (
-    <View
+    <TouchableOpacity
+      onPress={EditFoodOnPress}
       style={[
         listStyles.container,
         { borderColor: Colors[colorScheme].surface },
       ]}
     >
-      <View>
-        <View>
+      <TouchableOpacity onPress={EditFoodOnPress}>
+        <TouchableOpacity onPress={EditFoodOnPress}>
           <Text style={listStyles.nameText}>{meal.meal_name}</Text>
-        </View>
-        <View>
-          <View style={listStyles.containerBottom}>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={EditFoodOnPress}>
+          <TouchableOpacity
+            onPress={EditFoodOnPress}
+            style={listStyles.containerBottom}
+          >
             <Text
               style={[
-                listStyles.category,
+                listStyles.calText,
                 { color: Colors[colorScheme].textDark },
               ]}
             >
-              Category: {meal.category}
+              {meal.calories} Kcal/100g
             </Text>
-          </View>
-        </View>
-      </View>
-      <View style={listStyles.containerCalories}>
-        <Text
-          style={[listStyles.calText, { color: Colors[colorScheme].textLight }]}
-        >
-          {meal.calories} Kcal
-        </Text>
-      </View>
-      <View style={listStyles.containerCalories}>
-        <Button title={t("editScreen.edit")} onPress={EditFoodOnPress}></Button>
-      </View>
-    </View>
+          </TouchableOpacity>
+        </TouchableOpacity>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={EditFoodOnPress}
+        style={listStyles.containerCalories}
+      >
+        <Entypo
+          name="dots-three-horizontal"
+          size={20}
+          color={Colors[colorScheme].textDark}
+        />
+      </TouchableOpacity>
+    </TouchableOpacity>
   );
 }

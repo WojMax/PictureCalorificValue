@@ -5,7 +5,7 @@ import t from "../services/translations";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import MealsFavouriteList from "../components/MealsFavouriteList/MealsFavouriteList";
-import FloatingButton from "../elements/FloatingButton"
+import FloatingButton from "../elements/FloatingButton";
 
 type Meal = {
   meal_name: string;
@@ -48,10 +48,11 @@ export default function FavoritesScreen({ props, navigation }: any) {
           keyExtractor={(item, index) => index.toString()}
         />
         <View style={styles.container3}>
-          <FloatingButton onPress={navigation.navigate("Home")}></FloatingButton>   
+          <FloatingButton
+            onPress={() => navigation.navigate("AddFav")}
+          ></FloatingButton>
         </View>
       </View>
-         
     </View>
   );
 }
