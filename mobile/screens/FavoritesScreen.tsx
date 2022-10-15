@@ -13,7 +13,7 @@ type Meal = {
   category: string;
 };
 
-export default function FavoritesScreen({ props, navigation }: any) {
+export default function FavoritesScreen(props: any) {
   const [meals, setMeals] = useState(Array<Meal>());
 
   useEffect(() => {
@@ -28,6 +28,7 @@ export default function FavoritesScreen({ props, navigation }: any) {
         console.log(er);
       });
   }, [props]);
+
   return (
     <View style={styles.container}>
       <View style={styles.container2}>
@@ -37,7 +38,7 @@ export default function FavoritesScreen({ props, navigation }: any) {
             <MealsFavouriteList
               meal={item}
               EditFoodOnPress={() =>
-                navigation.navigate("Edit", {
+                props.navigation.navigate("Edit", {
                   name: item.meal_name,
                   calories: item.calories,
                   category: item.category,
@@ -48,9 +49,7 @@ export default function FavoritesScreen({ props, navigation }: any) {
           keyExtractor={(item, index) => index.toString()}
         />
         <View style={styles.container3}>
-          <FloatingButton
-            onPress={() => navigation.navigate("AddFav")}
-          ></FloatingButton>
+          <FloatingButton onPress={() => props.navigation.navigate("AddFav")} />
         </View>
       </View>
     </View>

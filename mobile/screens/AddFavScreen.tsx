@@ -30,6 +30,9 @@ export default function AddFormScreen(props: any) {
         "http://calorieappserverinz-env.eba-5zgigd3w.eu-central-1.elasticbeanstalk.com/favourites",
         mealFav
       )
+      .then(() => {
+        props.navigation.navigate("Favorites", {});
+      })
       .catch((er) => {
         console.log(er);
       });
