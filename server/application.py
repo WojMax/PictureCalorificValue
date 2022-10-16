@@ -1,31 +1,55 @@
 import psycopg2
 import ast
 import json
+# from flask_awscognito import AWSCognitoAuthentication
 from psycopg2 import Error
 from flask import Flask, request, jsonify
 from flask_cors import cross_origin
 
 application = Flask(__name__, instance_relative_config=True)
 
+# application.config['AWS_DEFAULT_REGION'] = 'eu-central-1'
+# application.config['AWS_COGNITO_DOMAIN'] = 'https://calorie-app-server.auth.eu-central-1.amazoncognito.com'
+# application.config['AWS_COGNITO_USER_POOL_ID'] = 'eu-central-1_rOBluZwQ1'
+# application.config['AWS_COGNITO_USER_POOL_CLIENT_ID'] = 'm75ur9evsre2ngnssbnvnkf5g'
+# application.config['AWS_COGNITO_USER_POOL_CLIENT_SECRET'] = 'ZZZZ'
+# application.config['AWS_COGNITO_REDIRECT_URL'] = 'http://localhost:5000/aws_cognito_redirect'
+
+# aws_auth = AWSCognitoAuthentication(application)
+
 try:
-    #    connection = psycopg2.connect(user="postgres",
-    #                                  password="f26e%ppBV7t%a#MPxHUMMvq9j",
-    #                                  host="calorie-app-database-instance.ctsaxdvte9a9.eu-central-1.rds.amazonaws.com",
-    #                                  port="5432",
-    #                                  database="calorie_app_database")
     connection = psycopg2.connect(user="postgres",
-                                  password="",  ########## enter password
-                                  host="localhost",
+                                  password="f26e%ppBV7t%a#MPxHUMMvq9j",
+                                  host="calorie-app-database-instance.ctsaxdvte9a9.eu-central-1.rds.amazonaws.com",
                                   port="5432",
                                   database="calorie_app_database")
+# connection = psycopg2.connect(user="postgres",
+#                              password="Wojtecki2",  ########## enter password
+#                              host="localhost",
+#                              port="5432",
+#                              database="calorie_app_database")
 
 except (Exception, Error) as error:
     print("Error while connecting to PostgreSQL", error)
 
 
 @application.route('/')
-def hello_world():
-    return 'Calorie app server'
+# @aws_auth.authentication_required
+def index():
+    # claims = aws_auth.claims  # also available through g.cognito_claims
+    # return jsonify({'claims': claims})
+    return 'welcome'
+
+
+# @application.route('/sign_in')
+# def sign_in():
+#    return redirect(aws_auth.get_sign_in_url())
+
+
+# @application.route('/aws_cognito_redirect')
+# def aws_cognito_redirect():
+#    access_token = aws_auth.get_access_token(request.args)
+#    return jsonify({'access_token': access_token})
 
 
 @application.route('/picture', methods=['POST', 'GET'])
@@ -47,7 +71,8 @@ def show_last_picture(last_photo=None):
 def save_meal_data_in_database():
     if request.method == 'PUT':
         data = request.data
-        post_data = json.loads(ast.literal_eval(data.decode("UTF-8")))
+        post_data = ast.literal_eval(data.decode("UTF-8"))
+
 
         userID = post_data["userID"]
         mealName = post_data["mealName"]
@@ -108,7 +133,7 @@ def favourites():
     if request.method == 'PUT':
         # add new favourite meal
         data = request.data
-        post_data = json.loads(ast.literal_eval(data.decode("UTF-8")))
+        post_data = ast.literal_eval(data.decode("UTF-8"))
 
         userID = post_data["userID"]
         mealName = post_data["mealName"]
@@ -135,7 +160,7 @@ def favourites():
     elif request.method == 'DELETE':
         # delete favourite meal
         data = request.data
-        post_data = json.loads(ast.literal_eval(data.decode("UTF-8")))
+        post_data = ast.literal_eval(data.decode("UTF-8"))
 
         userID = post_data["userID"]
         mealName = post_data["mealName"]
@@ -160,7 +185,7 @@ def favourites():
     elif request.method == 'POST':
         # change favourite meal data
         data = request.data
-        post_data = json.loads(ast.literal_eval(data.decode("UTF-8")))
+        post_data = ast.literal_eval(data.decode("UTF-8"))
 
         userID = post_data["userID"]
         mealName = post_data["mealName"]
