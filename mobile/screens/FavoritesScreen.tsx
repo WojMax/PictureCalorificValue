@@ -1,11 +1,10 @@
 import { FlatList, StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
-import Button from "../elements/Button";
-import t from "../services/translations";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useEffect } from "react";
 import MealsFavouriteList from "../components/MealsFavouriteList/MealsFavouriteList";
 import FloatingButton from "../elements/FloatingButton";
+import { useAppDispatch, useAppSelector } from "../hooks/useRedux";
+import { getFavMeals } from "../redux/favoritesSlice";
 
 type Meal = {
   meal_name: string;
@@ -14,19 +13,12 @@ type Meal = {
 };
 
 export default function FavoritesScreen(props: any) {
-  const [meals, setMeals] = useState(Array<Meal>());
+  let meals = useAppSelector((state) => state.favMeal.meals);
+
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    axios
-      .get(
-        "http://calorieappserverinz-env.eba-5zgigd3w.eu-central-1.elasticbeanstalk.com/favourites/15a227be-8a9e-438f-85b9-8abc7f6832bc"
-      )
-      .then((res) => {
-        setMeals(res.data);
-      })
-      .catch((er) => {
-        console.log(er);
-      });
+    dispatch(getFavMeals());
   }, [props]);
 
   return (

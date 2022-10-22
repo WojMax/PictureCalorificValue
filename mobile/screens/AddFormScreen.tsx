@@ -5,8 +5,12 @@ import Button from "../elements/Button";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import t from "../services/translations";
+import { getFavMeals } from "../redux/favoritesSlice";
+import { useAppDispatch } from "../hooks/useRedux";
 
 export default function AddFormScreen(props: any) {
+  const dispatch = useAppDispatch();
+
   const [name, setName] = useState("");
   const [calories, setCalories] = useState<number>(
     props.route.params
@@ -44,7 +48,7 @@ export default function AddFormScreen(props: any) {
         console.log(er);
       });
   };
-  const saveFav = () => {
+  const saveFav = async () => {
     console.log(calories);
     const mealFav = {
       userID: "15a227be-8a9e-438f-85b9-8abc7f6832bc",
@@ -52,14 +56,11 @@ export default function AddFormScreen(props: any) {
       calories: calories,
       category: "breakfast",
     };
-    axios
-      .put(
-        "http://calorieappserverinz-env.eba-5zgigd3w.eu-central-1.elasticbeanstalk.com/favourites",
-        mealFav
-      )
-      .catch((er) => {
-        console.log(er);
-      });
+    await axios.put(
+      "http://calorieappserverinz-env.eba-5zgigd3w.eu-central-1.elasticbeanstalk.com/favourites",
+      mealFav
+    );
+    dispatch(getFavMeals());
   };
 
   return (

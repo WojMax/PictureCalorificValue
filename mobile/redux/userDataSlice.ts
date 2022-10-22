@@ -1,8 +1,5 @@
-import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import {
-  ColorSchemeName,
-  useColorScheme as _useColorScheme,
-} from "react-native";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { ColorSchemeName } from "react-native";
 import i18n from "i18n-js";
 
 interface UserState {
