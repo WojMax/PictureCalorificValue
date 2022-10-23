@@ -39,11 +39,10 @@ export default function Button(props: Props) {
 }
 
 const containerStyle = {
-  margin: 5,
-  borderRadius: 50,
+  borderRadius: 10,
 };
 
 const buttonStyle = {
   paddingHorizontal: 20,
-  borderRadius: 50,
+  borderRadius: 10,
 };

@@ -28,15 +28,12 @@ export default function MealsFavouriteList({ meal, EditFoodOnPress }: Props) {
         { borderColor: Colors[colorScheme].surface },
       ]}
     >
-      <TouchableOpacity onPress={EditFoodOnPress}>
-        <TouchableOpacity onPress={EditFoodOnPress}>
+      <View>
+        <View>
           <Text style={listStyles.nameText}>{meal.meal_name}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={EditFoodOnPress}>
-          <TouchableOpacity
-            onPress={EditFoodOnPress}
-            style={listStyles.containerBottom}
-          >
+        </View>
+        <View>
+          <View style={listStyles.containerBottom}>
             <Text
               style={[
                 listStyles.calText,
@@ -45,19 +42,16 @@ export default function MealsFavouriteList({ meal, EditFoodOnPress }: Props) {
             >
               {meal.calories} Kcal/100g
             </Text>
-          </TouchableOpacity>
-        </TouchableOpacity>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={EditFoodOnPress}
-        style={listStyles.containerCalories}
-      >
+          </View>
+        </View>
+      </View>
+      <View style={listStyles.containerCalories}>
         <Entypo
           name="dots-three-horizontal"
           size={20}
           color={Colors[colorScheme].textDark}
         />
-      </TouchableOpacity>
+      </View>
     </TouchableOpacity>
   );
 }

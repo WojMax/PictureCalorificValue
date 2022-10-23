@@ -89,12 +89,16 @@ export default function EditFormScreen(props: any) {
         />
       </View>
       <View style={styles.buttonContainer}>
-        <Button
-          title={t("editScreen.delete")}
-          color="#ef5350"
-          onPress={() => deleteFav()}
-        />
-        <Button title={t("editScreen.edit")} onPress={() => editFav()} />
+        <View style={{ margin: 5 }}>
+          <Button
+            title={t("editScreen.delete")}
+            color="#ef5350"
+            onPress={() => deleteFav()}
+          />
+        </View>
+        <View style={{ margin: 5 }}>
+          <Button title={t("editScreen.edit")} onPress={() => editFav()} />
+        </View>
       </View>
     </View>
   );
