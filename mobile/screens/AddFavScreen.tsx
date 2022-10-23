@@ -5,6 +5,7 @@ import Button from "../elements/Button";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import t from "../services/translations";
+import HttpApi from "../services/Api/HttpApi";
 
 export default function AddFormScreen(props: any) {
   const [name, setName] = useState("");
@@ -17,25 +18,20 @@ export default function AddFormScreen(props: any) {
   );
   const [category, setCategory] = useState("");
 
-  const saveFav = () => {
-    console.log(calories);
+  const saveFav = async () => {
     const mealFav = {
       userID: "15a227be-8a9e-438f-85b9-8abc7f6832bc",
       mealName: name,
       calories: calories,
       category: "breakfast",
     };
-    axios
-      .put(
-        "http://calorieappserverinz-env.eba-5zgigd3w.eu-central-1.elasticbeanstalk.com/favourites",
-        mealFav
-      )
-      .then(() => {
-        props.navigation.navigate("Favorites", {});
-      })
-      .catch((er) => {
-        console.log(er);
-      });
+    try {
+      const resoult = await HttpApi.put("favourites", mealFav);
+      console.log(resoult);
+      props.navigation.navigate("Favorites", {});
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -60,7 +56,9 @@ export default function AddFormScreen(props: any) {
         />
       </View>
       <View style={styles.buttonContainer}>
-        <Button title={t("common.addProduct")} onPress={() => saveFav()} />
+        <View style={{ margin: 5 }}>
+          <Button title={t("common.addProduct")} onPress={() => saveFav()} />
+        </View>
       </View>
     </View>
   );

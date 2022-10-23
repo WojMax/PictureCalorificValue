@@ -5,6 +5,7 @@ import t from "../services/translations";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import MealsHomeList from "../components/MealsHomeList/MealsHomeList";
+import HttpApi from "../services/Api/HttpApi";
 
 type Meal = {
   calories: number;
@@ -18,16 +19,18 @@ export default function HomeScreen(props: any) {
   const [meals, setMeals] = useState(Array<Meal>());
 
   useEffect(() => {
-    axios
-      .get(
-        "http://calorieappserverinz-env.eba-5zgigd3w.eu-central-1.elasticbeanstalk.com/meals/15a227be-8a9e-438f-85b9-8abc7f6832bc"
-      )
-      .then((res) => {
-        setMeals(res.data);
-      })
-      .catch((er) => {
-        console.log(er);
-      });
+    try {
+      const fetchData = async () => {
+        const result = await HttpApi.get(
+          "meals",
+          "15a227be-8a9e-438f-85b9-8abc7f6832bc"
+        );
+        setMeals(result.data);
+      };
+      fetchData();
+    } catch (error) {
+      console.error(error);
+    }
   }, [props]);
 
   return (
