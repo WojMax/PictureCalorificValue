@@ -14,7 +14,7 @@ export default function useCachedResources() {
 
         await Font.loadAsync({
           ...FontAwesome.font,
-          "space-mono": require("../assets/fonts/SpaceMono-Regular.ttf"),
+          "poppins-regular": require("../assets/fonts/Poppins-Regular.ttf"),
         });
         await useLangTranslations();
       } catch (e) {

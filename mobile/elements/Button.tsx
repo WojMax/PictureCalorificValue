@@ -40,9 +40,11 @@ export default function Button(props: Props) {
 
 const containerStyle = {
   borderRadius: 10,
+  fontFamily: "poppins-regular",
 };
 
 const buttonStyle = {
   paddingHorizontal: 20,
   borderRadius: 10,
+  fontFamily: "poppins-regular",
 };

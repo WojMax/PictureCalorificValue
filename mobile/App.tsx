@@ -12,6 +12,8 @@ import { Amplify } from "aws-amplify";
 import { withAuthenticator, AmplifyTheme } from "aws-amplify-react-native";
 import config from "./src/aws-exports.js";
 import Colors from "./constants/Colors";
+import { View } from "./components/Themed";
+import { StyleSheet } from "react-native";
 
 Amplify.configure({
   ...config,
