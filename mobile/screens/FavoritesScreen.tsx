@@ -1,17 +1,10 @@
 import { FlatList, StyleSheet } from "react-native";
-import { Text, View } from "../components/Themed";
+import { View } from "../components/Themed";
 import { useEffect } from "react";
 import MealsFavouriteList from "../components/MealsFavouriteList/MealsFavouriteList";
-import FloatingButton from "../elements/FloatingButton";
 import { useAppDispatch, useAppSelector } from "../hooks/useRedux";
 import { getFavMeals } from "../redux/favoritesSlice";
 import Button from "../elements/Button";
-
-type Meal = {
-  meal_name: string;
-  calories: number;
-  category: string;
-};
 
 export default function FavoritesScreen(props: any) {
   let meals = useAppSelector((state) => state.favMeal.meals);

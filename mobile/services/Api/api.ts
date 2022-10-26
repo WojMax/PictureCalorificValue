@@ -24,7 +24,7 @@ class Api {
   }
 
   async post(path: string, data?: Object) {
-    return axios.put(`${this.apiName}/${path}`, data, {
+    return axios.post(`${this.apiName}/${path}`, data, {
       headers: {
         Authorization: await getToken(),
       },
@@ -32,7 +32,7 @@ class Api {
   }
 
   async patch(path: string, data?: Object) {
-    return axios.put(`${this.apiName}/${path}`, data, {
+    return axios.patch(`${this.apiName}/${path}`, data, {
       headers: {
         Authorization: await getToken(),
       },
@@ -40,11 +40,7 @@ class Api {
   }
 
   async delete(path: string, data?: Object) {
-    return axios.put(`${this.apiName}/${path}`, data, {
-      headers: {
-        Authorization: await getToken(),
-      },
-    });
+    return axios.delete(`${this.apiName}/${path}`, data);
   }
 }
 
