@@ -1,36 +1,24 @@
 import psycopg2
-import ast
-import json
-# from flask_awscognito import AWSCognitoAuthentication
-from psycopg2 import Error
-from flask import Flask, request, jsonify
+from flask_awscognito import AWSCognitoAuthentication
+from psycopg2 import Error, errors
+from flask import Flask, request, jsonify, Response, make_response
 from flask_cors import cross_origin
+from Functions.json_functions import sqlfetch_to_json_meals, sqlfetch_to_json_favourites
+from Functions.db_functions import connect_to_db
+from Functions.sql_functions import insert_favourites, delete_favourites, update_favourites, insert_meals, update_meals, \
+    delete_meals
 
 application = Flask(__name__, instance_relative_config=True)
 
-# application.config['AWS_DEFAULT_REGION'] = 'eu-central-1'
-# application.config['AWS_COGNITO_DOMAIN'] = 'https://calorie-app-server.auth.eu-central-1.amazoncognito.com'
-# application.config['AWS_COGNITO_USER_POOL_ID'] = 'eu-central-1_rOBluZwQ1'
-# application.config['AWS_COGNITO_USER_POOL_CLIENT_ID'] = 'm75ur9evsre2ngnssbnvnkf5g'
-# application.config['AWS_COGNITO_USER_POOL_CLIENT_SECRET'] = 'ZZZZ'
-# application.config['AWS_COGNITO_REDIRECT_URL'] = 'http://localhost:5000/aws_cognito_redirect'
 
-# aws_auth = AWSCognitoAuthentication(application)
+#application.config['AWS_DEFAULT_REGION'] = 'eu-central-1'
+#application.config['AWS_COGNITO_DOMAIN'] = 'https://calorie-app-server.auth.eu-central-1.amazoncognito.com'
+#application.config['AWS_COGNITO_USER_POOL_ID'] = 'eu-central-1_RCh3lDhgJ'
+#application.config['AWS_COGNITO_USER_POOL_CLIENT_ID'] = '32q1vjtjc18nftf6r87r6ijj6p'
+#application.config['AWS_COGNITO_USER_POOL_CLIENT_SECRET'] = ''
+#application.config['AWS_COGNITO_REDIRECT_URL'] = 'http://localhost:5000/aws_cognito_redirect'
 
-try:
-    connection = psycopg2.connect(user="postgres",
-                                  password="f26e%ppBV7t%a#MPxHUMMvq9j",
-                                  host="calorie-app-database-instance.ctsaxdvte9a9.eu-central-1.rds.amazonaws.com",
-                                  port="5432",
-                                  database="calorie_app_database")
-# connection = psycopg2.connect(user="postgres",
-#                              password="Wojtecki2",  ########## enter password
-#                              host="localhost",
-#                              port="5432",
-#                              database="calorie_app_database")
-
-except (Exception, Error) as error:
-    print("Error while connecting to PostgreSQL", error)
+#aws_auth = AWSCognitoAuthentication(application)
 
 
 @application.route('/')
@@ -41,90 +29,93 @@ def index():
     return 'welcome'
 
 
-# @application.route('/sign_in')
-# def sign_in():
-#    return redirect(aws_auth.get_sign_in_url())
-
-
-# @application.route('/aws_cognito_redirect')
-# def aws_cognito_redirect():
-#    access_token = aws_auth.get_access_token(request.args)
-#    return jsonify({'access_token': access_token})
-
-
-@application.route('/picture', methods=['POST', 'GET'])
-@cross_origin()
-def parse_request():
-    if request.method == 'POST':
-        pass
-    return 'TEST'
-
-
-@application.route('/last-picture')
-@cross_origin()
-def show_last_picture(last_photo=None):
-    return last_photo
-
-
-@application.route('/meal', methods=['PUT', 'GET'])
+@application.route('/meal', methods=['PUT', 'POST', 'DELETE'])
 @cross_origin()
 def save_meal_data_in_database():
     if request.method == 'PUT':
-        data = request.data
-        post_data = ast.literal_eval(data.decode("UTF-8"))
-
-
-        userID = post_data["userID"]
-        mealName = post_data["mealName"]
-        calories = post_data["calories"]
-        mealWeight = post_data["mealWeight"]
-        dateCreated = post_data["dateCreated"]
-        category = post_data["category"]
-
-        SQLquery_user = f'INSERT INTO public.users VALUES (\'{userID}\') ON CONFLICT DO NOTHING; '
-        SQLquery_meal = 'INSERT INTO public.user_meal_data (user_id, meal_name, calories, meal_weight, date_created, category) VALUES ' \
-                        + f'(\'{userID}\', \'{mealName}\', {calories}, {mealWeight}, \'{dateCreated}\', \'{category}\');'
-        SQLquery = SQLquery_user + SQLquery_meal
+        connection = connect_to_db()
+        cursor = connection.cursor()
         try:
-            cursor = connection.cursor()
-            cursor.execute(SQLquery)
+            cursor.execute(insert_meals(request.data))
             connection.commit()
             print("successfull sql statement")
             cursor.close()
-            return "200"
+            connection.close()
+            return make_response(jsonify({'code': 'SUCCESS'}), 200)
         except:
             print("error occured, rollback")
+            print(Error.pgcode)
+            print(Error.pgerror)
             connection.rollback()
-            return "error occured, rollback"
-    return 'pass data to db'
+            cursor.close()
+            connection.close()
+            return make_response(jsonify({'code': 'FAILURE'}), 500)
+    if request.method == 'POST':
+        connection = connect_to_db()
+        cursor = connection.cursor()
+        try:
+            cursor.execute(update_meals(request.data))
+            connection.commit()
+            print("successfull sql statement")
+            cursor.close()
+            connection.close()
+            return make_response(jsonify({'code': 'SUCCESS'}), 200)
+        except Exception as error:
+            print("error occured, rollback")
+            print(error)
+            connection.rollback()
+            cursor.close()
+            connection.close()
+            return make_response(jsonify({'code': 'FAILURE'}), 500)
+    if request.method == 'DELETE':
+        connection = connect_to_db()
+        cursor = connection.cursor()
+        try:
+            cursor.execute(delete_meals(request.data))
+            connection.commit()
+            print("successfull sql statement")
+            cursor.close()
+            connection.close()
+            return make_response(jsonify({'code': 'SUCCESS'}), 200)
+        except:
+            print("error occured, rollback")
+            print(Error.pgcode)
+            print(Error.pgerror)
+            connection.rollback()
+            cursor.close()
+            connection.close()
+            return make_response(jsonify({'code': 'FAILURE'}), 500)
 
 
 @application.route("/meals/<userID>", methods=['GET'])
 @cross_origin()
 def get_user_meals(userID):
     if request.method == 'GET':
-        SQLquery = f'SELECT meal_name, calories, meal_weight FROM public.user_meal_data WHERE user_id =\'{userID}\''
+        ###tokens
+        print(request.data)
+
+        ###
+        connection = connect_to_db()
         cursor = connection.cursor()
-        cursor.execute(SQLquery)
-        if cursor.rowcount != 0:
+        try:
+            cursor.execute(f'SELECT meal_name, calories, meal_weight, category FROM public.user_meal_data WHERE user_id =\'{userID}\';')
+        except [Exception, psycopg2.errors.InvalidTextRepresentation] as error:
+            print(error)
+            connection.rollback()
+
+        if cursor.rowcount == -1:
+            cursor.close()
+            connection.close()
+            return make_response(jsonify({'code': 'FAILURE'}), 500)
+        elif cursor.rowcount == 0:
+            cursor.close()
+            connection.close()
+            return jsonify({})
+        else:
             meals = cursor.fetchall()
             cursor.close()
-            jsons = '['
-            for entry in meals:
-                meal_name = entry[0]
-                meal_calories_on_100g = entry[1]
-                meal_weight = entry[2]
-                meal_calories = meal_weight * meal_calories_on_100g / 100
-                entry_json = '{"meal_name":"' + meal_name + '","calories":' + str(
-                    int(meal_calories)) + ',"calories_on_100g":' + str(int(meal_calories_on_100g)) + '},'
-                jsons += entry_json
-            jsons = jsons[:-1]
-            jsons += ']'
-            meals_data_json = json.loads(jsons)
-            return jsonify(meals_data_json)
-        else:
-            cursor.close()
-            return {}
+            connection.close()
+            return jsonify(sqlfetch_to_json_meals(values=meals))
 
 
 @application.route('/favourites', methods=['PUT', 'DELETE', 'POST'])
@@ -132,115 +123,90 @@ def get_user_meals(userID):
 def favourites():
     if request.method == 'PUT':
         # add new favourite meal
-        data = request.data
-        post_data = ast.literal_eval(data.decode("UTF-8"))
-
-        userID = post_data["userID"]
-        mealName = post_data["mealName"]
-        calories = post_data["calories"]
-        category = post_data["category"]
-
-        SQLquery_user = f'INSERT INTO public.users VALUES (\'{userID}\') ON CONFLICT DO NOTHING; '
-        SQLquery_meal = 'INSERT INTO public.user_favourites_data (user_id, meal_name, calories, category) VALUES ' \
-                        + f'(\'{userID}\', \'{mealName}\', {calories}, \'{category}\');'
-        SQLquery = SQLquery_user + SQLquery_meal
+        connection = connect_to_db()
+        cursor = connection.cursor()
         try:
-            cursor = connection.cursor()
-            cursor.execute(SQLquery)
+            cursor.execute(insert_favourites(request.data))
             connection.commit()
             print("successfull sql statement")
             cursor.close()
-            return "200"
-        except:
+            connection.close()
+            return make_response(jsonify({'code': 'SUCCESS'}), 200)
+        except Exception as error:
+            print(error)
             print("error occured, rollback")
             connection.rollback()
             cursor.close()
-            return "error occured, rollback"
+            connection.close()
+            return make_response(jsonify({'code': 'FAILURE'}), 500)
 
     elif request.method == 'DELETE':
         # delete favourite meal
-        data = request.data
-        post_data = ast.literal_eval(data.decode("UTF-8"))
-
-        userID = post_data["userID"]
-        mealName = post_data["mealName"]
-        calories = post_data["calories"]
-        category = post_data["category"]
-
-        SQLquery = f'DELETE FROM public.user_favourites_data\n' \
-                   f'WHERE user_id = \'{userID}\' AND meal_name = \'{mealName}\' AND calories = {calories} AND category = \'{category}\';'
+        connection = connect_to_db()
+        cursor = connection.cursor()
         try:
-            cursor = connection.cursor()
-            cursor.execute(SQLquery)
+            cursor.execute(delete_favourites(request.data))
             connection.commit()
             print("successfull sql statement")
             cursor.close()
-            return "200"
-        except:
+            connection.close()
+            return make_response(jsonify({'code': 'SUCCESS'}), 200)
+        except Exception as error:
+            print(error)
             print("error occured, rollback")
             connection.rollback()
             cursor.close()
-            return "error occured, rollback"
+            connection.close()
+            return make_response(jsonify({'code': 'FAILURE'}), 500)
 
     elif request.method == 'POST':
         # change favourite meal data
-        data = request.data
-        post_data = ast.literal_eval(data.decode("UTF-8"))
-
-        userID = post_data["userID"]
-        mealName = post_data["mealName"]
-        calories = post_data["calories"]
-        category = post_data["category"]
-        newMealName = post_data["newCategory"]
-        newCalories = post_data["newCalories"]
-        newCategory = post_data["newCategory"]
-
-        SQLquery = f'UPDATE public.user_favourites_data\n' \
-                   f'SET meal_name=\'{newMealName}\', calories={newCalories}, category=\'{newCategory}\'\n' \
-                   f'WHERE user_id = \'{userID}\' AND meal_name=\'{mealName}\' AND calories={calories} AND category=\'{category}\';'
-        print(SQLquery)
+        connection = connect_to_db()
+        cursor = connection.cursor()
         try:
-            cursor = connection.cursor()
-            cursor.execute(SQLquery)
+            print(request.data)
+            cursor.execute(update_favourites(request.data))
             connection.commit()
             print("successfull sql statement")
             cursor.close()
-            return "200"
-        except:
+            print('cursor closed')
+            connection.close()
+            print('conn closed')
+            return make_response(jsonify({'code': 'SUCCESS'}), 200)
+        except Exception as error:
+            print(error)
             print("error occured, rollback")
             connection.rollback()
             cursor.close()
-            return "error occured, rollback"
+            connection.close()
+            return make_response(jsonify({'code': 'FAILURE'}), 500)
 
 
 @application.route("/favourites/<userID>", methods=['GET'])
 @cross_origin()
 def get_user_favourites(userID):
     if request.method == 'GET':
+        connection = connect_to_db()
         cursor = connection.cursor()
-        SQLquery = f'SELECT meal_name, calories, category FROM public.user_favourites_data WHERE user_id =\'{userID}\''
-        cursor.execute(SQLquery)
-        if cursor.rowcount != 0:
-            favourites = cursor.fetchall()
+        try:
+            cursor.execute(f'SELECT meal_name, calories, category FROM public.user_favourites_data WHERE user_id =\'{userID}\';')
+        except [Exception, psycopg2.errors.InvalidTextRepresentation] as error:
+            print(error)
+            connection.rollback()
+
+        if cursor.rowcount == -1:
             cursor.close()
-
-            jsons = '['
-            for entry in favourites:
-                favourite_name = entry[0]
-                favourite_calories_on_100g = entry[1]
-                favourite_category = entry[2]
-                entry_json = '{"meal_name":"' + favourite_name + '","calories":' + str(int(favourite_calories_on_100g)) \
-                             + ',"category": "' + str(favourite_category) + '"},'
-                jsons += entry_json
-            jsons = jsons[:-1]
-            jsons += ']'
-
-            favourites_data_json = json.loads(jsons)
-
-            return jsonify(favourites_data_json)
+            connection.close()
+            return make_response(jsonify({'code': 'FAILURE'}), 500)
+        elif cursor.rowcount == 0:
+            cursor.close()
+            connection.close()
+            return jsonify({})
         else:
+            favourite_meals = cursor.fetchall()
             cursor.close()
-            return {}
+            connection.close()
+            return jsonify(sqlfetch_to_json_favourites(values=favourite_meals))
 
 
 if __name__ == '__main__':
