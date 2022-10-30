@@ -7,9 +7,10 @@ from Functions.json_functions import sqlfetch_to_json_meals, sqlfetch_to_json_fa
 from Functions.db_functions import connect_to_db
 from Functions.sql_functions import insert_favourites, delete_favourites, update_favourites, insert_meals, update_meals, \
     delete_meals
+from Middleware.middleware_tokens import Middleware
 
 application = Flask(__name__, instance_relative_config=True)
-
+application.wsgi_app = Middleware(application.wsgi_app)
 
 #application.config['AWS_DEFAULT_REGION'] = 'eu-central-1'
 #application.config['AWS_COGNITO_DOMAIN'] = 'https://calorie-app-server.auth.eu-central-1.amazoncognito.com'
@@ -29,14 +30,39 @@ def index():
     return 'welcome'
 
 
-@application.route('/meal', methods=['PUT', 'POST', 'DELETE'])
+@application.route('/meal', methods=['GET', 'PUT', 'POST', 'DELETE'])
 @cross_origin()
 def save_meal_data_in_database():
+    if request.method == 'GET':
+        connection = connect_to_db()
+        cursor = connection.cursor()
+        try:
+            user = Middleware.get_user_ID(application.wsgi_app)
+            cursor.execute(f'SELECT id, meal_name, calories, meal_weight, category FROM public.user_meal_data WHERE user_id =\'{user}\';')
+        except [Exception, psycopg2.errors.InvalidTextRepresentation] as error:
+            print(error)
+            connection.rollback()
+
+        if cursor.rowcount == -1:
+            cursor.close()
+            connection.close()
+            return make_response(jsonify({'code': 'FAILURE'}), 500)
+        elif cursor.rowcount == 0:
+            cursor.close()
+            connection.close()
+            return jsonify({})
+        else:
+            meals = cursor.fetchall()
+            cursor.close()
+            connection.close()
+            return jsonify(sqlfetch_to_json_meals(values=meals))
+
+
     if request.method == 'PUT':
         connection = connect_to_db()
         cursor = connection.cursor()
         try:
-            cursor.execute(insert_meals(request.data))
+            cursor.execute(insert_meals(request.data, Middleware.get_user_ID(application.wsgi_app)))
             connection.commit()
             print("successfull sql statement")
             cursor.close()
@@ -54,7 +80,7 @@ def save_meal_data_in_database():
         connection = connect_to_db()
         cursor = connection.cursor()
         try:
-            cursor.execute(update_meals(request.data))
+            cursor.execute(update_meals(request.data, Middleware.get_user_ID(application.wsgi_app)))
             connection.commit()
             print("successfull sql statement")
             cursor.close()
@@ -87,18 +113,15 @@ def save_meal_data_in_database():
             return make_response(jsonify({'code': 'FAILURE'}), 500)
 
 
-@application.route("/meals/<userID>", methods=['GET'])
+@application.route('/favourites', methods=['GET', 'PUT', 'DELETE', 'POST'])
 @cross_origin()
-def get_user_meals(userID):
+def favourites():
     if request.method == 'GET':
-        ###tokens
-        print(request.data)
-
-        ###
         connection = connect_to_db()
         cursor = connection.cursor()
         try:
-            cursor.execute(f'SELECT meal_name, calories, meal_weight, category FROM public.user_meal_data WHERE user_id =\'{userID}\';')
+            user = Middleware.get_user_ID(application.wsgi_app)
+            cursor.execute(f'SELECT id, meal_name, calories FROM public.user_favourites_data WHERE user_id =\'{user}\';')
         except [Exception, psycopg2.errors.InvalidTextRepresentation] as error:
             print(error)
             connection.rollback()
@@ -112,21 +135,17 @@ def get_user_meals(userID):
             connection.close()
             return jsonify({})
         else:
-            meals = cursor.fetchall()
+            favourite_meals = cursor.fetchall()
             cursor.close()
             connection.close()
-            return jsonify(sqlfetch_to_json_meals(values=meals))
+            return jsonify(sqlfetch_to_json_favourites(values=favourite_meals))
 
-
-@application.route('/favourites', methods=['PUT', 'DELETE', 'POST'])
-@cross_origin()
-def favourites():
     if request.method == 'PUT':
         # add new favourite meal
         connection = connect_to_db()
         cursor = connection.cursor()
         try:
-            cursor.execute(insert_favourites(request.data))
+            cursor.execute(insert_favourites(request.data, Middleware.get_user_ID(application.wsgi_app)))
             connection.commit()
             print("successfull sql statement")
             cursor.close()
@@ -164,8 +183,7 @@ def favourites():
         connection = connect_to_db()
         cursor = connection.cursor()
         try:
-            print(request.data)
-            cursor.execute(update_favourites(request.data))
+            cursor.execute(update_favourites(request.data, Middleware.get_user_ID(application.wsgi_app)))
             connection.commit()
             print("successfull sql statement")
             cursor.close()
@@ -180,33 +198,6 @@ def favourites():
             cursor.close()
             connection.close()
             return make_response(jsonify({'code': 'FAILURE'}), 500)
-
-
-@application.route("/favourites/<userID>", methods=['GET'])
-@cross_origin()
-def get_user_favourites(userID):
-    if request.method == 'GET':
-        connection = connect_to_db()
-        cursor = connection.cursor()
-        try:
-            cursor.execute(f'SELECT meal_name, calories, category FROM public.user_favourites_data WHERE user_id =\'{userID}\';')
-        except [Exception, psycopg2.errors.InvalidTextRepresentation] as error:
-            print(error)
-            connection.rollback()
-
-        if cursor.rowcount == -1:
-            cursor.close()
-            connection.close()
-            return make_response(jsonify({'code': 'FAILURE'}), 500)
-        elif cursor.rowcount == 0:
-            cursor.close()
-            connection.close()
-            return jsonify({})
-        else:
-            favourite_meals = cursor.fetchall()
-            cursor.close()
-            connection.close()
-            return jsonify(sqlfetch_to_json_favourites(values=favourite_meals))
 
 
 if __name__ == '__main__':
