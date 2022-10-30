@@ -4,7 +4,6 @@ import ast
 def insert_meals(put_data, userID):
     put_data = ast.literal_eval(put_data.decode("UTF-8"))
 
-
     mealName = put_data["mealName"]
     caloriesOn100g = put_data["caloriesOn100g"]
     mealWeight = put_data["mealWeight"]
@@ -34,7 +33,7 @@ def update_meals(post_data, userID):
 def delete_meals(delete_data):
     delete_data = ast.literal_eval(delete_data.decode("UTF-8"))
 
-    mealId = delete_data["mealId"]
+    mealId = delete_data["mealID"]
 
     SQLquery = f'DELETE FROM public.user_meal_data\n' \
                f'WHERE id = \'{mealId}\';'
@@ -56,7 +55,7 @@ def insert_favourites(put_data, userID):
 def delete_favourites(delete_data):
     delete_data = ast.literal_eval(delete_data.decode("UTF-8"))
 
-    mealId = delete_data["mealId"]
+    mealId = delete_data["mealID"]
 
     SQLquery = f'DELETE FROM public.user_favourites_data\n' \
                f'WHERE user_id = \'{mealId}\';'
