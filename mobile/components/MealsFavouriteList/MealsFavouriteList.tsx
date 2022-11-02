@@ -1,5 +1,4 @@
 import { View, Text } from "../Themed";
-import Button from "../../elements/Button";
 import listStyles from "./style.MealsFavouriteList";
 import Colors from "../../constants/Colors";
 import useColorScheme from "../../hooks/useColorScheme";

@@ -1,9 +1,9 @@
 import React from "react";
-import { AntDesign } from "@expo/vector-icons";
-import Colors from "../constants/Colors";
-
-// import all the components we are going to use
+import { View, Text } from "../components/Themed";
 import { StyleSheet, TouchableOpacity } from "react-native";
+import Colors from "../constants/Colors";
+import { AntDesign } from "@expo/vector-icons";
+import { FAB } from "@rneui/base";
 
 type Props = {
   onPress: () => void;
@@ -11,30 +11,22 @@ type Props = {
 
 export default function FloatingButton(props: Props) {
   return (
-    <TouchableOpacity
-      activeOpacity={0.7}
+    <FAB
+      visible={true}
+      icon={{ name: "add", color: "white" }}
+      color={Colors.general.accent}
       onPress={props.onPress}
-      style={styles.touchableOpacityStyle}
-    >
-      <AntDesign name="pluscircle" size={50} color={Colors.dark.accent} />
-    </TouchableOpacity>
+    />
   );
 }
 
 const styles = StyleSheet.create({
   touchableOpacityStyle: {
-    position: "absolute",
     width: 50,
     height: 50,
     alignItems: "center",
     justifyContent: "center",
-    right: 30,
-    bottom: 30,
     zIndex: 100,
-  },
-  floatingButtonStyle: {
-    resizeMode: "contain",
-    width: 50,
-    height: 50,
+    borderRadius: 1000,
   },
 });

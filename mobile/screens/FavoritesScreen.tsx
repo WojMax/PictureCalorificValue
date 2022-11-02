@@ -5,6 +5,7 @@ import MealsFavouriteList from "../components/MealsFavouriteList/MealsFavouriteL
 import { useAppDispatch, useAppSelector } from "../hooks/useRedux";
 import { getFavMeals } from "../redux/favoritesSlice";
 import Button from "../elements/Button";
+import FloatingButton from "../elements/FloatingButton";
 
 export default function FavoritesScreen(props: any) {
   let meals = useAppSelector((state) => state.favMeal.meals);
@@ -35,10 +36,7 @@ export default function FavoritesScreen(props: any) {
           keyExtractor={(item, index) => index.toString()}
         />
         <View style={styles.container3}>
-          <Button
-            onPress={() => props.navigation.navigate("AddFav")}
-            title={"Add new"}
-          />
+          <FloatingButton onPress={() => props.navigation.navigate("AddFav")} />
         </View>
       </View>
     </View>
@@ -54,7 +52,7 @@ const styles = StyleSheet.create({
   },
   container3: {
     position: "absolute",
-    bottom: 20,
-    right: 20,
+    bottom: 30,
+    right: 30,
   },
 });
