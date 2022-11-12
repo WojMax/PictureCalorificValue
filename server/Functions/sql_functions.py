@@ -47,7 +47,7 @@ def insert_favourites(put_data, userID):
     caloriesOn100g = put_data["caloriesOn100g"]
 
     SQLquery_user = f'INSERT INTO public.users VALUES (\'{userID}\') ON CONFLICT DO NOTHING; '
-    SQLquery_meal = 'INSERT INTO public.user_favourites_data (user_id, meal_name, calories, category) VALUES ' \
+    SQLquery_meal = 'INSERT INTO public.user_favourites_data (user_id, meal_name, calories) VALUES ' \
                     + f'(\'{userID}\', \'{mealName}\', {caloriesOn100g});'
     return SQLquery_user + SQLquery_meal
 

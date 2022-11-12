@@ -1,5 +1,3 @@
-import psycopg2
-from psycopg2 import Error, errors
 from flask import Flask, request, jsonify, make_response
 from flask_cors import cross_origin
 from Functions.json_functions import sqlfetch_to_json_meals, sqlfetch_to_json_favourites

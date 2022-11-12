@@ -12,6 +12,7 @@ class Middleware:
 
     def get_user_ID(self):
         token = request.headers['Authorization']
+        token = str.replace(token, 'Bearer ', '')
         decoded_token = jwt.decode(token, algorithms=["RS256"], options={"verify_signature": False})
         # request.environ['cognito_user'] = decoded_token['cognito:username']
 
