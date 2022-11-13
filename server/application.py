@@ -55,6 +55,7 @@ def save_meal_data_in_database():
             meals = cursor.fetchall()
             cursor.close()
             connection.close()
+            print(sqlfetch_to_json_meals(values=meals))
             return jsonify(sqlfetch_to_json_meals(values=meals))
 
     if request.method == 'PUT':
