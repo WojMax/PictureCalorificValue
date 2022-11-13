@@ -8,7 +8,7 @@ class Api {
   }
 
   async get(path: string, queryString?: string) {
-    return axios.get(`${this.apiName}/${path}/${queryString}`, {
+    return axios.get(`${this.apiName}/${path}`, {
       headers: {
         Authorization: await getToken(),
       },

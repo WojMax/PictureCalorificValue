@@ -1,4 +1,4 @@
-import { StyleSheet, ToastAndroid } from "react-native";
+import { StyleSheet } from "react-native";
 import { Text, View } from "../components/Themed";
 import Input from "../elements/Input";
 import Button from "../elements/Button";
@@ -7,6 +7,7 @@ import axios from "axios";
 import t from "../services/translations";
 import { getFavMeals } from "../redux/favoritesSlice";
 import { useAppDispatch } from "../hooks/useRedux";
+import HttpApi from "../services/Api/HttpApi";
 
 export default function AddFormScreen(props: any) {
   const dispatch = useAppDispatch();
@@ -21,12 +22,11 @@ export default function AddFormScreen(props: any) {
   );
   const [weight, setWeight] = useState(0);
 
-  const save = () => {
-    console.log(calories);
+  const save = async() => {
+    //console.log(calories);
     const meal = {
-      userID: "15a227be-8a9e-438f-85b9-8abc7f6832bc",
       mealName: name,
-      calories: calories,
+      caloriesOn100g: calories,
       mealWeight: weight,
       dateCreated:
         new Date().getFullYear() +
@@ -34,33 +34,28 @@ export default function AddFormScreen(props: any) {
         (new Date().getMonth() + 1) +
         "-" +
         new Date().getDate(),
-      category: "breakfast",
+      category: props.route.params.category,
     };
-    axios
-      .put(
-        "http://calorieappserverinz-env.eba-5zgigd3w.eu-central-1.elasticbeanstalk.com/meal",
-        meal
-      )
-      .then((res) => {
-        props.navigation.navigate("Home", {});
-      })
-      .catch((er) => {
-        console.log(er);
-      });
+    try {
+      await HttpApi.put("meal", meal);
+      props.navigation.navigate("Home", {});
+    } catch (error) {
+      console.error(error);
+    }
   };
+  
+
   const saveFav = async () => {
-    console.log(calories);
     const mealFav = {
-      userID: "15a227be-8a9e-438f-85b9-8abc7f6832bc",
       mealName: name,
-      calories: calories,
-      category: "breakfast",
+      caloriesOn100g: calories,
     };
-    await axios.put(
-      "http://calorieappserverinz-env.eba-5zgigd3w.eu-central-1.elasticbeanstalk.com/favourites",
-      mealFav
-    );
-    dispatch(getFavMeals());
+    try {
+      await HttpApi.put("favourites", mealFav);
+      dispatch(getFavMeals());
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

@@ -1,6 +1,6 @@
 export const en = {
   common: {
-    addProduct: "Add product",
+    addProduct: "Add Product",
     takePhoto: "Take photo",
     addPhoto: "Choose photo",
     addMeal: "Add meal",
@@ -8,6 +8,7 @@ export const en = {
     toast: "Please choose an image",
     error: "Error",
     add: "Add",
+    addNew: "Add new"
   },
   navigation: {
     home: "Home",
@@ -42,6 +43,13 @@ export const en = {
     editMeal: "Edit meal",
     delete: "Delete meal",
     weight: "Weight",
+    calories_on_100g:"Calories on 100g"
+  },
+  categories: {
+    breakfast: "Breakfast",
+    lunch: "Lunch",
+    dinner: "Dinner",
+    snack: "Snacks",
   },
   settings: {
     changeLang: "Change language",

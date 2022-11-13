@@ -1,10 +1,10 @@
-import axios from "axios";
+import HttpApi from "../services/Api/HttpApi";
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 
 export type Meal = {
+  id: number;
   meal_name: string;
-  calories: number;
-  category: string;
+  calories_on_100g: number;
 };
 
 export interface FavoritesState {
@@ -20,9 +20,7 @@ const initialState: FavoritesState = {
 export const getFavMeals = createAsyncThunk("getFavMeals", async () => {
   let data: { meals: Meal[] } = { meals: [] };
   try {
-    const response = await axios.get(
-      "http://calorieappserverinz-env.eba-5zgigd3w.eu-central-1.elasticbeanstalk.com/favourites/15a227be-8a9e-438f-85b9-8abc7f6832bc"
-    );
+    const response = await HttpApi.get("favourites");
     data = { meals: response.data };
     return data;
   } catch (error) {

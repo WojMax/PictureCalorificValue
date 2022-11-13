@@ -6,10 +6,13 @@ import Button from "../../elements/Button";
 import t from "../../services/translations";
 import { TouchableOpacity } from "react-native";
 
-type Meal = {
-  calories: number;
-  calories_on_100g: number;
-  meal_name: string;
+export type Meal = {
+  id: number, 
+  meal_name: string, 
+  calories: number, 
+  calories_on_100g: number,
+  meal_weight: number, 
+  category: string
 };
 
 type Props = {
@@ -27,13 +30,12 @@ export default function MealsHomeList({ meal, EditFoodOnPress }: Props) {
         { borderColor: Colors[colorScheme].surface },
       ]}
     >
-      <TouchableOpacity onPress={EditFoodOnPress}>
-        <TouchableOpacity onPress={EditFoodOnPress}>
+      <View>
+        <View>
           <Text style={listStyles.nameText}>{meal.meal_name}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={EditFoodOnPress}>
-          <TouchableOpacity
-            onPress={EditFoodOnPress}
+        </View>
+        <View>
+          <View
             style={listStyles.containerBottom}
           >
             <Text
@@ -44,11 +46,10 @@ export default function MealsHomeList({ meal, EditFoodOnPress }: Props) {
             >
               {meal.calories_on_100g} Kcal/100g
             </Text>
-          </TouchableOpacity>
-        </TouchableOpacity>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={EditFoodOnPress}
+          </View>
+        </View>
+      </View>
+      <View
         style={listStyles.containerCalories}
       >
         <Text
@@ -56,7 +57,7 @@ export default function MealsHomeList({ meal, EditFoodOnPress }: Props) {
         >
           {meal.calories} Kcal
         </Text>
-      </TouchableOpacity>
+      </View>
     </TouchableOpacity>
   );
 }
