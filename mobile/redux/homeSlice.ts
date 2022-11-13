@@ -13,11 +13,13 @@ export type Meal = {
 export interface HomeState {
   meals: Meal[];
   selectedMeal: Meal | null;
+  dates: Date[];
 }
 
 const initialState: HomeState = {
   meals: [],
   selectedMeal: null,
+  dates: [],
 };
 
 export const getHomeMeals = createAsyncThunk("getHomeMeals", async () => {
@@ -27,6 +29,7 @@ export const getHomeMeals = createAsyncThunk("getHomeMeals", async () => {
     data = { meals: response.data };
     return data;
   } catch (error) {
+    console.error(error);
     return data;
   }
 });

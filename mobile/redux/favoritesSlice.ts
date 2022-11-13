@@ -24,7 +24,7 @@ export const getFavMeals = createAsyncThunk("getFavMeals", async () => {
     data = { meals: response.data };
     return data;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return data;
   }
 });

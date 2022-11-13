@@ -15,6 +15,10 @@ import MealsHomeList from "../components/MealsHomeList/MealsHomeList";
 import { LinearProgress } from "@rneui/themed";
 import { AntDesign } from "@expo/vector-icons";
 import { TabItem } from "@rneui/base/dist/Tab/Tab.Item";
+import DateSlider from "../components/DateSlider/DateSlider";
+import useColorScheme from "../hooks/useColorScheme";
+import React from "react";
+import { View as DefaultView } from "react-native";
 
 export type Meal = {
   id: number;
@@ -26,6 +30,7 @@ export type Meal = {
 };
 
 export default function HomeScreen(props: any) {
+  const colorScheme = useColorScheme();
   let meals = useAppSelector((state) => state.homeMeal.meals);
   let dailyCalories = 2540;
   let caloriesCount = 0;
@@ -67,10 +72,16 @@ export default function HomeScreen(props: any) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.container4}>
+      <View
+        style={[
+          styles.container4,
+          { backgroundColor: Colors[colorScheme].topSurface },
+        ]}
+      >
+        <DateSlider />
         <Text style={styles.progressText}>Progress</Text>
-        <View style={styles.container5}>
-          <View style={styles.container6}>
+        <DefaultView style={styles.container5}>
+          <DefaultView style={styles.container6}>
             <LinearProgress
               style={{ marginVertical: 10 }}
               value={progress}
@@ -78,13 +89,13 @@ export default function HomeScreen(props: any) {
               color={Colors.dark.accent}
               trackColor={Colors.dark.accent}
             />
-          </View>
-          <View style={styles.container7}>
+          </DefaultView>
+          <DefaultView style={styles.container7}>
             <Text style={styles.progressText}>
               {caloriesCount}/{dailyCalories}
             </Text>
-          </View>
-        </View>
+          </DefaultView>
+        </DefaultView>
       </View>
       <View style={styles.container2}>
         <SectionList
@@ -196,7 +207,7 @@ const styles = StyleSheet.create({
     paddingRight: 6,
     justifyContent: "space-between",
     flexDirection: "row",
-    backgroundColor: Colors.general.cameraGray,
+    backgroundColor: Colors.dark.surface,
     borderBottomWidth: 1,
   },
 
