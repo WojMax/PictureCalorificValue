@@ -14,8 +14,8 @@ export default {
     textDark: "#424242",
     //areas
     background: "#fff",
-    surface: "#cfd8dc",
-    topSurface: "#9ea7aa",
+    surface: "#EBEBF0",
+    topSurface: "#D8D8DC",
     //mainColors
     accent: colors.mainAccent,
     //navButtons
@@ -29,8 +29,8 @@ export default {
     textDark: "#8a8d8e",
     //areas
     background: "#000",
-    surface: "#121212",
-    topSurface: "#282828",
+    surface: "#1C1C1C",
+    topSurface: "#242424",
     //mainColors
     accent: colors.mainAccent,
     //navButtons

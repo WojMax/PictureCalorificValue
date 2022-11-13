@@ -2,22 +2,24 @@ import HttpApi from "../services/Api/HttpApi";
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 
 export type Meal = {
-    id: number, 
-    meal_name: string, 
-    calories: number, 
-    calories_on_100g: number,
-    meal_weight: number, 
-    category: string
+  id: number;
+  meal_name: string;
+  calories: number;
+  calories_on_100g: number;
+  meal_weight: number;
+  category: string;
 };
 
 export interface HomeState {
   meals: Meal[];
   selectedMeal: Meal | null;
+  dates: Date[];
 }
 
 const initialState: HomeState = {
   meals: [],
   selectedMeal: null,
+  dates: [],
 };
 
 export const getHomeMeals = createAsyncThunk("getHomeMeals", async () => {
@@ -27,6 +29,7 @@ export const getHomeMeals = createAsyncThunk("getHomeMeals", async () => {
     data = { meals: response.data };
     return data;
   } catch (error) {
+    console.error(error);
     return data;
   }
 });
