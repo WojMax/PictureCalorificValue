@@ -5,65 +5,62 @@ import Button from "../elements/Button";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import t from "../services/translations";
+import HttpApi from "../services/Api/HttpApi";
 
-type Meal = {
-  meal_name: string;
-  calories: number;
-  mealWeight: number;
-};
 
 export default function EditFormScreen(props: any) {
-  const [name, setName] = useState("");
+  const [name, setName] = useState(
+    props.route.params
+    ? props.route.params.name
+      ? props.route.params.name.toString()
+      : ""
+    : ""
+  );
   const [calories, setCalories] = useState<number>(
     props.route.params
-      ? props.route.params.calories
-        ? props.route.params.calories.toString()
+      ? props.route.params.calories_on_100g
+        ? props.route.params.calories_on_100g.toString()
         : ""
       : ""
   );
-  const [weight, setWeight] = useState<number>();
-  const editFav = () => {
-    console.log(calories);
+  const [weight, setWeight] = useState<number>(
+    props.route.params
+    ? props.route.params.weight
+      ? props.route.params.weight.toString()
+      : ""
+    : ""
+  );
+  
+  const editHome = async () => {
+    //console.log(calories);
     const meal = {
-      userID: "15a227be-8a9e-438f-85b9-8abc7f6832bc",
-      mealName: props.route.params.name,
-      calories: props.route.params.calories,
-      category: props.route.params.category,
-      newMealName: name,
-      newCalories: calories,
+      mealID: props.route.params.mealID,
+      mealName: name,
+      caloriesOn100g: Number(calories),
+      mealWeight: Number(weight),
     };
-    axios
-      .post(
-        "http://calorieappserverinz-env.eba-5zgigd3w.eu-central-1.elasticbeanstalk.com/favourites",
-        meal
-      )
-      .then((res) => {
-        props.navigation.navigate("Favorites", {});
-      })
-      .catch((er) => {
-        console.log(er);
-      });
+    try {
+      //console.log(meal)
+      await HttpApi.post("meal", meal);
+      props.navigation.navigate("Home", {});
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const deleteFav = () => {
-    console.log(calories);
+  const deleteHome = async () => {
+    //console.log(calories);
     const meal = {
-      userID: "15a227be-8a9e-438f-85b9-8abc7f6832bc",
-      mealName: props.route.params.name,
-      calories: props.route.params.calories,
-      category: props.route.params.category,
+      mealID: props.route.params.mealID,
     };
-    axios
-      .delete(
-        "http://calorieappserverinz-env.eba-5zgigd3w.eu-central-1.elasticbeanstalk.com/favourites",
-        { data: meal }
-      )
-      .then((res) => {
-        props.navigation.navigate("Favorites", {});
-      })
-      .catch((er) => {
-        console.log(er);
-      });
+    try {
+      //console.log(meal)
+      const resp = await HttpApi.delete("meal", { data: meal });
+      //console.log(resp);
+      props.navigation.navigate("Home", {});
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -75,15 +72,15 @@ export default function EditFormScreen(props: any) {
           onChangeText={(value: string) => setName(value)}
         />
         <Input
-          label={t("editScreen.calories")}
-          placeholder={props.route.params.calories.toString()}
+          label={t("editScreen.calories_on_100g")}
+          placeholder={props.route.params.calories_on_100g.toString()}
           keyboardType={"numeric"}
           value={calories}
           onChangeText={(value: number) => setCalories(value)}
         />
         <Input
           label={t("editScreen.weight")}
-          placeholder={props.route.params.weight}
+          placeholder={props.route.params.weight.toString()}
           onChangeText={(value: number) => setWeight(value)}
         />
       </View>
@@ -92,11 +89,11 @@ export default function EditFormScreen(props: any) {
           <Button
             title={t("editScreen.delete")}
             color="#ef5350"
-            onPress={() => deleteFav()}
+            onPress={() => deleteHome()}
           />
         </View>
         <View style={{ margin: 5 }}>
-          <Button title={t("editScreen.edit")} onPress={() => editFav()} />
+          <Button title={t("editScreen.edit")} onPress={() => editHome()} />
         </View>
       </View>
     </View>

@@ -16,21 +16,17 @@ export default function EditFormScreen(props: any) {
   );
   const [calories, setCalories] = useState<number>(
     props.route.params
-      ? props.route.params.calories
-        ? props.route.params.calories.toString()
+      ? props.route.params.calories_on_100g
+        ? props.route.params.calories_on_100g.toString()
         : ""
       : ""
   );
 
   const editFav = async () => {
     const meal = {
-      userID: "15a227be-8a9e-438f-85b9-8abc7f6832bc",
-      mealName: props.route.params.name,
-      calories: props.route.params.calories,
-      category: props.route.params.category,
-      newMealName: name,
-      newCalories: 1000,
-      newCategory: props.route.params.category,
+      mealID: props.route.params.mealID,
+      mealName: name,
+      caloriesOn100g: calories,
     };
 
     try {
@@ -43,10 +39,7 @@ export default function EditFormScreen(props: any) {
 
   const deleteFav = async () => {
     const meal = {
-      userID: "15a227be-8a9e-438f-85b9-8abc7f6832bc",
-      mealName: props.route.params.name,
-      calories: props.route.params.calories,
-      category: props.route.params.category,
+      mealID: props.route.params.mealID,
     };
 
     try {
@@ -69,7 +62,7 @@ export default function EditFormScreen(props: any) {
         />
         <Input
           label={t("editScreen.calories")}
-          placeholder={props.route.params.calories.toString()}
+          placeholder={props.route.params.calories_on_100g.toString()}
           keyboardType={"numeric"}
           value={calories}
           onChangeText={(value: number) => setCalories(value)}

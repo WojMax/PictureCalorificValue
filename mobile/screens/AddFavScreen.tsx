@@ -12,10 +12,8 @@ export default function AddFormScreen(props: any) {
 
   const saveFav = async () => {
     const mealFav = {
-      userID: "15a227be-8a9e-438f-85b9-8abc7f6832bc",
       mealName: name,
-      calories: calories,
-      category: "breakfast",
+      caloriesOn100g: calories,
     };
     try {
       await HttpApi.put("favourites", mealFav);

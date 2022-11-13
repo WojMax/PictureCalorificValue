@@ -9,8 +9,7 @@ import { TouchableOpacity } from "react-native";
 
 type Meal = {
   meal_name: string;
-  calories: number;
-  category: string;
+  calories_on_100g: number;
 };
 
 type Props = {
@@ -40,7 +39,7 @@ export default function MealsFavouriteList({ meal, EditFoodOnPress }: Props) {
                 { color: Colors[colorScheme].textDark },
               ]}
             >
-              {meal.calories} Kcal/100g
+              {meal.calories_on_100g} Kcal/100g
             </Text>
           </View>
         </View>

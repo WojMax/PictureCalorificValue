@@ -25,9 +25,9 @@ export default function FavoritesScreen(props: any) {
               meal={item}
               EditFoodOnPress={() =>
                 props.navigation.navigate("Edit", {
+                  mealID:item.id,
                   name: item.meal_name,
-                  calories: item.calories,
-                  category: item.category,
+                  calories_on_100g: item.calories_on_100g,
                 })
               }
             />

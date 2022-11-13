@@ -1,15 +1,9 @@
 import {
   TouchableOpacity,
-  StyleSheet,
-  ToastAndroid,
-  ImageBackground,
 } from "react-native";
-import Button from "../../elements/Button";
-import Preview from "../Camera/PhotoPreview";
 import { Text, View, useThemeColor } from "../Themed";
 import Colors from "../../constants/Colors";
 import { styles } from "./style.AddButtons";
-import useColorScheme from "../../hooks/useColorScheme";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";

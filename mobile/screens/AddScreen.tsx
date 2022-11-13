@@ -8,7 +8,7 @@ import axios from "axios";
 import ActivityIndicator from "../elements/ActivityIndicator";
 import { t } from "i18n-js";
 
-export default function AddFormScreen({ navigation }: any) {
+export default function AddFormScreen(props: any) {
   const [screen, setScreen] = useState<string>("main");
   const [uri, setUri] = useState("");
   const [calories, setCalories] = useState(0);
@@ -42,7 +42,7 @@ export default function AddFormScreen({ navigation }: any) {
   };
 
   const addMeal = () => {
-    navigation.navigate("AddForm", { url: "HomeStack", calories: calories });
+    props.navigation.navigate("AddForm", { url: "HomeStack", calories: calories });
     setScreen("main");
   };
 
@@ -66,10 +66,10 @@ export default function AddFormScreen({ navigation }: any) {
     return (
       <View style={styles.container}>
         <AddButtons
-          AddFoodOnPress={() => navigation.navigate("AddForm")}
-          CameraOnPress={() => navigation.navigate("Camera")}
+          AddFoodOnPress={() => props.navigation.navigate("AddForm",{category:props.route.params.category})}
+          CameraOnPress={() => props.navigation.navigate("Camera")}
           LoadPhotoOnPress={() => pickImage()}
-          navigation={navigation}
+          navigation={props.navigation}
         />
       </View>
     );

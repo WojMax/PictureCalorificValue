@@ -1,6 +1,6 @@
 export const pl = {
   common: {
-    addProduct: "Dodaj produkt",
+    addProduct: "Dodaj Produkt",
     takePhoto: "Zrób zdjęcie",
     addPhoto: "Wybierz zdjęcie",
     addMeal: "Dodaj posiłek",
@@ -8,6 +8,7 @@ export const pl = {
     toast: "Proszę wybrać zdjęcie",
     error: "Błąd",
     add: "Dodaj",
+    addNew: "Dodaj nowy"
   },
   navigation: {
     home: "Strona Główna",
@@ -42,6 +43,13 @@ export const pl = {
     editMeal: "Edytuj potrawę",
     delete: "Usuń potrawę",
     weight: "Waga",
+    calories_on_100g:"Kalorie na 100g"
+  },
+  categories: {
+    breakfast: "Śniadanie",
+    lunch: "Lunch",
+    dinner: "Kolacja",
+    snack: "Przekąski",
   },
   settings: {
     changeLang: "Zmień język",

@@ -1,6 +1,6 @@
 import Api from "./api";
 
 const HttpApi = new Api(
-  "http://calorieappserverinz-env.eba-5zgigd3w.eu-central-1.elasticbeanstalk.com"
+  "https://d40f-85-221-147-43.eu.ngrok.io"
 );
 export default HttpApi;
