@@ -22,3 +22,11 @@ def sqlfetch_to_json_favourites(values):
     return json.loads(json_to_send)
 
 
+def sqlfetch_to_json_most_popular(values):
+    json_to_send = '['
+    for entry in values:
+        json_entry = f'{{"meal_name":"{str(entry[0])}", "calories_on_100g":{str(entry[1])}, "proposed_meal_weight":{str(entry[2])}}},'
+        json_to_send += json_entry
+    json_to_send = json_to_send[:-1]
+    json_to_send += ']'
+    return json.loads(json_to_send)

@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify, make_response
 from flask_cors import cross_origin
-from Functions.json_functions import sqlfetch_to_json_meals, sqlfetch_to_json_favourites
+from Functions.json_functions import sqlfetch_to_json_meals, sqlfetch_to_json_favourites, sqlfetch_to_json_most_popular
 from Functions.db_functions import connect_to_db
 from Functions.sql_functions import insert_favourites, delete_favourites, update_favourites, insert_meals, update_meals, \
     delete_meals
@@ -30,15 +30,19 @@ def index():
 
 @application.route('/meal', methods=['GET', 'PUT', 'POST', 'DELETE'])
 @cross_origin()
-def save_meal_data_in_database():
+def meal():
     if request.method == 'GET':
         connection = connect_to_db()
         cursor = connection.cursor()
         try:
             user = Middleware.get_user_ID(application.wsgi_app)
             cursor.execute(
-                f'SELECT id, meal_name, calories, meal_weight, category '
-                f'FROM public.user_meal_data WHERE user_id =\'{user}\';')
+                f'''SELECT 
+                        id, meal_name, calories, meal_weight, category 
+                    FROM 
+                        public.user_meal_data 
+                    WHERE 
+                        user_id =\'{user}\';''')
         except Exception as error:
             print(error)
             connection.rollback()
@@ -120,7 +124,12 @@ def favourites():
         try:
             user = Middleware.get_user_ID(application.wsgi_app)
             cursor.execute(
-                f'SELECT id, meal_name, calories FROM public.user_favourites_data WHERE user_id =\'{user}\';')
+                f'''SELECT 
+                        id, meal_name, calories 
+                    FROM 
+                        public.user_favourites_data 
+                    WHERE 
+                        user_id =\'{user}\';''')
         except Exception as error:
             print(error)
             connection.rollback()
@@ -197,6 +206,42 @@ def favourites():
             cursor.close()
             connection.close()
             return make_response(jsonify({'code': 'FAILURE'}), 500)
+
+
+@application.route('/popular/<lang>', methods=['GET'])
+@cross_origin()
+def popular(lang):
+    if request.method == 'GET':
+        connection = connect_to_db()
+        cursor = connection.cursor()
+        try:
+            cursor.execute(
+                f'''SELECT 
+                        meal_name, calories_on_100g, proposed_meal_weight
+                    FROM 
+                        public.most_popular
+                    WHERE
+                        language = '{lang}'
+                    ORDER BY
+                        meal_name;''')
+
+        except Exception as error:
+            print(error)
+            connection.rollback()
+
+        if cursor.rowcount == -1:
+            cursor.close()
+            connection.close()
+            return make_response(jsonify({'code': 'FAILURE'}), 500)
+        elif cursor.rowcount == 0:
+            cursor.close()
+            connection.close()
+            return jsonify({})
+        else:
+            most_popular_meals = cursor.fetchall()
+            cursor.close()
+            connection.close()
+            return jsonify(sqlfetch_to_json_most_popular(values=most_popular_meals))
 
 
 if __name__ == '__main__':
