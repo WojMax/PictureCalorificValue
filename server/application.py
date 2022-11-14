@@ -1,9 +1,12 @@
+import json
+
 from flask import Flask, request, jsonify, make_response
 from flask_cors import cross_origin
 from Functions.json_functions import sqlfetch_to_json_meals, sqlfetch_to_json_favourites, sqlfetch_to_json_most_popular
 from Functions.db_functions import connect_to_db
 from Functions.sql_functions import insert_favourites, delete_favourites, update_favourites, insert_meals, update_meals, \
-    delete_meals
+    delete_meals, insert_user_data
+from Functions.user_functions import calculate_caloric_demand
 from Middleware.middleware_tokens import Middleware
 
 application = Flask(__name__, instance_relative_config=True)
@@ -59,7 +62,6 @@ def meal():
             meals = cursor.fetchall()
             cursor.close()
             connection.close()
-            print(sqlfetch_to_json_meals(values=meals))
             return jsonify(sqlfetch_to_json_meals(values=meals))
 
     if request.method == 'PUT':
@@ -242,6 +244,64 @@ def popular(lang):
             cursor.close()
             connection.close()
             return jsonify(sqlfetch_to_json_most_popular(values=most_popular_meals))
+
+
+@application.route('/profile', methods=['GET', 'PUT'])
+@cross_origin()
+def profile():
+    if request.method == 'GET':
+        connection = connect_to_db()
+        cursor = connection.cursor()
+        try:
+            user = Middleware.get_user_ID(application.wsgi_app)
+            cursor.execute(
+                f'''SELECT 
+                        U.gender, U.age, U.height, U.weight, E.value
+                    FROM 
+                        public.users U 
+                    INNER JOIN 
+                        public.user_exercise_data E ON U.weekly_exercise = E.id
+                    WHERE
+                        user_id = \'{user}\';''')
+        except Exception as error:
+            print(error)
+            connection.rollback()
+
+        if cursor.rowcount == -1:
+            cursor.close()
+            connection.close()
+            return make_response(jsonify({'code': 'FAILURE'}), 500)
+        elif cursor.rowcount == 0:
+            cursor.close()
+            connection.close()
+            return jsonify({})
+        else:
+            user_data = cursor.fetchall()
+            caloric_demand = calculate_caloric_demand(user_data)
+            cursor.close()
+            connection.close()
+            if caloric_demand != -1:
+                return jsonify(json.loads(f'{{"caloricDemand": {caloric_demand}}}'))
+            else:
+                return make_response(jsonify({'code': 'FAILURE', 'error': 'incorrect user values'}), 500)
+
+    if request.method == 'PUT':
+        connection = connect_to_db()
+        cursor = connection.cursor()
+        try:
+            cursor.execute(insert_user_data(request.data, Middleware.get_user_ID(application.wsgi_app)))
+            connection.commit()
+            print("successful sql statement")
+            cursor.close()
+            connection.close()
+            return make_response(jsonify({'code': 'SUCCESS'}), 200)
+        except Exception as error:
+            print(error)
+            print("error occurred, rollback")
+            connection.rollback()
+            cursor.close()
+            connection.close()
+            return make_response(jsonify({'code': 'FAILURE'}), 500)
 
 
 if __name__ == '__main__':
