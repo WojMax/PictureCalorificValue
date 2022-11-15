@@ -16,6 +16,7 @@ export const pl = {
     profile: "Profil",
     settings: "Ustawienia",
     camera: "Aparat",
+    most_popular: "Najpopularniejsze"
   },
   camera: {
     return: "Powrót",

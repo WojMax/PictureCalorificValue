@@ -9,18 +9,33 @@ import { getFavMeals } from "../redux/favoritesSlice";
 import { useAppDispatch } from "../hooks/useRedux";
 import HttpApi from "../services/Api/HttpApi";
 
-export default function AddFormScreen(props: any) {
+export default function AddFromListsScreen(props: any) {
   const dispatch = useAppDispatch();
 
-  const [name, setName] = useState("");
-  const [calories, setCalories] = useState<number>(
+ 
+  const [name, setName] = useState<string>(
     props.route.params
-      ? props.route.params.calories
-        ? props.route.params.calories.toString()
+      ? props.route.params.name
+        ? props.route.params.name.toString()
         : ""
       : ""
   );
-  const [weight, setWeight] = useState(0);
+  const [calories, setCalories] = useState<number>(
+    props.route.params
+      ? props.route.params.calories_on_100g
+        ? props.route.params.calories_on_100g.toString()
+        : ""
+      : ""
+  );
+
+  const [weight, setWeight] = useState<number>(
+    props.route.params
+      ? props.route.params.mealWeight
+        ? props.route.params.mealWeight.toString()
+        : ""
+      : ""
+  );
+
 
   const save = async() => {
     //console.log(calories);
@@ -46,49 +61,30 @@ export default function AddFormScreen(props: any) {
   };
   
 
-  const saveFav = async () => {
-    const mealFav = {
-      mealName: name,
-      caloriesOn100g: calories,
-    };
-    try {
-      await HttpApi.put("favourites", mealFav);
-      dispatch(getFavMeals());
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   return (
     <View style={styles.container}>
       <View style={styles.inputContainer}>
         <Input
           label={t("addScreen.name")}
-          placeholder={t("addScreen.enterName")}
+          placeholder={props.route.params.name}
           onChangeText={(value: string) => setName(value)}
         />
         <Input
           label={t("addScreen.calories")}
-          placeholder={t("addScreen.enterCalories")}
+          placeholder={props.route.params.calories_on_100g.toString()}
           keyboardType={"numeric"}
           value={calories}
           onChangeText={(value: number) => setCalories(value)}
         />
         <Input
           label={t("addScreen.weight")}
-          placeholder={t("addScreen.enterWeight")}
+          placeholder={props.route.params.mealWeight.toString()}
           keyboardType={"numeric"}
           onChangeText={(value: number) => setWeight(value)}
         />
       </View>
       <View style={styles.buttonContainer}>
-        <View style={{ margin: 5 }}>
-          <Button
-            title={t("common.addFav")}
-            disabled={!name || !calories}
-            onPress={() => saveFav()}
-          />
-        </View>
         <View style={{ margin: 5 }}>
           <Button title={t("common.addProduct")} onPress={() => save()} />
         </View>

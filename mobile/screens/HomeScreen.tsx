@@ -79,23 +79,21 @@ export default function HomeScreen(props: any) {
         ]}
       >
         <DateSlider />
-        <Text style={styles.progressText}>Progress</Text>
         <DefaultView style={styles.container5}>
-          <DefaultView style={styles.container6}>
-            <LinearProgress
-              style={{ marginVertical: 10 }}
-              value={progress}
-              variant="determinate"
-              color={Colors.dark.accent}
-              trackColor={Colors.dark.accent}
-            />
-          </DefaultView>
+        <Text style={styles.progressText}>Progress</Text>
           <DefaultView style={styles.container7}>
             <Text style={styles.progressText}>
               {caloriesCount}/{dailyCalories}
             </Text>
           </DefaultView>
         </DefaultView>
+        <LinearProgress
+              style={styles.progressBar}
+              value={progress}
+              variant="determinate"
+              color={Colors[colorScheme].accent}
+              trackColor={Colors[colorScheme].textLight}
+            />
       </View>
       <View style={styles.container2}>
         <SectionList
@@ -144,11 +142,11 @@ export default function HomeScreen(props: any) {
             />
           )}
           renderSectionHeader={({ section }) => (
-            <View>
-              <View style={styles.container8}>
-                <Text style={styles.categoryText}>{section.title}</Text>
-                <Text style={styles.categoryText}>{section.calories}</Text>
-              </View>
+            <DefaultView>
+              <DefaultView style={styles.container8}>
+                <Text style={[styles.categoryText,{color: Colors[colorScheme].textDark,}]}>{section.title}</Text>
+                <Text style={[styles.categoryText,{color: Colors[colorScheme].textDark,}]}>{section.calories}</Text>
+              </DefaultView>
               <TouchableOpacity
                 onPress={() =>
                   props.navigation.navigate("Add", {
@@ -157,14 +155,14 @@ export default function HomeScreen(props: any) {
                 }
                 style={styles.container9}
               >
-                <View>
+                <DefaultView>
                   <Text style={styles.addText}>{section.add}</Text>
-                </View>
-                <View>
+                </DefaultView>
+                <DefaultView>
                   <AntDesign name="plus" size={15} color={Colors.dark.accent} />
-                </View>
+                </DefaultView>
               </TouchableOpacity>
-            </View>
+            </DefaultView>
           )}
           keyExtractor={(item, index) => index.toString()}
         />
@@ -207,26 +205,30 @@ const styles = StyleSheet.create({
     paddingRight: 6,
     justifyContent: "space-between",
     flexDirection: "row",
-    backgroundColor: Colors.dark.surface,
+    borderBottomColor:Colors.dark.surface,
     borderBottomWidth: 1,
   },
 
   container9: {
-    paddingTop: 5,
-    paddingBottom: 5,
-    paddingLeft: 6,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingLeft: 8,
     paddingRight: 6,
     justifyContent: "space-between",
     flexDirection: "row",
+    borderBottomColor:Colors.dark.surface,
     borderBottomWidth: 1,
   },
-
+  progressBar: {
+    marginVertical: 8,
+    justifyContent: "center",
+    width:"100%"
+  },
   progressText: {
     fontSize: 20,
   },
   categoryText: {
     fontSize: 20,
-    color: Colors.dark.textLight,
     textAlign: "left",
   },
   addText: {

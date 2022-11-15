@@ -16,6 +16,7 @@ export const en = {
     profile: "Profile",
     settings: "Settings",
     camera: "Camera",
+    most_popular: "Most Popular"
   },
   camera: {
     return: "Return",

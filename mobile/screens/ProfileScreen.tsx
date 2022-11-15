@@ -1,8 +1,9 @@
 import { StyleSheet } from "react-native";
-
 import { Text, View } from "../components/Themed";
-import i18n from "i18n-js";
+import {LinearProgress } from '@rneui/themed';
 import t from "../services/translations";
+
+let progress = 0.5
 
 export default function ProfileScreen() {
   return (

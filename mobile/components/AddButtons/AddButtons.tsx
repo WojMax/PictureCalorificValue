@@ -8,6 +8,8 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import t from "../../services/translations";
+import { useColorScheme } from "react-native";
+
 
 type Props = {
   AddFoodOnPress: () => void;
@@ -18,9 +20,10 @@ type Props = {
 
 export default function AddButtons(props: Props) {
   const backgroundColor = useThemeColor(
-    { light: Colors.light.background, dark: Colors.dark.background },
+    { light: Colors.light.topSurface, dark: Colors.dark.topSurface },
     "background"
   );
+
 
   return (
     <View style={styles.mainView}>

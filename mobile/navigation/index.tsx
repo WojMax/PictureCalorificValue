@@ -25,6 +25,7 @@ import LinkingConfiguration from "./LinkingConfiguration";
 import AddFormScreen from "../screens/AddFormScreen";
 import AddFavScreen from "../screens/AddFavScreen";
 import AddScreen from "../screens/AddScreen";
+import AddFromListsScreen from "../screens/AddFromListsScreen"
 import CameraScreen from "../screens/CameraScreen";
 import i18n from "i18n-js";
 import t from "../services/translations";
@@ -133,6 +134,13 @@ function HomeStackNavigator() {
         component={AddScreen}
         options={{
           title: t("common.add"),
+        }}
+      />
+      <HomeStack.Screen
+        name="AddList"
+        component={AddFromListsScreen}
+        options={{
+          title: t("common.addProduct"),
         }}
       />
       <HomeStack.Screen
