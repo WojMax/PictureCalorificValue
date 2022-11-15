@@ -6,13 +6,13 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import t from "../services/translations";
 import { getFavMeals } from "../redux/favoritesSlice";
-import { useAppDispatch } from "../hooks/useRedux";
+import { useAppDispatch, useAppSelector } from "../hooks/useRedux";
 import HttpApi from "../services/Api/HttpApi";
 
 export default function AddFromListsScreen(props: any) {
   const dispatch = useAppDispatch();
+  const selectedDate = useAppSelector((state) => state.homeMeal.date);
 
- 
   const [name, setName] = useState<string>(
     props.route.params
       ? props.route.params.name
@@ -36,22 +36,22 @@ export default function AddFromListsScreen(props: any) {
       : ""
   );
 
-
-  const save = async() => {
+  const save = async () => {
     //console.log(calories);
+    const date = new Date(selectedDate);
     const meal = {
       mealName: name,
       caloriesOn100g: calories,
       mealWeight: weight,
       dateCreated:
-        new Date().getFullYear() +
+        date.getUTCFullYear() +
         "-" +
-        (new Date().getMonth() + 1) +
+        date.getUTCMonth() +
         "-" +
-        new Date().getDate(),
+        date.getUTCDay(),
       category: props.route.params.category,
     };
-    console.log(meal)
+    console.log(meal);
     try {
       await HttpApi.put("meal", meal);
       props.navigation.navigate("Home", {});
@@ -59,8 +59,6 @@ export default function AddFromListsScreen(props: any) {
       console.error(error);
     }
   };
-  
-
 
   return (
     <View style={styles.container}>

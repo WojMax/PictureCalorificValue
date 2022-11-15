@@ -13,26 +13,34 @@ export type Meal = {
 export interface HomeState {
   meals: Meal[];
   selectedMeal: Meal | null;
-  dates: Date[];
+  date: string;
 }
 
 const initialState: HomeState = {
   meals: [],
   selectedMeal: null,
-  dates: [],
+  date: "",
 };
 
-export const getHomeMeals = createAsyncThunk("getHomeMeals", async () => {
-  let data: { meals: Meal[] } = { meals: [] };
-  try {
-    const response = await HttpApi.get("meal");
-    data = { meals: response.data };
-    return data;
-  } catch (error) {
-    console.error(error);
-    return data;
+export const getHomeMeals = createAsyncThunk(
+  "getHomeMeals",
+  async (selectedDate: string) => {
+    let data: { meals: Meal[] } = { meals: [] };
+
+    const date = new Date(selectedDate);
+    const transformedDate =
+      date.getUTCFullYear() + "-" + date.getUTCMonth() + "-" + date.getDate();
+
+    try {
+      const response = await HttpApi.get("meal", transformedDate);
+      data = { meals: response.data };
+      return data;
+    } catch (error) {
+      console.error(error);
+      return data;
+    }
   }
-});
+);
 
 export const homeMealsSlice = createSlice({
   name: "homeMeals",
@@ -40,6 +48,9 @@ export const homeMealsSlice = createSlice({
   reducers: {
     setHomeMeal: (state, action: PayloadAction<Meal>) => {
       state.selectedMeal = action.payload;
+    },
+    setDate: (state, action: PayloadAction<string>) => {
+      state.date = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -49,6 +60,6 @@ export const homeMealsSlice = createSlice({
   },
 });
 
-export const { setHomeMeal } = homeMealsSlice.actions;
+export const { setHomeMeal, setDate } = homeMealsSlice.actions;
 
 export default homeMealsSlice.reducer;

@@ -32,6 +32,8 @@ export type Meal = {
 export default function HomeScreen(props: any) {
   const colorScheme = useColorScheme();
   let meals = useAppSelector((state) => state.homeMeal.meals);
+  const selectedDate = useAppSelector((state) => state.homeMeal.date);
+
   let dailyCalories = 2540;
   let caloriesCount = 0;
   let breakfastCalories = 0;
@@ -67,7 +69,9 @@ export default function HomeScreen(props: any) {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(getHomeMeals());
+    if (selectedDate.length > 0) {
+      dispatch(getHomeMeals(selectedDate));
+    }
   }, [props]);
 
   return (
@@ -80,7 +84,7 @@ export default function HomeScreen(props: any) {
       >
         <DateSlider />
         <DefaultView style={styles.container5}>
-        <Text style={styles.progressText}>Progress</Text>
+          <Text style={styles.progressText}>Progress</Text>
           <DefaultView style={styles.container7}>
             <Text style={styles.progressText}>
               {caloriesCount}/{dailyCalories}
@@ -88,12 +92,12 @@ export default function HomeScreen(props: any) {
           </DefaultView>
         </DefaultView>
         <LinearProgress
-              style={styles.progressBar}
-              value={progress}
-              variant="determinate"
-              color={Colors[colorScheme].accent}
-              trackColor={Colors[colorScheme].textLight}
-            />
+          style={styles.progressBar}
+          value={progress}
+          variant="determinate"
+          color={Colors[colorScheme].accent}
+          trackColor={Colors[colorScheme].textLight}
+        />
       </View>
       <View style={styles.container2}>
         <SectionList
@@ -144,8 +148,22 @@ export default function HomeScreen(props: any) {
           renderSectionHeader={({ section }) => (
             <DefaultView>
               <DefaultView style={styles.container8}>
-                <Text style={[styles.categoryText,{color: Colors[colorScheme].textDark,}]}>{section.title}</Text>
-                <Text style={[styles.categoryText,{color: Colors[colorScheme].textDark,}]}>{section.calories}</Text>
+                <Text
+                  style={[
+                    styles.categoryText,
+                    { color: Colors[colorScheme].textDark },
+                  ]}
+                >
+                  {section.title}
+                </Text>
+                <Text
+                  style={[
+                    styles.categoryText,
+                    { color: Colors[colorScheme].textDark },
+                  ]}
+                >
+                  {section.calories}
+                </Text>
               </DefaultView>
               <TouchableOpacity
                 onPress={() =>
@@ -174,7 +192,7 @@ export default function HomeScreen(props: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 30,
+    paddingTop: 0,
   },
   container2: {
     flex: 9,
@@ -184,7 +202,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   container4: {
-    paddingTop: 30,
+    paddingTop: 32,
     paddingRight: 10,
     paddingLeft: 10,
   },
@@ -205,7 +223,7 @@ const styles = StyleSheet.create({
     paddingRight: 6,
     justifyContent: "space-between",
     flexDirection: "row",
-    borderBottomColor:Colors.dark.surface,
+    borderBottomColor: Colors.dark.surface,
     borderBottomWidth: 1,
   },
 
@@ -216,13 +234,13 @@ const styles = StyleSheet.create({
     paddingRight: 6,
     justifyContent: "space-between",
     flexDirection: "row",
-    borderBottomColor:Colors.dark.surface,
+    borderBottomColor: Colors.dark.surface,
     borderBottomWidth: 1,
   },
   progressBar: {
     marginVertical: 8,
     justifyContent: "center",
-    width:"100%"
+    width: "100%",
   },
   progressText: {
     fontSize: 20,

@@ -7,12 +7,12 @@ import t from "../../services/translations";
 import { TouchableOpacity } from "react-native";
 
 export type Meal = {
-  id: number, 
-  meal_name: string, 
-  calories: number, 
-  calories_on_100g: number,
-  meal_weight: number, 
-  category: string
+  id: number;
+  meal_name: string;
+  calories: number;
+  calories_on_100g: number;
+  meal_weight: number;
+  category: string;
 };
 
 type Props = {
@@ -35,9 +35,7 @@ export default function MealsHomeList({ meal, EditFoodOnPress }: Props) {
           <Text style={listStyles.nameText}>{meal.meal_name}</Text>
         </View>
         <View>
-          <View
-            style={listStyles.containerBottom}
-          >
+          <View style={listStyles.containerBottom}>
             <Text
               style={[
                 listStyles.kcal100Text,
@@ -49,9 +47,7 @@ export default function MealsHomeList({ meal, EditFoodOnPress }: Props) {
           </View>
         </View>
       </View>
-      <View
-        style={listStyles.containerCalories}
-      >
+      <View style={listStyles.containerCalories}>
         <Text
           style={[listStyles.calText, { color: Colors[colorScheme].textLight }]}
         >

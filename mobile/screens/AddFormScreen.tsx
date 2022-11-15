@@ -6,11 +6,12 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import t from "../services/translations";
 import { getFavMeals } from "../redux/favoritesSlice";
-import { useAppDispatch } from "../hooks/useRedux";
+import { useAppDispatch, useAppSelector } from "../hooks/useRedux";
 import HttpApi from "../services/Api/HttpApi";
 
 export default function AddFormScreen(props: any) {
   const dispatch = useAppDispatch();
+  const selectedDate = useAppSelector((state) => state.homeMeal.date);
 
   const [name, setName] = useState("");
   const [calories, setCalories] = useState<number>(
@@ -22,18 +23,20 @@ export default function AddFormScreen(props: any) {
   );
   const [weight, setWeight] = useState(0);
 
-  const save = async() => {
+  const save = async () => {
     //console.log(calories);
+    const date = new Date(selectedDate);
+    console.log(date);
     const meal = {
       mealName: name,
       caloriesOn100g: calories,
       mealWeight: weight,
       dateCreated:
-        new Date().getFullYear() +
+        date.getUTCFullYear() +
         "-" +
-        (new Date().getMonth() + 1) +
+        date.getUTCMonth() +
         "-" +
-        new Date().getDate(),
+        date.getUTCDay(),
       category: props.route.params.category,
     };
     console.log(meal)
@@ -44,7 +47,6 @@ export default function AddFormScreen(props: any) {
       console.error(error);
     }
   };
-  
 
   const saveFav = async () => {
     const mealFav = {

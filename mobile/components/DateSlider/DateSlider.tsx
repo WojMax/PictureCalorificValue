@@ -5,13 +5,16 @@ import { useEffect, useState } from "react";
 import { FlatList, StyleSheet } from "react-native";
 import DateListItem from "./DateListItem";
 import { View as DefaultView } from "react-native";
+import { useAppDispatch } from "../../hooks/useRedux";
+import { getHomeMeals, setDate } from "../../redux/homeSlice";
 
 export default function DateSlider() {
   const [dates, setDates] = useState<Date[]>([]);
-  const colorScheme = useColorScheme();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     getLastDates();
+    set(new Date());
   }, []);
 
   const getDatesList = (start: any, end: any): Date[] => {
@@ -28,9 +31,14 @@ export default function DateSlider() {
   const getLastDates = () => {
     const today = new Date();
     const beginDate = new Date().setDate(today.getDate() - 30);
-    const dayList = getDatesList(beginDate, new Date());
+    const futureDate = new Date().setDate(today.getDate() + 2);
+    const dayList = getDatesList(beginDate, futureDate);
     dayList.map((v) => v.toISOString().slice(0, 10)).join("");
     setDates(dayList);
+  };
+
+  const set = (date: Date) => {
+    dispatch(setDate(date.toString()));
   };
 
   return (
@@ -40,7 +48,9 @@ export default function DateSlider() {
         inverted
         contentContainerStyle={{ flexDirection: "row-reverse" }}
         data={dates}
-        renderItem={({ item }) => <DateListItem date={item} />}
+        renderItem={({ item }) => (
+          <DateListItem date={item} DateOnPress={() => set(item)} />
+        )}
         keyExtractor={(item, index) => index.toString()}
       />
     </DefaultView>

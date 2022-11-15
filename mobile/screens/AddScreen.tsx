@@ -1,6 +1,6 @@
 import { StyleSheet, FlatList } from "react-native";
 import { View } from "../components/Themed";
-import { ButtonGroup } from '@rneui/themed';
+import { ButtonGroup } from "@rneui/themed";
 import Preview from "../components/Camera/PhotoPreview";
 import AddButtons from "../components/AddButtons/AddButtons";
 import Colors from "../constants/Colors";
@@ -47,18 +47,19 @@ export default function AddFormScreen(props: any) {
     }
   };
 
-
   const addMeal = () => {
-    props.navigation.navigate("AddForm", { url: "HomeStack", calories: calories });
+    props.navigation.navigate("AddForm", {
+      url: "HomeStack",
+      calories: calories,
+    });
     setScreen("main");
   };
   const [selectedIndex, setSelectedIndex] = useState(0);
   const close = () => {
     setScreen("main");
   };
-  let meals= useAppSelector((state) => state.MPMeal.meals);
+  let meals = useAppSelector((state) => state.MPMeal.meals);
   let meals0 = useAppSelector((state) => state.favMeal.meals);
-  
 
   const dispatch = useAppDispatch();
 
@@ -82,12 +83,16 @@ export default function AddFormScreen(props: any) {
     );
   } else if (screen === "loading") {
     return <ActivityIndicator text={t("addScreen.loader")} />;
-  } else if (selectedIndex==0) {
+  } else if (selectedIndex == 0) {
     return (
       <View style={styles.container}>
         <View style={styles.container1}>
           <AddButtons
-            AddFoodOnPress={() => props.navigation.navigate("AddForm",{category:props.route.params.category})}
+            AddFoodOnPress={() =>
+              props.navigation.navigate("AddForm", {
+                category: props.route.params.category,
+              })
+            }
             CameraOnPress={() => props.navigation.navigate("Camera")}
             LoadPhotoOnPress={() => pickImage()}
             navigation={props.navigation}
@@ -95,44 +100,56 @@ export default function AddFormScreen(props: any) {
         </View>
         <View>
           <ButtonGroup
-            buttons={[t("navigation.favorites"),t("navigation.most_popular")]}
+            buttons={[t("navigation.favorites"), t("navigation.most_popular")]}
             selectedIndex={selectedIndex}
             onPress={(value) => {
               setSelectedIndex(value);
             }}
-            containerStyle={[styles.buttonGroup,{backgroundColor: Colors.dark.topSurface},{borderColor:Colors.dark.topSurface}]}
-            selectedButtonStyle={[styles.selectedButton,{backgroundColor: Colors.dark.topSurface },{borderColor:Colors.dark.accent}]}
+            containerStyle={[
+              styles.buttonGroup,
+              { backgroundColor: Colors.dark.topSurface },
+              { borderColor: Colors.dark.topSurface },
+            ]}
+            selectedButtonStyle={[
+              styles.selectedButton,
+              { backgroundColor: Colors.dark.topSurface },
+              { borderColor: Colors.dark.accent },
+            ]}
             selectedTextStyle={styles.selectedText}
             textStyle={styles.disabledText}
           />
         </View>
         <View style={styles.container2}>
           <FlatList
-          data={meals0}
-          renderItem={({ item }) => (
-            <AddScreenList
-              meal={item}
-              ADDFoodOnPress={() => props.navigation.navigate("AddList",
-              {
-                name:item.meal_name,
-                mealWeight:0,
-                calories_on_100g:item.calories_on_100g,
-                category:props.route.params.category}
-                )}
-            />
-          )}
-          keyExtractor={(item, index) => index.toString()}
-        />
+            data={meals0}
+            renderItem={({ item }) => (
+              <AddScreenList
+                meal={item}
+                ADDFoodOnPress={() =>
+                  props.navigation.navigate("AddList", {
+                    name: item.meal_name,
+                    mealWeight: 0,
+                    calories_on_100g: item.calories_on_100g,
+                    category: props.route.params.category,
+                  })
+                }
+              />
+            )}
+            keyExtractor={(item, index) => index.toString()}
+          />
         </View>
       </View>
     );
-  }
-  else  {
+  } else {
     return (
       <View style={styles.container}>
         <View style={styles.container1}>
           <AddButtons
-            AddFoodOnPress={() => props.navigation.navigate("AddForm",{category:props.route.params.category})}
+            AddFoodOnPress={() =>
+              props.navigation.navigate("AddForm", {
+                category: props.route.params.category,
+              })
+            }
             CameraOnPress={() => props.navigation.navigate("Camera")}
             LoadPhotoOnPress={() => pickImage()}
             navigation={props.navigation}
@@ -140,34 +157,43 @@ export default function AddFormScreen(props: any) {
         </View>
         <View>
           <ButtonGroup
-            buttons={[t("navigation.favorites"),t("navigation.most_popular")]}
+            buttons={[t("navigation.favorites"), t("navigation.most_popular")]}
             selectedIndex={selectedIndex}
             onPress={(value) => {
               setSelectedIndex(value);
             }}
-            containerStyle={[styles.buttonGroup,{backgroundColor: Colors.dark.topSurface},{borderColor:Colors.dark.topSurface}]}
-            selectedButtonStyle={[styles.selectedButton,{backgroundColor: Colors.dark.topSurface },{borderColor:Colors.dark.accent}]}
+            containerStyle={[
+              styles.buttonGroup,
+              { backgroundColor: Colors.dark.topSurface },
+              { borderColor: Colors.dark.topSurface },
+            ]}
+            selectedButtonStyle={[
+              styles.selectedButton,
+              { backgroundColor: Colors.dark.topSurface },
+              { borderColor: Colors.dark.accent },
+            ]}
             selectedTextStyle={styles.selectedText}
             textStyle={styles.disabledText}
           />
         </View>
         <View style={styles.container2}>
           <FlatList
-          data={meals}
-          renderItem={({ item }) => (
-            <AddScreenList
-              meal={item}
-              ADDFoodOnPress={() => props.navigation.navigate("AddList",
-              {
-                name:item.meal_name,
-                calories_on_100g:item.calories_on_100g,
-                mealWeight:item.proposed_meal_weight,
-                category:props.route.params.category
-              })}
-            />
-          )}
-          keyExtractor={(item, index) => index.toString()}
-        />
+            data={meals}
+            renderItem={({ item }) => (
+              <AddScreenList
+                meal={item}
+                ADDFoodOnPress={() =>
+                  props.navigation.navigate("AddList", {
+                    name: item.meal_name,
+                    calories_on_100g: item.calories_on_100g,
+                    mealWeight: item.proposed_meal_weight,
+                    category: props.route.params.category,
+                  })
+                }
+              />
+            )}
+            keyExtractor={(item, index) => index.toString()}
+          />
         </View>
       </View>
     );
@@ -186,18 +212,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   container2: {
-    flex:2,
-    marginTop:"-30%"
+    flex: 2,
   },
-  buttonGroup:{
-    borderBottomWidth:0,
-    marginHorizontal:0,
-    height:"25%"
+  buttonGroup: {
+    borderBottomWidth: 0,
+    marginHorizontal: 0,
+    marginTop: 0,
   },
-  selectedButton:{
-    borderBottomWidth:3,
-    marginHorizontal:0,
-    height:"25%"
+  selectedButton: {
+    borderBottomWidth: 3,
   },
   selectedText: {
     fontSize: 15,

@@ -24,8 +24,8 @@ export default {
   },
   dark: {
     //text
-    text: "#e2f1f8",
-    textLight: "#babdbe",
+    text: "#FFFFFF",
+    textLight: "#bababa",
     textDark: "#8a8d8e",
     //areas
     background: "#000",
