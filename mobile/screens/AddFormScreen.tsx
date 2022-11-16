@@ -8,6 +8,7 @@ import t from "../services/translations";
 import { getFavMeals } from "../redux/favoritesSlice";
 import { useAppDispatch, useAppSelector } from "../hooks/useRedux";
 import HttpApi from "../services/Api/HttpApi";
+import { getHomeMeals } from "../redux/homeSlice";
 
 export default function AddFormScreen(props: any) {
   const dispatch = useAppDispatch();
@@ -39,9 +40,9 @@ export default function AddFormScreen(props: any) {
         date.getUTCDay(),
       category: props.route.params.category,
     };
-    console.log(meal)
     try {
       await HttpApi.put("meal", meal);
+      dispatch(getHomeMeals(selectedDate));
       props.navigation.navigate("Home", {});
     } catch (error) {
       console.error(error);

@@ -14,7 +14,6 @@ export default function DateSlider() {
 
   useEffect(() => {
     getLastDates();
-    set(new Date());
   }, []);
 
   const getDatesList = (start: any, end: any): Date[] => {

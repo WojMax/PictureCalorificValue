@@ -20,59 +20,19 @@ import useColorScheme from "../hooks/useColorScheme";
 import React from "react";
 import { View as DefaultView } from "react-native";
 
-export type Meal = {
-  id: number;
-  calories: number;
-  calories_on_100g: number;
-  meal_name: string;
-  meal_weight: number;
-  category: string;
-};
-
 export default function HomeScreen(props: any) {
   const colorScheme = useColorScheme();
   let meals = useAppSelector((state) => state.homeMeal.meals);
   const selectedDate = useAppSelector((state) => state.homeMeal.date);
 
-  let dailyCalories = 2540;
-  let caloriesCount = 0;
-  let breakfastCalories = 0;
-  let breakfastMeals: Meal[] = [];
-  let lunchCalories = 0;
-  let lunchMeals: Meal[] = [];
-  let dinnerCalories = 0;
-  let dinnerMeals: Meal[] = [];
-  let snackCalories = 0;
-  let snackMeals: Meal[] = [];
-
-  meals.forEach((item) => {
-    caloriesCount += item.calories;
-    if (item.category == "breakfast") {
-      breakfastCalories += item.calories;
-      breakfastMeals.push(item);
-    }
-    if (item.category == "lunch") {
-      lunchCalories += item.calories;
-      lunchMeals.push(item);
-    }
-    if (item.category == "dinner") {
-      dinnerCalories += item.calories;
-      dinnerMeals.push(item);
-    }
-    if (item.category == "snack") {
-      snackCalories += item.calories;
-      snackMeals.push(item);
-    }
-  });
-
-  let progress = caloriesCount / dailyCalories;
+  // let progress = caloriesCount / dailyCalories;
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (selectedDate.length > 0) {
       dispatch(getHomeMeals(selectedDate));
     }
-  }, [props]);
+  }, [selectedDate]);
 
   return (
     <View style={styles.container}>
@@ -86,47 +46,47 @@ export default function HomeScreen(props: any) {
         <DefaultView style={styles.container5}>
           <Text style={styles.progressText}>Progress</Text>
           <DefaultView style={styles.container7}>
-            <Text style={styles.progressText}>
-              {caloriesCount}/{dailyCalories}
-            </Text>
+            {/*<Text style={styles.progressText}>*/}
+            {/*  {caloriesCount}/{dailyCalories}*/}
+            {/*</Text>*/}
           </DefaultView>
         </DefaultView>
-        <LinearProgress
-          style={styles.progressBar}
-          value={progress}
-          variant="determinate"
-          color={Colors[colorScheme].accent}
-          trackColor={Colors[colorScheme].textLight}
-        />
+        {/*<LinearProgress*/}
+        {/*  style={styles.progressBar}*/}
+        {/*  value={progress}*/}
+        {/*  variant="determinate"*/}
+        {/*  color={Colors[colorScheme].accent}*/}
+        {/*  trackColor={Colors[colorScheme].textLight}*/}
+        {/*/>*/}
       </View>
       <View style={styles.container2}>
         <SectionList
           sections={[
             {
               title: t("categories.breakfast"),
-              data: breakfastMeals,
-              calories: breakfastCalories,
+              data: meals?.breakfast?.meals ? meals?.breakfast?.meals : [],
+              calories: meals?.breakfast?.calories,
               category: "breakfast",
               add: t("common.addProduct"),
             },
             {
               title: t("categories.lunch"),
-              data: lunchMeals,
-              calories: lunchCalories,
+              data: meals?.lunch?.meals ? meals?.breakfast?.meals : [],
+              calories: meals?.lunch?.calories,
               category: "lunch",
               add: t("common.addProduct"),
             },
             {
               title: t("categories.dinner"),
-              data: dinnerMeals,
-              calories: dinnerCalories,
+              data: meals?.dinner?.meals ? meals?.breakfast?.meals : [],
+              calories: meals?.dinner?.calories,
               category: "dinner",
               add: t("common.addProduct"),
             },
             {
               title: t("categories.snack"),
-              data: snackMeals,
-              calories: snackCalories,
+              data: meals?.snacks?.meals ? meals?.breakfast?.meals : [],
+              calories: meals?.snacks?.calories,
               category: "snack",
               add: t("common.addProduct"),
             },

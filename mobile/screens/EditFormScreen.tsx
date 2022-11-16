@@ -6,15 +6,19 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import t from "../services/translations";
 import HttpApi from "../services/Api/HttpApi";
-
+import { getHomeMeals } from "../redux/homeSlice";
+import { useAppDispatch, useAppSelector } from "../hooks/useRedux";
 
 export default function EditFormScreen(props: any) {
+  const dispatch = useAppDispatch();
+  const selectedDate = useAppSelector((state) => state.homeMeal.date);
+
   const [name, setName] = useState(
     props.route.params
-    ? props.route.params.name
-      ? props.route.params.name.toString()
+      ? props.route.params.name
+        ? props.route.params.name.toString()
+        : ""
       : ""
-    : ""
   );
   const [calories, setCalories] = useState<number>(
     props.route.params
@@ -25,12 +29,12 @@ export default function EditFormScreen(props: any) {
   );
   const [weight, setWeight] = useState<number>(
     props.route.params
-    ? props.route.params.weight
-      ? props.route.params.weight.toString()
+      ? props.route.params.weight
+        ? props.route.params.weight.toString()
+        : ""
       : ""
-    : ""
   );
-  
+
   const editHome = async () => {
     //console.log(calories);
     const meal = {
@@ -42,6 +46,7 @@ export default function EditFormScreen(props: any) {
     try {
       //console.log(meal)
       await HttpApi.post("meal", meal);
+      dispatch(getHomeMeals(selectedDate));
       props.navigation.navigate("Home", {});
     } catch (error) {
       console.error(error);
@@ -56,7 +61,7 @@ export default function EditFormScreen(props: any) {
     try {
       //console.log(meal)
       const resp = await HttpApi.delete("meal", { data: meal });
-      //console.log(resp);
+      dispatch(getHomeMeals(selectedDate));
       props.navigation.navigate("Home", {});
     } catch (error) {
       console.error(error);

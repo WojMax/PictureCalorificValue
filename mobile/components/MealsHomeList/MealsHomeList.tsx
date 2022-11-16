@@ -12,7 +12,6 @@ export type Meal = {
   calories: number;
   calories_on_100g: number;
   meal_weight: number;
-  category: string;
 };
 
 type Props = {
