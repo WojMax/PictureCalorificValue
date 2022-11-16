@@ -22,8 +22,9 @@ import { View as DefaultView } from "react-native";
 
 export default function HomeScreen(props: any) {
   const colorScheme = useColorScheme();
-  let meals = useAppSelector((state) => state.homeMeal.meals);
+  const meals = useAppSelector((state) => state.homeMeal.meals);
   const selectedDate = useAppSelector((state) => state.homeMeal.date);
+  const caloriesCount = useAppSelector((state) => state.homeMeal.caloriesCount);
 
   // let progress = caloriesCount / dailyCalories;
   const dispatch = useAppDispatch();
@@ -46,18 +47,18 @@ export default function HomeScreen(props: any) {
         <DefaultView style={styles.container5}>
           <Text style={styles.progressText}>Progress</Text>
           <DefaultView style={styles.container7}>
-            {/*<Text style={styles.progressText}>*/}
-            {/*  {caloriesCount}/{dailyCalories}*/}
-            {/*</Text>*/}
+            <Text style={styles.progressText}>
+              {caloriesCount}/{2200}
+            </Text>
           </DefaultView>
         </DefaultView>
-        {/*<LinearProgress*/}
-        {/*  style={styles.progressBar}*/}
-        {/*  value={progress}*/}
-        {/*  variant="determinate"*/}
-        {/*  color={Colors[colorScheme].accent}*/}
-        {/*  trackColor={Colors[colorScheme].textLight}*/}
-        {/*/>*/}
+        <LinearProgress
+          style={styles.progressBar}
+          value={caloriesCount / 2200}
+          variant="determinate"
+          color={Colors[colorScheme].accent}
+          trackColor={Colors[colorScheme].textLight}
+        />
       </View>
       <View style={styles.container2}>
         <SectionList
@@ -71,21 +72,21 @@ export default function HomeScreen(props: any) {
             },
             {
               title: t("categories.lunch"),
-              data: meals?.lunch?.meals ? meals?.breakfast?.meals : [],
+              data: meals?.lunch?.meals ? meals?.lunch?.meals : [],
               calories: meals?.lunch?.calories,
               category: "lunch",
               add: t("common.addProduct"),
             },
             {
               title: t("categories.dinner"),
-              data: meals?.dinner?.meals ? meals?.breakfast?.meals : [],
+              data: meals?.dinner?.meals ? meals?.dinner?.meals : [],
               calories: meals?.dinner?.calories,
               category: "dinner",
               add: t("common.addProduct"),
             },
             {
               title: t("categories.snack"),
-              data: meals?.snacks?.meals ? meals?.breakfast?.meals : [],
+              data: meals?.snacks?.meals ? meals?.snacks?.meals : [],
               calories: meals?.snacks?.calories,
               category: "snack",
               add: t("common.addProduct"),

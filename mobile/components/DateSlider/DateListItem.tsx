@@ -15,9 +15,9 @@ export default function DateListItem({ date, DateOnPress }: Props) {
   const colorScheme = useColorScheme();
   const selectedDate = useAppSelector((state) => state.homeMeal.date);
 
-  const day = date.getUTCDate();
+  const day = date.getDate();
   const monthYear =
-    date.getUTCMonth() + "." + date.getUTCFullYear().toString().substring(2);
+    date.getMonth() + 1 + "." + date.getUTCFullYear().toString().substring(2);
 
   const color = {
     borderColor: Colors[colorScheme].textDark,
