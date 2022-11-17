@@ -56,7 +56,7 @@ def delete_favourites(delete_data):
     mealId = delete_data["mealID"]
 
     SQLquery = f'DELETE FROM public.user_favourites_data\n' \
-               f'WHERE user_id = \'{mealId}\';'
+               f'WHERE id = \'{mealId}\';'
     return SQLquery
 
 

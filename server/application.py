@@ -1,4 +1,5 @@
 import json
+import boto3, botocore
 
 from flask import Flask, request, jsonify, make_response
 from flask_cors import cross_origin
@@ -11,6 +12,20 @@ from Middleware.middleware_tokens import Middleware
 
 application = Flask(__name__, instance_relative_config=True)
 application.wsgi_app = Middleware(application.wsgi_app)
+
+
+#############################
+#  CONNECT TO S3 ML MODEL   #
+#############################
+
+# application.config['S3_BUCKET'] = "S3_BUCKET_NAME"
+# application.config['S3_KEY'] = "AWS_ACCESS_KEY"
+# application.config['S3_SECRET'] = "AWS_ACCESS_SECRET"
+# application.config['S3_LOCATION'] = 'http://{}.s3.amazonaws.com/'.format(S3_BUCKET)
+
+#############################
+#    CONNECT TO COGNITO     #
+#############################
 
 
 # application.config['AWS_DEFAULT_REGION'] = 'eu-central-1'
@@ -31,9 +46,9 @@ def index():
     return 'welcome'
 
 
-@application.route('/meal', methods=['GET', 'PUT', 'POST', 'DELETE'])
+@application.route('/meal/<date>', methods=['GET'])
 @cross_origin()
-def meal():
+def get_meal(date):
     if request.method == 'GET':
         connection = connect_to_db()
         cursor = connection.cursor()
@@ -45,7 +60,7 @@ def meal():
                     FROM 
                         public.user_meal_data 
                     WHERE 
-                        user_id =\'{user}\';''')
+                        user_id =\'{user}\' AND date_created = \'{date}\';''')
         except Exception as error:
             print(error)
             connection.rollback()
@@ -64,6 +79,10 @@ def meal():
             connection.close()
             return jsonify(sqlfetch_to_json_meals(values=meals))
 
+
+@application.route('/meal', methods=['PUT', 'POST', 'DELETE'])
+@cross_origin()
+def meal():
     if request.method == 'PUT':
         connection = connect_to_db()
         cursor = connection.cursor()

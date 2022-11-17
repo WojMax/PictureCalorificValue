@@ -28,18 +28,21 @@ export default function AddFormScreen(props: any) {
     //console.log(calories);
     const date = new Date(selectedDate);
     console.log(date);
+    const transformedDate =
+      date.getUTCFullYear() +
+      "-" +
+      (date.getUTCMonth() + 1) +
+      "-" +
+      date.getDate();
+
     const meal = {
       mealName: name,
       caloriesOn100g: calories,
       mealWeight: weight,
-      dateCreated:
-        date.getUTCFullYear() +
-        "-" +
-        date.getUTCMonth() +
-        "-" +
-        date.getUTCDay(),
+      dateCreated: transformedDate,
       category: props.route.params.category,
     };
+
     try {
       await HttpApi.put("meal", meal);
       dispatch(getHomeMeals(selectedDate));
