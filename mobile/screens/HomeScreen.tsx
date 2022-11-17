@@ -88,7 +88,7 @@ export default function HomeScreen(props: any) {
               title: t("categories.snack"),
               data: meals?.snacks?.meals ? meals?.snacks?.meals : [],
               calories: meals?.snacks?.calories,
-              category: "snack",
+              category: "snacks",
               add: t("common.addProduct"),
             },
           ]}
