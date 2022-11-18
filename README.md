@@ -33,7 +33,7 @@ This project is an mobile application for calorie-counting based on machinery le
 	```
 	pip install -r "pic2kcal-master/requirements.txt
 	```
-3.  Open Open any Python Code editor, at your discretion
+3.  Open any Python Code editor, at your discretion
 
 ## How to start developing server
 
