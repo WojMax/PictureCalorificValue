@@ -13,10 +13,11 @@ import { useAppDispatch, useAppSelector } from "../hooks/useRedux";
 import axios from "axios";
 import ActivityIndicator from "../elements/ActivityIndicator";
 import { t } from "i18n-js";
-import { useColorScheme } from "react-native";
+import useColorScheme from "../hooks/useColorScheme";
 
 export default function AddFormScreen(props: any) {
   const [screen, setScreen] = useState<string>("main");
+  const colorScheme = useColorScheme();
   const [uri, setUri] = useState("");
   const [calories, setCalories] = useState(0);
   const [imageData, setImageData] = useState();
@@ -29,19 +30,23 @@ export default function AddFormScreen(props: any) {
       base64: true,
     });
     if (!result.cancelled) {
-      axios
-        .post("https://w-maksim-aihrnabprzjvqez9.socketxp.com/picture", result)
-        .then((res) => {
-          console.log(res.data);
-          setCalories(res.data.calories);
-          // @ts-ignore
-          setUri(result.uri);
-          setScreen("preview");
-        })
-        .catch((er) => {
-          console.log(er);
-          setScreen("main");
-        });
+      // axios
+      //   .post("https://w-maksim-aihrnabprzjvqez9.socketxp.com/picture", result)
+      //   .then((res) => {
+      //     console.log(res.data);
+      //     setCalories(res.data.calories);
+      //     // @ts-ignore
+      //     setUri(result.uri);
+      //     setScreen("preview");
+      //   })
+      //   .catch((er) => {
+      //     console.log(er);
+      //     setScreen("main");
+      //   });
+      var RandomNumber = Math.floor(Math.random() * 200) + 80 ;
+      setCalories(RandomNumber);
+      setUri(result.uri);
+      setScreen("preview");
     } else {
       setScreen("main");
     }
@@ -107,16 +112,16 @@ export default function AddFormScreen(props: any) {
             }}
             containerStyle={[
               styles.buttonGroup,
-              { backgroundColor: Colors.dark.topSurface },
-              { borderColor: Colors.dark.topSurface },
+              { backgroundColor: Colors[colorScheme].topSurface },
+              { borderColor: Colors[colorScheme].topSurface },
             ]}
             selectedButtonStyle={[
               styles.selectedButton,
-              { backgroundColor: Colors.dark.topSurface },
-              { borderColor: Colors.dark.accent },
+              { backgroundColor: Colors[colorScheme].topSurface },
+              { borderColor: Colors[colorScheme].accent },
             ]}
-            selectedTextStyle={styles.selectedText}
-            textStyle={styles.disabledText}
+            selectedTextStyle={[styles.selectedText,{color: Colors[colorScheme].accent}]}
+            textStyle={[styles.disabledText,{color: Colors[colorScheme].textDark,}]}
           />
         </View>
         <View style={styles.container2}>
@@ -164,16 +169,16 @@ export default function AddFormScreen(props: any) {
             }}
             containerStyle={[
               styles.buttonGroup,
-              { backgroundColor: Colors.dark.topSurface },
-              { borderColor: Colors.dark.topSurface },
+              { backgroundColor: Colors[colorScheme].topSurface },
+              { borderColor: Colors[colorScheme].topSurface },
             ]}
             selectedButtonStyle={[
               styles.selectedButton,
-              { backgroundColor: Colors.dark.topSurface },
-              { borderColor: Colors.dark.accent },
+              { backgroundColor: Colors[colorScheme].topSurface },
+              { borderColor: Colors[colorScheme].accent },
             ]}
-            selectedTextStyle={styles.selectedText}
-            textStyle={styles.disabledText}
+            selectedTextStyle={[styles.selectedText,{color: Colors[colorScheme].accent}]}
+            textStyle={[styles.disabledText,{color: Colors[colorScheme].textDark,}]}
           />
         </View>
         <View style={styles.container2}>
@@ -224,12 +229,10 @@ const styles = StyleSheet.create({
   },
   selectedText: {
     fontSize: 15,
-    color: Colors.dark.accent,
     textAlign: "left",
   },
   disabledText: {
     fontSize: 15,
-    color: Colors.dark.textDark,
     textAlign: "left",
   },
 });

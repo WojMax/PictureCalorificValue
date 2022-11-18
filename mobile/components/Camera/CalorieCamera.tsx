@@ -89,18 +89,22 @@ export default function CalorieCamera(props: Props) {
     // @ts-ignore
     const photo = await camera.takePictureAsync({ base64: true });
     setScreen("loading");
-    axios
-      .post("https://w-maksim-aihrnabprzjvqez9.socketxp.com/picture", photo)
-      .then((res) => {
-        console.log(res.data);
-        setCalories(res.data.calories);
-        setPhoto(photo.uri);
-        setScreen("preview");
-      })
-      .catch((er) => {
-        console.log(er);
-        setScreen("main");
-      });
+    // axios
+    //   .post("https://w-maksim-aihrnabprzjvqez9.socketxp.com/picture", photo)
+    //   .then((res) => {
+    //     console.log(res.data);
+    //     setCalories(res.data.calories);
+    //     setPhoto(photo.uri);
+    //     setScreen("preview");
+    //   })
+    //   .catch((er) => {
+    //     console.log(er);
+    //     setScreen("main");
+    //   });
+    var RandomNumber = Math.floor(Math.random() * 200) + 80 ;
+      setCalories(RandomNumber);
+      setPhoto(photo.uri);
+      setScreen("preview");
   };
 
   const retakePhoto = () => {

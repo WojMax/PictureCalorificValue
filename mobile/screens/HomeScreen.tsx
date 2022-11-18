@@ -108,7 +108,7 @@ export default function HomeScreen(props: any) {
           )}
           renderSectionHeader={({ section }) => (
             <DefaultView>
-              <DefaultView style={styles.container8}>
+              <DefaultView style={[styles.container8,{borderBottomColor: Colors[colorScheme].surface}]}>
                 <Text
                   style={[
                     styles.categoryText,
@@ -132,10 +132,10 @@ export default function HomeScreen(props: any) {
                     category: section.category,
                   })
                 }
-                style={styles.container9}
+                style={[styles.container9,{borderBottomColor: Colors[colorScheme].surface}]}
               >
                 <DefaultView>
-                  <Text style={styles.addText}>{section.add}</Text>
+                  <Text style={[styles.addText,{color: Colors[colorScheme].accent,}]}>{section.add}</Text>
                 </DefaultView>
                 <DefaultView>
                   <AntDesign name="plus" size={15} color={Colors.dark.accent} />
@@ -184,7 +184,6 @@ const styles = StyleSheet.create({
     paddingRight: 6,
     justifyContent: "space-between",
     flexDirection: "row",
-    borderBottomColor: Colors.dark.surface,
     borderBottomWidth: 1,
   },
 
@@ -195,7 +194,6 @@ const styles = StyleSheet.create({
     paddingRight: 6,
     justifyContent: "space-between",
     flexDirection: "row",
-    borderBottomColor: Colors.dark.surface,
     borderBottomWidth: 1,
   },
   progressBar: {
@@ -212,7 +210,6 @@ const styles = StyleSheet.create({
   },
   addText: {
     fontSize: 15,
-    color: Colors.dark.accent,
     textAlign: "left",
   },
 });
