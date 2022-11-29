@@ -1,14 +1,27 @@
 import { StyleSheet } from "react-native";
-import { Text, View } from "../components/Themed";
-import {LinearProgress } from '@rneui/themed';
-import t from "../services/translations";
-
-let progress = 0.5
+import { View } from "../components/Themed";
+import Account from "../components/Profile/Account";
+import Weight from "../components/Profile/Weight";
+import User from "../components/Profile/User";
+import Objective from "../components/Profile/Objective";
 
 export default function ProfileScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{t("navigation.profile")}</Text>
+      <View style={styles.containerFullWidth}>
+        <Weight />
+      </View>
+      <View style={styles.containerFullWidth}>
+        <View style={styles.containerFullWidth}>
+          <Account />
+        </View>
+        <View style={styles.containerFullWidth}>
+          <User />
+        </View>
+      </View>
+      <View style={styles.containerFullWidth}>
+        <Objective />
+      </View>
     </View>
   );
 }
@@ -16,9 +29,8 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
   },
+  containerFullWidth: { flex: 1, flexDirection: "row" },
   title: {
     fontSize: 20,
     fontWeight: "bold",

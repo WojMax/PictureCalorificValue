@@ -10,7 +10,7 @@ import t from "../services/translations";
 import { useEffect, useState } from "react";
 import Colors from "../constants/Colors";
 import { useAppDispatch, useAppSelector } from "../hooks/useRedux";
-import { getHomeMeals } from "../redux/homeSlice";
+import { getCaloricDemand, getHomeMeals } from "../redux/homeSlice";
 import MealsHomeList from "../components/MealsHomeList/MealsHomeList";
 import { LinearProgress } from "@rneui/themed";
 import { AntDesign } from "@expo/vector-icons";
@@ -25,6 +25,7 @@ export default function HomeScreen(props: any) {
   const meals = useAppSelector((state) => state.homeMeal.meals);
   const selectedDate = useAppSelector((state) => state.homeMeal.date);
   const caloriesCount = useAppSelector((state) => state.homeMeal.caloriesCount);
+  const caloricDemand = useAppSelector((state) => state.homeMeal.caloricDemand);
 
   // let progress = caloriesCount / dailyCalories;
   const dispatch = useAppDispatch();
@@ -32,8 +33,12 @@ export default function HomeScreen(props: any) {
   useEffect(() => {
     if (selectedDate.length > 0) {
       dispatch(getHomeMeals(selectedDate));
+      dispatch(getCaloricDemand());
     }
   }, [selectedDate]);
+  useEffect(() => {
+    console.log(caloricDemand);
+  }, [caloricDemand]);
 
   return (
     <View style={styles.container}>
@@ -108,15 +113,15 @@ export default function HomeScreen(props: any) {
           )}
           renderSectionHeader={({ section }) => (
             <DefaultView>
-              <DefaultView style={[styles.container8,{borderBottomColor: Colors[colorScheme].surface}]}>
-                <Text
-                  style={[
-                    styles.categoryText,
-                    { color: Colors[colorScheme].textDark },
-                  ]}
-                >
-                  {section.title}
-                </Text>
+              <DefaultView
+                style={[
+                  styles.container8,
+                  {
+                    backgroundColor: Colors[colorScheme].surface,
+                  },
+                ]}
+              >
+                <Text style={[styles.categoryText]}>{section.title}</Text>
                 <Text
                   style={[
                     styles.categoryText,
@@ -132,10 +137,20 @@ export default function HomeScreen(props: any) {
                     category: section.category,
                   })
                 }
-                style={[styles.container9,{borderBottomColor: Colors[colorScheme].surface}]}
+                style={[
+                  styles.container9,
+                  { borderBottomColor: Colors[colorScheme].surface },
+                ]}
               >
                 <DefaultView>
-                  <Text style={[styles.addText,{color: Colors[colorScheme].accent,}]}>{section.add}</Text>
+                  <Text
+                    style={[
+                      styles.addText,
+                      { color: Colors[colorScheme].accent },
+                    ]}
+                  >
+                    {section.add}
+                  </Text>
                 </DefaultView>
                 <DefaultView>
                   <AntDesign name="plus" size={15} color={Colors.dark.accent} />
