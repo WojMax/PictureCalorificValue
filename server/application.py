@@ -6,7 +6,7 @@ from flask_cors import cross_origin
 from Functions.json_functions import sqlfetch_to_json_meals, sqlfetch_to_json_favourites, sqlfetch_to_json_most_popular
 from Functions.db_functions import connect_to_db
 from Functions.sql_functions import insert_favourites, delete_favourites, update_favourites, insert_meals, update_meals, \
-    delete_meals, insert_user_data
+    delete_meals, insert_user_data, update_user_data
 from Functions.user_functions import calculate_caloric_demand
 from Middleware.middleware_tokens import Middleware
 
@@ -265,7 +265,7 @@ def popular(lang):
             return jsonify(sqlfetch_to_json_most_popular(values=most_popular_meals))
 
 
-@application.route('/profile', methods=['GET', 'PUT'])
+@application.route('/profile', methods=['GET', 'PUT', 'POST'])
 @cross_origin()
 def profile():
     if request.method == 'GET':
@@ -304,7 +304,7 @@ def profile():
             else:
                 return make_response(jsonify({'code': 'FAILURE', 'error': 'incorrect user values'}), 500)
 
-    if request.method == 'PUT':
+    elif request.method == 'PUT':
         connection = connect_to_db()
         cursor = connection.cursor()
         try:
@@ -313,6 +313,26 @@ def profile():
             print("successful sql statement")
             cursor.close()
             connection.close()
+            return make_response(jsonify({'code': 'SUCCESS'}), 200)
+        except Exception as error:
+            print(error)
+            print("error occurred, rollback")
+            connection.rollback()
+            cursor.close()
+            connection.close()
+            return make_response(jsonify({'code': 'FAILURE'}), 500)
+
+    elif request.method == 'POST':
+        connection = connect_to_db()
+        cursor = connection.cursor()
+        try:
+            cursor.execute(update_user_data(request.data, Middleware.get_user_ID(application.wsgi_app)))
+            connection.commit()
+            print("successful sql statement")
+            cursor.close()
+            print('cursor closed')
+            connection.close()
+            print('conn closed')
             return make_response(jsonify({'code': 'SUCCESS'}), 200)
         except Exception as error:
             print(error)

@@ -87,3 +87,18 @@ def insert_user_data(put_data, userID):
     SQLquery_user = 'INSERT INTO public.users(user_id, gender, age, height, weight, weekly_exercise) VALUES ' \
                     + f'(\'{userID}\', \'{gender}\', {age}, {height}, {weight}, {weekly_exercise});'
     return SQLquery_user
+
+
+def update_user_data(post_data, userID):
+    post_data = ast.literal_eval(post_data.decode("UTF-8"))
+
+    gender = post_data["gender"]
+    age = post_data["age"]
+    height = post_data["height"]
+    weight = post_data["weight"]
+    weekly_exercise = post_data["activityID"]
+
+    SQLquery = f'''UPDATE public.users
+                    SET gender='{gender}', age={age}, height={height}, weight={weight}, weekly_exercise={weekly_exercise}
+                    WHERE user_id = '{userID}';'''
+    return SQLquery
