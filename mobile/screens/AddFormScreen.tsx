@@ -25,7 +25,6 @@ export default function AddFormScreen(props: any) {
   const [weight, setWeight] = useState(0);
 
   const save = async () => {
-    //console.log(calories);
     const date = new Date(selectedDate);
     console.log(date);
     const transformedDate =

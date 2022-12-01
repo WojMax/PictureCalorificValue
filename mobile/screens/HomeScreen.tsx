@@ -36,8 +36,12 @@ export default function HomeScreen(props: any) {
       dispatch(getCaloricDemand());
     }
   }, [selectedDate]);
+
   useEffect(() => {
-    console.log(caloricDemand);
+    console.log("home", caloricDemand);
+    if (caloricDemand === -1) {
+      props.navigation.navigate("AddProfile", {});
+    }
   }, [caloricDemand]);
 
   return (
@@ -53,13 +57,13 @@ export default function HomeScreen(props: any) {
           <Text style={styles.progressText}>Progress</Text>
           <DefaultView style={styles.container7}>
             <Text style={styles.progressText}>
-              {caloriesCount}/{2200}
+              {caloriesCount}/{caloricDemand}
             </Text>
           </DefaultView>
         </DefaultView>
         <LinearProgress
           style={styles.progressBar}
-          value={caloriesCount / 2200}
+          value={caloriesCount / caloricDemand}
           variant="determinate"
           color={Colors[colorScheme].accent}
           trackColor={Colors[colorScheme].textLight}
@@ -213,6 +217,7 @@ const styles = StyleSheet.create({
   },
   progressBar: {
     marginVertical: 8,
+    marginBottom: 20,
     justifyContent: "center",
     width: "100%",
   },

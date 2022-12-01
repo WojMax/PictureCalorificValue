@@ -30,6 +30,7 @@ const linking: LinkingOptions<RootStackParamList> = {
         },
       },
       Camera: "camera",
+      AddProfile: "addProfile",
     },
   },
 };

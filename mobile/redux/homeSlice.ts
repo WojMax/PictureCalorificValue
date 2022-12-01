@@ -26,6 +26,7 @@ export interface HomeState {
   meals: MealObject | null;
   selectedMeal: any | null;
   caloriesCount: number;
+  caloricDemand: number;
   date: string;
 }
 
@@ -33,6 +34,7 @@ const initialState: HomeState = {
   meals: null,
   selectedMeal: null,
   caloriesCount: 0,
+  caloricDemand: 0,
   date: new Date().toString(),
 };
 
@@ -56,6 +58,23 @@ export const getHomeMeals = createAsyncThunk(
     } catch (error) {
       console.error(error);
       return data;
+    }
+  }
+);
+
+export const getCaloricDemand = createAsyncThunk(
+  "getCaloricDemand",
+  async () => {
+    try {
+      const response = await HttpApi.get("profile");
+
+      if (response.data.caloricDemand) {
+        return { caloricDemand: Math.ceil(response.data.caloricDemand) };
+      }
+      return { caloricDemand: -1 };
+    } catch (error) {
+      console.error(error);
+      return { caloricDemand: 0 };
     }
   }
 );
@@ -85,6 +104,9 @@ export const homeMealsSlice = createSlice({
       } else {
         state.caloriesCount = 0;
       }
+    });
+    builder.addCase(getCaloricDemand.fulfilled, (state, { payload }) => {
+      state.caloricDemand = payload.caloricDemand;
     });
   },
 });

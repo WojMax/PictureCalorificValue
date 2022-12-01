@@ -25,12 +25,12 @@ import LinkingConfiguration from "./LinkingConfiguration";
 import AddFormScreen from "../screens/AddFormScreen";
 import AddFavScreen from "../screens/AddFavScreen";
 import AddScreen from "../screens/AddScreen";
-import AddFromListsScreen from "../screens/AddFromListsScreen"
+import AddFromListsScreen from "../screens/AddFromListsScreen";
 import CameraScreen from "../screens/CameraScreen";
-import i18n from "i18n-js";
 import t from "../services/translations";
 import EditFormScreen from "../screens/EditFormScreen";
 import EditFavScreen from "../screens/EditFavScreen";
+import AddProfileScreen from "../screens/AddProfileScreen";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -51,6 +51,11 @@ export default function Navigation({
           options={{ headerShown: false }}
         />
         <Stack.Screen name="Camera" component={CameraScreen} />
+        <Stack.Screen
+          name="AddProfile"
+          component={AddProfileScreen}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
