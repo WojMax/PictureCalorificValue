@@ -28,7 +28,7 @@ export default {
     textLight: "#bababa",
     textDark: "#8a8d8e",
     //areas
-    background: "#000",
+    background: "#030303",
     surface: "#1C1C1C",
     topSurface: "#242424",
     //mainColors

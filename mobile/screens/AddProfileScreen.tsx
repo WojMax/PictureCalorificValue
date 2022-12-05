@@ -1,18 +1,16 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, BackHandler } from "react-native";
 import { Text, View } from "../components/Themed";
 import Input from "../elements/Input";
 import Button from "../elements/Button";
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import t from "../services/translations";
-import { getFavMeals } from "../redux/favoritesSlice";
-import { useAppDispatch, useAppSelector } from "../hooks/useRedux";
+import { useAppDispatch } from "../hooks/useRedux";
 import HttpApi from "../services/Api/HttpApi";
-import { getCaloricDemand, getHomeMeals } from "../redux/homeSlice";
+import { getCaloricDemand } from "../redux/homeSlice";
 import Colors from "../constants/Colors";
-import { color, Slider } from "@rneui/base";
+import { Slider } from "@rneui/base";
 import useColorScheme from "../hooks/useColorScheme";
 import { MaterialIcons } from "@expo/vector-icons";
+import DropDownPicker from "react-native-dropdown-picker";
 
 export default function AddProfileScreen(props: any) {
   const colorScheme = useColorScheme();
@@ -23,16 +21,31 @@ export default function AddProfileScreen(props: any) {
   const [height, setHeight] = useState(0);
   const [activityID, setActivityID] = useState(0);
 
+  //dropdown
+  const [open, setOpen] = useState(false);
+  const [gender, setGender] = useState(null);
+  const [items, setItems] = useState([
+    { label: "Male", value: "male" },
+    { label: "Female", value: "female" },
+  ]);
+
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      () => true
+    );
+    return () => backHandler.remove();
+  }, []);
+
   const save = async () => {
     try {
       const data = {
-        gender: "male",
+        gender: gender,
         age: age,
         height: height,
         weight: weight,
         activityID: activityID,
       };
-      console.log(data);
       await HttpApi.put("profile", data);
       dispatch(getCaloricDemand());
       props.navigation.navigate("Home", {});
@@ -68,31 +81,58 @@ export default function AddProfileScreen(props: any) {
         keyboardType={"numeric"}
         onChangeText={(value: number) => setHeight(value)}
       />
-      <Text style={styles.activity}>Activity</Text>
-      <Slider
-        value={activityID}
-        onValueChange={setActivityID}
-        maximumValue={5}
-        minimumValue={1}
-        step={1}
-        style={styles.slider}
-        allowTouchTrack
-        trackStyle={{ height: 5, backgroundColor: Colors.general.accent }}
-        thumbStyle={{ height: 20, width: 20, backgroundColor: "transparent" }}
-        thumbProps={{
-          children: (
-            <MaterialIcons name="stop-circle" size={20} color="white" />
-          ),
+      <Text style={styles.activity}>Gender</Text>
+      <DropDownPicker
+        style={{
+          backgroundColor: Colors[colorScheme].background,
+          marginBottom: 10,
         }}
+        textStyle={{
+          color: Colors[colorScheme].text,
+          fontSize: 18,
+        }}
+        placeholderStyle={{ color: Colors[colorScheme].textDark }}
+        dropDownContainerStyle={{
+          backgroundColor: Colors[colorScheme].topSurface,
+        }}
+        selectedItemLabelStyle={{ color: Colors[colorScheme].accent }}
+        open={open}
+        value={gender}
+        items={items}
+        setOpen={setOpen}
+        setValue={setGender}
+        setItems={setItems}
       />
-      <View style={styles.activityVal}>
-        <Text style={{ color: Colors[colorScheme].textDark }}>Sedentary</Text>
-        <Text style={{ color: Colors[colorScheme].textDark }}>Very active</Text>
+      <View style={{ zIndex: -1 }}>
+        <Text style={styles.activity}>Activity</Text>
+        <Slider
+          value={activityID}
+          onValueChange={setActivityID}
+          maximumValue={5}
+          minimumValue={1}
+          step={1}
+          style={styles.slider}
+          allowTouchTrack
+          trackStyle={{ height: 5, backgroundColor: Colors.general.accent }}
+          thumbStyle={{ height: 20, width: 20, backgroundColor: "transparent" }}
+          thumbProps={{
+            children: (
+              <MaterialIcons name="stop-circle" size={20} color="white" />
+            ),
+          }}
+        />
+        <View style={styles.activityVal}>
+          <Text style={{ color: Colors[colorScheme].textDark }}>Sedentary</Text>
+          <Text style={{ color: Colors[colorScheme].textDark }}>
+            Very active
+          </Text>
+        </View>
       </View>
+
       <View style={styles.buttonContainer}>
         <Button
           title={"Continue"}
-          disabled={!age || !height || !weight}
+          disabled={!age || !height || !weight || !gender}
           onPress={() => save()}
         />
       </View>
