@@ -3,10 +3,11 @@ import boto3, botocore
 
 from flask import Flask, request, jsonify, make_response
 from flask_cors import cross_origin
-from Functions.json_functions import sqlfetch_to_json_meals, sqlfetch_to_json_favourites, sqlfetch_to_json_most_popular
+from Functions.json_functions import sqlfetch_to_json_meals, sqlfetch_to_json_favourites, sqlfetch_to_json_most_popular, \
+    sqlfetch_to_json_user_weight
 from Functions.db_functions import connect_to_db
 from Functions.sql_functions import insert_favourites, delete_favourites, update_favourites, insert_meals, update_meals, \
-    delete_meals, insert_user_data, update_user_data
+    delete_meals, insert_user_data, update_user_data, insert_weight_history
 from Functions.user_functions import calculate_caloric_demand
 from Middleware.middleware_tokens import Middleware
 
@@ -342,6 +343,61 @@ def profile():
             connection.close()
             return make_response(jsonify({'code': 'FAILURE'}), 500)
 
+
+@application.route('/weight/<date>', methods=['PUT'])
+@cross_origin()
+def weight(date):
+    if request.method == 'PUT':
+        connection = connect_to_db()
+        cursor = connection.cursor()
+        try:
+            cursor.execute(insert_weight_history(request.data, Middleware.get_user_ID(application.wsgi_app), date))
+            connection.commit()
+            print("successful sql statement")
+            cursor.close()
+            connection.close()
+            return make_response(jsonify({'code': 'SUCCESS'}), 200)
+        except Exception as error:
+            print(error)
+            print("error occurred, rollback")
+            connection.rollback()
+            cursor.close()
+            connection.close()
+            return make_response(jsonify({'code': 'FAILURE'}), 500)
+
+
+@application.route('/weight', methods=['GET'])
+@cross_origin()
+def profile():
+    if request.method == 'GET':
+        connection = connect_to_db()
+        cursor = connection.cursor()
+        try:
+            user = Middleware.get_user_ID(application.wsgi_app)
+            cursor.execute(
+                f'''SELECT 
+                        weight, weight_date
+                    FROM 
+                        public.user_weight_history
+                    WHERE 
+                        user_id = '{user}';''')
+        except Exception as error:
+            print(error)
+            connection.rollback()
+
+        if cursor.rowcount == -1:
+            cursor.close()
+            connection.close()
+            return make_response(jsonify({'code': 'FAILURE'}), 500)
+        elif cursor.rowcount == 0:
+            cursor.close()
+            connection.close()
+            return jsonify({})
+        else:
+            user_weight_data = cursor.fetchall()
+            cursor.close()
+            connection.close()
+            return jsonify(sqlfetch_to_json_user_weight(values=user_weight_data))
 
 if __name__ == '__main__':
     application.run(debug=True)

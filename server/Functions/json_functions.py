@@ -62,3 +62,13 @@ def sqlfetch_to_json_most_popular(values):
     json_to_send = json_to_send[:-1]
     json_to_send += ']'
     return json.loads(json_to_send)
+
+
+def sqlfetch_to_json_user_weight(values):
+    json_to_send = '['
+    for entry in values:
+        json_entry = f'{{"weight":{str(entry[0])}, "weight_date":"{str(entry[1])}"}},'
+        json_to_send += json_entry
+    json_to_send = json_to_send[:-1]
+    json_to_send += ']'
+    return json.loads(json_to_send)

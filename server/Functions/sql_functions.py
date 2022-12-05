@@ -102,3 +102,13 @@ def update_user_data(post_data, userID):
                     SET gender='{gender}', age={age}, height={height}, weight={weight}, weekly_exercise={weekly_exercise}
                     WHERE user_id = '{userID}';'''
     return SQLquery
+
+
+def insert_weight_history(put_data, userID, date):
+    put_data = ast.literal_eval(put_data.decode("UTF-8"))
+
+    weight = put_data["weight"]
+
+    SQLquery_user = f'''INSERT INTO public.user_weight_history(user_id, weight, weight_date)
+                        VALUES ('{userID}', {weight}, '{date}');'''
+    return SQLquery_user
