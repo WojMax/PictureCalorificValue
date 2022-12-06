@@ -1,10 +1,11 @@
+import ast
 import json
 import boto3, botocore
-
+from datetime import date
 from flask import Flask, request, jsonify, make_response
 from flask_cors import cross_origin
 from Functions.json_functions import sqlfetch_to_json_meals, sqlfetch_to_json_favourites, sqlfetch_to_json_most_popular, \
-    sqlfetch_to_json_user_weight
+    sqlfetch_to_json_user_weight, sqlfetch_to_json_profile
 from Functions.db_functions import connect_to_db
 from Functions.sql_functions import insert_favourites, delete_favourites, update_favourites, insert_meals, update_meals, \
     delete_meals, insert_user_data, update_user_data, insert_weight_history
@@ -266,9 +267,9 @@ def popular(lang):
             return jsonify(sqlfetch_to_json_most_popular(values=most_popular_meals))
 
 
-@application.route('/profile', methods=['GET', 'PUT', 'POST'])
+@application.route('/caloricDemand', methods=['GET'])
 @cross_origin()
-def profile():
+def caloric_demand():
     if request.method == 'GET':
         connection = connect_to_db()
         cursor = connection.cursor()
@@ -305,6 +306,42 @@ def profile():
             else:
                 return make_response(jsonify({'code': 'FAILURE', 'error': 'incorrect user values'}), 500)
 
+
+@application.route('/profile', methods=['GET', 'PUT', 'POST'])
+@cross_origin()
+def profile():
+    if request.method == 'GET':
+        connection = connect_to_db()
+        cursor = connection.cursor()
+        try:
+            user = Middleware.get_user_ID(application.wsgi_app)
+            cursor.execute(
+                f'''SELECT 
+                        U.gender, U.age, U.height, U.weight, E.name
+                    FROM 
+                        public.users U 
+                    INNER JOIN 
+                        public.user_exercise_data E ON U.weekly_exercise = E.id
+                    WHERE
+                        user_id = \'{user}\';''')
+        except Exception as error:
+            print(error)
+            connection.rollback()
+
+        if cursor.rowcount == -1:
+            cursor.close()
+            connection.close()
+            return make_response(jsonify({'code': 'FAILURE'}), 500)
+        elif cursor.rowcount == 0:
+            cursor.close()
+            connection.close()
+            return jsonify({})
+        else:
+            profile_data = cursor.fetchall()
+            cursor.close()
+            connection.close()
+            return jsonify(sqlfetch_to_json_profile(values=profile_data))
+
     elif request.method == 'PUT':
         connection = connect_to_db()
         cursor = connection.cursor()
@@ -327,7 +364,22 @@ def profile():
         connection = connect_to_db()
         cursor = connection.cursor()
         try:
-            cursor.execute(update_user_data(request.data, Middleware.get_user_ID(application.wsgi_app)))
+            user = Middleware.get_user_ID(application.wsgi_app)
+            current_date = date.today()
+
+            cursor.execute(
+                f'''SELECT 
+                        *
+                    FROM 
+                        public.user_weight_history
+                    WHERE 
+                        user_id = '{user}' AND weight_date = '{current_date}';''')
+
+            already_inserted = cursor.rowcount
+            cursor.close()
+
+            cursor = connection.cursor()
+            cursor.execute(update_user_data(request.data, user, already_inserted, current_date))
             connection.commit()
             print("successful sql statement")
             cursor.close()
@@ -344,31 +396,9 @@ def profile():
             return make_response(jsonify({'code': 'FAILURE'}), 500)
 
 
-@application.route('/weight/<date>', methods=['PUT'])
+@application.route('/weight', methods=['GET','PUT'])
 @cross_origin()
-def weight(date):
-    if request.method == 'PUT':
-        connection = connect_to_db()
-        cursor = connection.cursor()
-        try:
-            cursor.execute(insert_weight_history(request.data, Middleware.get_user_ID(application.wsgi_app), date))
-            connection.commit()
-            print("successful sql statement")
-            cursor.close()
-            connection.close()
-            return make_response(jsonify({'code': 'SUCCESS'}), 200)
-        except Exception as error:
-            print(error)
-            print("error occurred, rollback")
-            connection.rollback()
-            cursor.close()
-            connection.close()
-            return make_response(jsonify({'code': 'FAILURE'}), 500)
-
-
-@application.route('/weight', methods=['GET'])
-@cross_origin()
-def profile():
+def get_weight():
     if request.method == 'GET':
         connection = connect_to_db()
         cursor = connection.cursor()
@@ -398,6 +428,40 @@ def profile():
             cursor.close()
             connection.close()
             return jsonify(sqlfetch_to_json_user_weight(values=user_weight_data))
+
+    elif request.method == 'PUT':
+        connection = connect_to_db()
+        cursor = connection.cursor()
+        try:
+            user = Middleware.get_user_ID(application.wsgi_app)
+            put_data = ast.literal_eval(request.data.decode("UTF-8"))
+            date = put_data["date"]
+
+            cursor.execute(
+                f'''SELECT 
+                        *
+                    FROM 
+                        public.user_weight_history
+                    WHERE 
+                        user_id = '{user}' AND weight_date = '{date}';''')
+
+            already_inserted = cursor.rowcount
+            cursor.close()
+
+            cursor = connection.cursor()
+            cursor.execute(insert_weight_history(request.data, user, already_inserted))
+            connection.commit()
+            print("successful sql statement")
+            cursor.close()
+            connection.close()
+            return make_response(jsonify({'code': 'SUCCESS'}), 200)
+        except Exception as error:
+            print(error)
+            print("error occurred, rollback")
+            connection.rollback()
+            cursor.close()
+            connection.close()
+            return make_response(jsonify({'code': 'FAILURE'}), 500)
 
 if __name__ == '__main__':
     application.run(debug=True)

@@ -72,3 +72,8 @@ def sqlfetch_to_json_user_weight(values):
     json_to_send = json_to_send[:-1]
     json_to_send += ']'
     return json.loads(json_to_send)
+
+
+def sqlfetch_to_json_profile(values):
+    json_to_send = f'{{"gender":"{str(values[0][0])}", "age":{str(values[0][1])}, "height":{str(values[0][2])}, "weight":{str(values[0][3])}, "exercise":{str(values[0][4])}}}'
+    return json.loads(json_to_send)

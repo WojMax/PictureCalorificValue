@@ -1,4 +1,5 @@
 import ast
+from datetime import date
 
 
 def insert_meals(put_data, userID):
@@ -13,6 +14,7 @@ def insert_meals(put_data, userID):
     SQLquery_user = f'INSERT INTO public.users(user_id, gender, age, height, weight, weekly_exercise) VALUES (\'{userID}\', \'male\', 20, 180, 75, 3) ON CONFLICT DO NOTHING; '
     SQLquery_meal = 'INSERT INTO public.user_meal_data (user_id, meal_name, calories, meal_weight, date_created, category) VALUES ' \
                     + f'(\'{userID}\', \'{mealName}\', {caloriesOn100g}, {mealWeight}, \'{dateCreated}\', \'{category}\');'
+
     return SQLquery_user + SQLquery_meal
 
 
@@ -27,6 +29,7 @@ def update_meals(post_data, userID):
     SQLquery = f'UPDATE public.user_meal_data\n' \
                f'SET meal_name=\'{mealName}\', calories={caloriesOn100g}, meal_weight={mealWeight}\n' \
                f'WHERE id = {mealID} AND user_id = \'{userID}\';'
+
     return SQLquery
 
 
@@ -37,6 +40,7 @@ def delete_meals(delete_data):
 
     SQLquery = f'DELETE FROM public.user_meal_data\n' \
                f'WHERE id = \'{mealId}\';'
+
     return SQLquery
 
 
@@ -49,6 +53,7 @@ def insert_favourites(put_data, userID):
     SQLquery_user = f'INSERT INTO public.users(user_id, gender, age, height, weight, weekly_exercise) VALUES (\'{userID}\', \'male\', 20, 180, 75, 3) ON CONFLICT DO NOTHING; '
     SQLquery_meal = 'INSERT INTO public.user_favourites_data (user_id, meal_name, calories) VALUES ' \
                     + f'(\'{userID}\', \'{mealName}\', {caloriesOn100g});'
+
     return SQLquery_user + SQLquery_meal
 
 
@@ -59,6 +64,7 @@ def delete_favourites(delete_data):
 
     SQLquery = f'DELETE FROM public.user_favourites_data\n' \
                f'WHERE id = \'{mealId}\';'
+
     return SQLquery
 
 
@@ -72,6 +78,7 @@ def update_favourites(post_data, userID):
     SQLquery = f'UPDATE public.user_favourites_data\n' \
                f'SET meal_name=\'{mealName}\', calories={caloriesOn100g}\n' \
                f'WHERE id = {mealID} AND user_id = \'{userID}\';'
+
     return SQLquery
 
 
@@ -84,12 +91,17 @@ def insert_user_data(put_data, userID):
     weight = put_data["weight"]
     weekly_exercise = put_data["activityID"]
 
+    current_date = date.today()
+
     SQLquery_user = 'INSERT INTO public.users(user_id, gender, age, height, weight, weekly_exercise) VALUES ' \
                     + f'(\'{userID}\', \'{gender}\', {age}, {height}, {weight}, {weekly_exercise});'
-    return SQLquery_user
+    SQLquery_user_weight_history = f'''INSERT INTO public.user_weight_history(user_id, weight, weight_date)
+                                                VALUES ('{userID}', {weight}, '{current_date}');'''
+
+    return SQLquery_user + SQLquery_user_weight_history
 
 
-def update_user_data(post_data, userID):
+def update_user_data(post_data, userID, already_inserted, current_date):
     post_data = ast.literal_eval(post_data.decode("UTF-8"))
 
     gender = post_data["gender"]
@@ -98,17 +110,36 @@ def update_user_data(post_data, userID):
     weight = post_data["weight"]
     weekly_exercise = post_data["activityID"]
 
-    SQLquery = f'''UPDATE public.users
+    if already_inserted == 0:
+        SQLquery_user_weight_history = f'''INSERT INTO public.user_weight_history(user_id, weight, weight_date)
+                                            VALUES ('{userID}', {weight}, '{current_date}');'''
+    else:
+        SQLquery_user_weight_history = f'''UPDATE public.user_weight_history
+                                            SET weight={weight}
+                                            WHERE user_id = '{userID}' AND weight_date = '{current_date}';'''
+
+    SQLquery_user_data = f'''UPDATE public.users
                     SET gender='{gender}', age={age}, height={height}, weight={weight}, weekly_exercise={weekly_exercise}
                     WHERE user_id = '{userID}';'''
-    return SQLquery
+
+    return SQLquery_user_data + SQLquery_user_weight_history
 
 
-def insert_weight_history(put_data, userID, date):
+def insert_weight_history(put_data, userID, already_inserted):
     put_data = ast.literal_eval(put_data.decode("UTF-8"))
 
     weight = put_data["weight"]
+    current_date = put_data["date"]
 
-    SQLquery_user = f'''INSERT INTO public.user_weight_history(user_id, weight, weight_date)
-                        VALUES ('{userID}', {weight}, '{date}');'''
-    return SQLquery_user
+    if already_inserted == 0:
+        SQLquery_user_weight_history = f'''INSERT INTO public.user_weight_history(user_id, weight, weight_date)
+                                            VALUES ('{userID}', {weight}, '{current_date}');'''
+    else:
+        SQLquery_user_weight_history = f'''UPDATE public.user_weight_history
+                                            SET weight={weight}
+                                            WHERE user_id = '{userID}' AND weight_date = '{current_date}';'''
+    SQLquery_user = f'''UPDATE public.users
+                        SET weight={weight}
+                        WHERE user_id = '{userID}';'''
+
+    return SQLquery_user_weight_history + SQLquery_user
