@@ -1,14 +1,14 @@
 import { StyleSheet, BackHandler } from "react-native";
-import { Text, View } from "../components/Themed";
-import Input from "../elements/Input";
-import Button from "../elements/Button";
+import { Text, View } from "../../components/Themed";
+import Input from "../../elements/Input";
+import Button from "../../elements/Button";
 import React, { useEffect, useState } from "react";
-import { useAppDispatch } from "../hooks/useRedux";
-import HttpApi from "../services/Api/HttpApi";
-import { getCaloricDemand } from "../redux/homeSlice";
-import Colors from "../constants/Colors";
+import { useAppDispatch } from "../../hooks/useRedux";
+import HttpApi from "../../services/Api/HttpApi";
+import { getCaloricDemand } from "../../redux/homeSlice";
+import Colors from "../../constants/Colors";
 import { Slider } from "@rneui/base";
-import useColorScheme from "../hooks/useColorScheme";
+import useColorScheme from "../../hooks/useColorScheme";
 import { MaterialIcons } from "@expo/vector-icons";
 import DropDownPicker from "react-native-dropdown-picker";
 

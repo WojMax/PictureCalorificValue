@@ -19,7 +19,7 @@ import useColorScheme from "../hooks/useColorScheme";
 import SettingsScreen from "../screens/SettingsScreen";
 import HomeScreen from "../screens/HomeScreen";
 import FavoritesScreen from "../screens/FavoritesScreen";
-import ProfileScreen from "../screens/ProfileScreen";
+import ProfileScreen from "../screens/Profile/ProfileScreen";
 import { RootStackParamList, RootTabParamList } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 import AddFormScreen from "../screens/AddFormScreen";
@@ -30,7 +30,8 @@ import CameraScreen from "../screens/CameraScreen";
 import t from "../services/translations";
 import EditFormScreen from "../screens/EditFormScreen";
 import EditFavScreen from "../screens/EditFavScreen";
-import AddProfileScreen from "../screens/AddProfileScreen";
+import AddProfileScreen from "../screens/Profile/AddProfileScreen";
+import EditUserScreen from "../screens/Profile/EditUserScreen";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -230,6 +231,13 @@ function ProfileStackNavigator() {
         component={SettingsScreen}
         options={{
           title: t("navigation.settings"),
+        }}
+      />
+      <ProfileStack.Screen
+        name="EditUser"
+        component={EditUserScreen}
+        options={{
+          title: "Edit profile",
         }}
       />
     </ProfileStack.Navigator>

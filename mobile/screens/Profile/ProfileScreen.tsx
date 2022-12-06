@@ -1,11 +1,11 @@
-import { StyleSheet } from "react-native";
-import { View } from "../components/Themed";
-import Account from "../components/Profile/Account";
-import Weight from "../components/Profile/Weight";
-import User from "../components/Profile/User";
-import Objective from "../components/Profile/Objective";
+import { StyleSheet, TouchableOpacity } from "react-native";
+import { View } from "../../components/Themed";
+import Account from "../../components/Profile/Account";
+import Weight from "../../components/Profile/Weight";
+import User from "../../components/Profile/User";
+import Objective from "../../components/Profile/Objective";
 
-export default function ProfileScreen() {
+export default function ProfileScreen(props: any) {
   return (
     <View style={styles.container}>
       <View style={styles.containerFullWidth}>
@@ -15,9 +15,12 @@ export default function ProfileScreen() {
         <View style={styles.containerFullWidth}>
           <Account />
         </View>
-        <View style={styles.containerFullWidth}>
+        <TouchableOpacity
+          onPress={() => props.navigation.navigate("EditUser")}
+          style={styles.containerFullWidth}
+        >
           <User />
-        </View>
+        </TouchableOpacity>
       </View>
       <View style={styles.containerFullWidth}>
         <Objective />

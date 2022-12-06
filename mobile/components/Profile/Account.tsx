@@ -37,12 +37,6 @@ export default function Account() {
         >
           Account
         </Text>
-        <Entypo
-          name="dots-three-horizontal"
-          size={20}
-          color={Colors[colorScheme].textLight}
-          style={styles.icon}
-        />
       </DefaultView>
       <DefaultView style={styles.data}>
         <DefaultView style={styles.avatar}></DefaultView>
