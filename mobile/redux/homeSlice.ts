@@ -62,23 +62,6 @@ export const getHomeMeals = createAsyncThunk(
   }
 );
 
-export const getCaloricDemand = createAsyncThunk(
-  "getCaloricDemand",
-  async () => {
-    try {
-      const response = await HttpApi.get("profile");
-
-      if (response.data.caloricDemand) {
-        return { caloricDemand: Math.ceil(response.data.caloricDemand) };
-      }
-      return { caloricDemand: -1 };
-    } catch (error) {
-      console.error(error);
-      return { caloricDemand: 0 };
-    }
-  }
-);
-
 export const homeMealsSlice = createSlice({
   name: "homeMeals",
   initialState,
@@ -104,9 +87,6 @@ export const homeMealsSlice = createSlice({
       } else {
         state.caloriesCount = 0;
       }
-    });
-    builder.addCase(getCaloricDemand.fulfilled, (state, { payload }) => {
-      state.caloricDemand = payload.caloricDemand;
     });
   },
 });

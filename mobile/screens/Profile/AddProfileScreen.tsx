@@ -5,7 +5,7 @@ import Button from "../../elements/Button";
 import React, { useEffect, useState } from "react";
 import { useAppDispatch } from "../../hooks/useRedux";
 import HttpApi from "../../services/Api/HttpApi";
-import { getCaloricDemand } from "../../redux/homeSlice";
+import { getCaloricDemand } from "../../redux/profileSlice";
 import Colors from "../../constants/Colors";
 import { Slider } from "@rneui/base";
 import useColorScheme from "../../hooks/useColorScheme";

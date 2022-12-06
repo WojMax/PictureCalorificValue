@@ -5,16 +5,15 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Text, View } from "../components/Themed";
-import Button from "../elements/Button";
 import t from "../services/translations";
 import { useEffect, useState } from "react";
 import Colors from "../constants/Colors";
 import { useAppDispatch, useAppSelector } from "../hooks/useRedux";
-import { getCaloricDemand, getHomeMeals } from "../redux/homeSlice";
+import { getHomeMeals } from "../redux/homeSlice";
+import { getCaloricDemand } from "../redux/profileSlice";
 import MealsHomeList from "../components/MealsHomeList/MealsHomeList";
 import { LinearProgress } from "@rneui/themed";
 import { AntDesign } from "@expo/vector-icons";
-import { TabItem } from "@rneui/base/dist/Tab/Tab.Item";
 import DateSlider from "../components/DateSlider/DateSlider";
 import useColorScheme from "../hooks/useColorScheme";
 import React from "react";
@@ -25,7 +24,7 @@ export default function HomeScreen(props: any) {
   const meals = useAppSelector((state) => state.homeMeal.meals);
   const selectedDate = useAppSelector((state) => state.homeMeal.date);
   const caloriesCount = useAppSelector((state) => state.homeMeal.caloriesCount);
-  const caloricDemand = useAppSelector((state) => state.homeMeal.caloricDemand);
+  const caloricDemand = useAppSelector((state) => state.profile.caloricDemand);
 
   // let progress = caloriesCount / dailyCalories;
   const dispatch = useAppDispatch();
@@ -38,7 +37,6 @@ export default function HomeScreen(props: any) {
   }, [selectedDate]);
 
   useEffect(() => {
-    console.log("home", caloricDemand);
     if (caloricDemand === -1) {
       props.navigation.navigate("AddProfile", {});
     }
