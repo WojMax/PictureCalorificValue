@@ -7,9 +7,17 @@ import { View as DefaultView } from "react-native";
 import { Auth } from "aws-amplify";
 import { useEffect, useState } from "react";
 import { Entypo } from "@expo/vector-icons";
+import { getCaloricDemand, getProfile } from "../../redux/profileSlice";
+import { useAppDispatch, useAppSelector } from "../../hooks/useRedux";
 
 export default function User() {
   const colorScheme = useColorScheme();
+  const dispatch = useAppDispatch();
+  const profile = useAppSelector((state) => state.profile.profile);
+
+  useEffect(() => {
+    dispatch(getProfile());
+  }, []);
 
   return (
     <View
@@ -33,7 +41,64 @@ export default function User() {
           style={styles.icon}
         />
       </DefaultView>
-      <DefaultView style={styles.data}></DefaultView>
+      <DefaultView style={styles.inData}>
+        <Text
+          style={{
+            fontSize: 15,
+            paddingRight: 5,
+            color: Colors.general.accentLight,
+          }}
+        >
+          Age:
+        </Text>
+        <Text style={{ color: Colors.general.accentLight }}>
+          {profile?.age}
+        </Text>
+      </DefaultView>
+      <DefaultView style={styles.data}>
+        <DefaultView style={styles.inData}>
+          <Text
+            style={{
+              fontSize: 15,
+              paddingRight: 5,
+              color: Colors.general.accentLight,
+            }}
+          >
+            Height
+          </Text>
+          <Text style={{ color: Colors.general.accentLight }}>
+            {profile?.height}
+          </Text>
+        </DefaultView>
+        <DefaultView style={styles.inData}>
+          <Text
+            style={{
+              fontSize: 15,
+              paddingRight: 5,
+              color: Colors.general.accentLight,
+            }}
+          >
+            Weight:
+          </Text>
+          <Text style={{ color: Colors.general.accentLight }}>
+            {profile?.weight}
+          </Text>
+        </DefaultView>
+        <DefaultView style={styles.inData}>
+          <Text
+            style={{
+              fontSize: 15,
+              paddingRight: 5,
+              color: Colors.general.accentLight,
+            }}
+          >
+            Gender:
+          </Text>
+          <Text style={{ color: Colors.general.accentLight }}>
+            {profile?.gender}
+          </Text>
+        </DefaultView>
+      </DefaultView>
     </View>
   );
 }
@@ -51,16 +116,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  data: { flex: 5 },
-  avatar: {
-    margin: 4,
-    width: 48,
-    height: 48,
-    backgroundColor: Colors.dark.topSurface,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 100,
-  },
+  data: { flex: 3 },
+  inData: { flexDirection: "row" },
   dataText: {
     fontSize: 14,
   },
