@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   container4: {
-    paddingTop: 32,
+    paddingTop: 42,
     paddingRight: 10,
     paddingLeft: 10,
   },

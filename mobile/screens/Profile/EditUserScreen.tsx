@@ -3,56 +3,54 @@ import { Text, View } from "../../components/Themed";
 import Input from "../../elements/Input";
 import Button from "../../elements/Button";
 import React, { useEffect, useState } from "react";
-import { useAppDispatch } from "../../hooks/useRedux";
+import { useAppDispatch, useAppSelector } from "../../hooks/useRedux";
 import HttpApi from "../../services/Api/HttpApi";
-import { getCaloricDemand } from "../../redux/homeSlice";
 import Colors from "../../constants/Colors";
 import { Slider } from "@rneui/base";
 import useColorScheme from "../../hooks/useColorScheme";
 import { MaterialIcons } from "@expo/vector-icons";
 import DropDownPicker from "react-native-dropdown-picker";
 import t from "../../services/translations";
+import {
+  getCaloricDemand,
+  getProfile,
+  getWeightList,
+} from "../../redux/profileSlice";
 
 export default function AddProfileScreen(props: any) {
   const colorScheme = useColorScheme();
   const dispatch = useAppDispatch();
 
-  const [age, setAge] = useState(0);
-  const [weight, setWeight] = useState(0);
-  const [height, setHeight] = useState(0);
-  const [activityID, setActivityID] = useState(0);
+  const profile = useAppSelector((state) => state.profile.profile);
+  const [age, setAge] = useState(profile?.age.toString() || 0);
+  const [weight, setWeight] = useState(profile?.weight.toString() || 0);
+  const [height, setHeight] = useState(profile?.height.toString() || 0);
 
   //dropdown
   const [open, setOpen] = useState(false);
-  const [gender, setGender] = useState(null);
+  const [gender, setGender] = useState(profile?.gender || null);
   const [items, setItems] = useState([
     { label: "Male", value: "male" },
     { label: "Female", value: "female" },
   ]);
 
-  useEffect(() => {
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      () => true
-    );
-    return () => backHandler.remove();
-  }, []);
-
-  const save = async () => {
-    // try {
-    //   const data = {
-    //     gender: gender,
-    //     age: age,
-    //     height: height,
-    //     weight: weight,
-    //     activityID: activityID,
-    //   };
-    //   await HttpApi.post("profile", data);
-    //   dispatch(getCaloricDemand());
-    //   props.navigation.navigate("Home", {});
-    // } catch (error) {
-    //   console.error(error);
-    // }
+  const edit = async () => {
+    try {
+      const data = {
+        gender: gender,
+        age: Number(age),
+        height: Number(height),
+        weight: Number(weight),
+        activityID: 1, //profile?.activityID,
+      };
+      await HttpApi.post("profile", data);
+      dispatch(getProfile());
+      dispatch(getCaloricDemand());
+      dispatch(getWeightList());
+      props.navigation.navigate("Profile", {});
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -61,18 +59,21 @@ export default function AddProfileScreen(props: any) {
         label={"Age"}
         placeholder={"Age"}
         keyboardType={"numeric"}
+        value={age}
         onChangeText={(value: number) => setAge(value)}
       />
       <Input
         label={"Weight"}
         placeholder={"Weight in kilograms"}
         keyboardType={"numeric"}
+        value={weight}
         onChangeText={(value: number) => setWeight(value)}
       />
       <Input
         label={"Height"}
         placeholder={"Height in centimeters"}
         keyboardType={"numeric"}
+        value={height}
         onChangeText={(value: number) => setHeight(value)}
       />
       <Text style={styles.activity}>Gender</Text>
@@ -102,7 +103,7 @@ export default function AddProfileScreen(props: any) {
           <Button
             title={"Save"}
             disabled={!age || !height || !weight || !gender}
-            onPress={() => save()}
+            onPress={() => edit()}
           />
         </View>
       </View>

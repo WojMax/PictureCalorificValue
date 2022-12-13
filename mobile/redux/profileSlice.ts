@@ -11,6 +11,7 @@ export type Profile = {
   gender: string;
   height: number;
   weight: number;
+  activityID: number;
 };
 
 export interface ProfileState {

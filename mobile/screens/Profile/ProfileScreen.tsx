@@ -7,7 +7,11 @@ import Objective from "../../components/Profile/Objective";
 import { Dialog } from "@rneui/themed";
 import React, { useEffect, useState } from "react";
 import { useAppDispatch } from "../../hooks/useRedux";
-import { getWeightList } from "../../redux/profileSlice";
+import {
+  getCaloricDemand,
+  getProfile,
+  getWeightList,
+} from "../../redux/profileSlice";
 import useColorScheme from "../../hooks/useColorScheme";
 import Colors from "../../constants/Colors";
 import { View as DefaultView } from "react-native";
@@ -32,6 +36,8 @@ export default function ProfileScreen(props: any) {
       const data = { weight: weight, date: new Date() };
       await HttpApi.put("weight", data);
       dispatch(getWeightList());
+      dispatch(getProfile());
+      dispatch(getCaloricDemand());
       toggleWeightDialog();
     } catch (error) {
       console.error(error);
