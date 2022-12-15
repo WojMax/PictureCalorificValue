@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 import { View } from "../../components/Themed";
 import Account from "../../components/Profile/Account";
 import Weight from "../../components/Profile/Weight";
@@ -49,27 +49,27 @@ export default function ProfileScreen(props: any) {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.containerFullWidth}
-        onPress={toggleWeightDialog}
-      >
-        <Weight />
-      </TouchableOpacity>
-      <View style={styles.containerFullWidth}>
-        <View style={styles.containerFullWidth}>
-          <Account />
-        </View>
-        <TouchableOpacity
-          onPress={() => props.navigation.navigate("EditUser")}
-          style={styles.containerFullWidth}
-        >
-          <User />
+    <View>
+      <ScrollView style={styles.container}>
+        <TouchableOpacity style={{ height: 250 }} onPress={toggleWeightDialog}>
+          <Weight />
         </TouchableOpacity>
-      </View>
-      <View style={styles.containerFullWidth}>
-        <Objective />
-      </View>
+        <View style={styles.containerFullWidth}>
+          <View style={styles.containerHalfWidth}>
+            <Account />
+          </View>
+          <TouchableOpacity
+            onPress={() => props.navigation.navigate("EditUser")}
+            style={styles.containerHalfWidth}
+          >
+            <User />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.containerFullWidth}>
+          <Objective />
+        </View>
+      </ScrollView>
+
       <Dialog
         isVisible={weightDialog}
         onBackdropPress={toggleWeightDialog}
@@ -109,10 +109,15 @@ export default function ProfileScreen(props: any) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  container: {},
+  containerFullWidth: {
+    flexDirection: "row",
+    height: 200,
   },
-  containerFullWidth: { flex: 1, flexDirection: "row" },
+  containerHalfWidth: {
+    height: 200,
+    width: "50%",
+  },
   title: {
     fontSize: 20,
     fontWeight: "bold",

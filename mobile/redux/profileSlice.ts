@@ -1,9 +1,5 @@
 import HttpApi from "../services/Api/HttpApi";
-import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-
-export type WeightChart = {
-  data: Date;
-};
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 export type Profile = {
   age: number;
@@ -17,20 +13,33 @@ export type Profile = {
 export interface ProfileState {
   caloricDemand: number;
   profile: Profile | null;
+  chartWeights: number[];
+  chartDates: string[];
 }
 
 const initialState: ProfileState = {
   caloricDemand: 0,
   profile: null,
+  chartWeights: [],
+  chartDates: [],
 };
 
 export const getWeightList = createAsyncThunk("getWeightList", async () => {
-  console.log("weight");
   try {
     const response = await HttpApi.get("weight");
+    let chartWeights: number[] = [];
+    let chartDates: string[] = [];
     console.log(response.data);
+    response.data.forEach((value: { weight: number; weight_date: string }) => {
+      if (value.weight && value.weight_date) {
+        chartWeights.push(value.weight);
+        chartDates.push(value.weight_date);
+      }
+    });
+    return { chartDates, chartWeights };
   } catch (error) {
     console.error(error);
+    return { chartDates: [], chartWeights: [] };
   }
 });
 
@@ -66,7 +75,10 @@ export const profileSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getWeightList.fulfilled, (state, { payload }) => {});
+    builder.addCase(getWeightList.fulfilled, (state, { payload }) => {
+      state.chartWeights = payload.chartWeights;
+      state.chartDates = payload.chartDates;
+    });
     builder.addCase(getProfile.fulfilled, (state, { payload }) => {
       state.profile = payload.profile;
     });

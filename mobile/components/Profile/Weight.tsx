@@ -1,15 +1,17 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 import { Text, View } from "../Themed";
-import t from "../../services/translations";
 import Colors from "../../constants/Colors";
 import useColorScheme from "../../hooks/useColorScheme";
 import { View as DefaultView } from "react-native";
-import { Auth } from "aws-amplify";
-import { useEffect, useState } from "react";
 import { Entypo } from "@expo/vector-icons";
+import { BarChart } from "react-native-chart-kit";
+import { useAppSelector } from "../../hooks/useRedux";
 
 export default function Weight() {
   const colorScheme = useColorScheme();
+
+  const chartDates = useAppSelector((state) => state.profile.chartDates);
+  const chartWeights = useAppSelector((state) => state.profile.chartWeights);
 
   return (
     <View
@@ -33,7 +35,33 @@ export default function Weight() {
           style={styles.icon}
         />
       </DefaultView>
-      <DefaultView style={styles.data}></DefaultView>
+      <DefaultView style={styles.data}>
+        <BarChart
+          data={{
+            labels: chartDates,
+            datasets: [
+              {
+                data: chartWeights,
+              },
+            ],
+          }}
+          width={Dimensions.get("window").width - 40} // from react-native
+          height={190}
+          withInnerLines={false}
+          yAxisLabel={""}
+          yAxisSuffix={""}
+          chartConfig={{
+            backgroundGradientFrom: Colors[colorScheme].surface,
+            backgroundGradientTo: Colors[colorScheme].surface,
+            decimalPlaces: 0, // optional, defaults to 2dp
+            color: (opacity = 1) => Colors[colorScheme].accent,
+            labelColor: (opacity = 1) => Colors[colorScheme].text,
+          }}
+          flatColor={true}
+          fromZero={true}
+          style={{ paddingRight: 45 }}
+        />
+      </DefaultView>
     </View>
   );
 }
@@ -43,26 +71,21 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 10,
     marginTop: 10,
-    padding: 10,
+    paddingBottom: 10,
     borderRadius: 6,
-  },
-  account: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  data: { flex: 5 },
-  avatar: {
-    margin: 4,
-    width: 48,
-    height: 48,
-    backgroundColor: Colors.dark.topSurface,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 100,
   },
   dataText: {
     fontSize: 14,
+  },
+  account: {
+    flex: 1,
+    marginTop: 10,
+    marginHorizontal: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  data: {
+    paddingTop: 10,
   },
   icon: {
     paddingRight: 2,
