@@ -18,6 +18,7 @@ import { View as DefaultView } from "react-native";
 import Button from "../../elements/Button";
 import Input from "../../elements/Input";
 import HttpApi from "../../services/Api/HttpApi";
+import t from "../../services/translations";
 
 export default function ProfileScreen(props: any) {
   const colorScheme = useColorScheme();
@@ -76,15 +77,15 @@ export default function ProfileScreen(props: any) {
         overlayStyle={{ backgroundColor: Colors[colorScheme].background }}
       >
         <Dialog.Title
-          title="Add new weight record"
+          title={t("profile.addNewWeight")}
           titleStyle={{
             color: Colors[colorScheme].text,
           }}
         />
         <DefaultView style={{ height: 100, paddingTop: 10 }}>
           <Input
-            label={"Weight"}
-            placeholder={"Weight in kilograms"}
+            label={t("profile.weight_1")}
+            placeholder={t("profile.weight_kg")}
             keyboardType={"numeric"}
             onChangeText={(value: number) => setWeight(value)}
           />
@@ -92,13 +93,13 @@ export default function ProfileScreen(props: any) {
         <Dialog.Actions>
           <DefaultView style={{ paddingLeft: 5 }}>
             <Button
-              title={"Continue"}
+              title={t("profile.continue")}
               disabled={!weight}
               onPress={() => saveWeight()}
             />
           </DefaultView>
           <Button
-            title={"Cancel"}
+            title={t("profile.cancel")}
             onPress={() => toggleWeightDialog()}
             color={Colors[colorScheme].background}
           />

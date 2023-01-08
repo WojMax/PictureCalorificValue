@@ -6,6 +6,7 @@ import { View as DefaultView } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import { BarChart } from "react-native-chart-kit";
 import { useAppSelector } from "../../hooks/useRedux";
+import t from "../../services/translations";
 
 export default function Weight() {
   const colorScheme = useColorScheme();
@@ -26,7 +27,7 @@ export default function Weight() {
         <Text
           style={[styles.dataText, { color: Colors[colorScheme].textDark }]}
         >
-          Weight
+          {t("profile.weight_1")}
         </Text>
         <Entypo
           name="dots-three-horizontal"

@@ -32,7 +32,7 @@ export default function User() {
         <Text
           style={[styles.dataText, { color: Colors[colorScheme].textDark }]}
         >
-          User
+          {t("profile.user")}
         </Text>
         <Entypo
           name="dots-three-horizontal"
@@ -49,7 +49,7 @@ export default function User() {
             color: Colors.general.accentLight,
           }}
         >
-          Age:
+          {t("profile.age")}
         </Text>
         <Text style={{ color: Colors.general.accentLight }}>
           {profile?.age}
@@ -64,7 +64,7 @@ export default function User() {
               color: Colors.general.accentLight,
             }}
           >
-            Height
+            {t("profile.height")}
           </Text>
           <Text style={{ color: Colors.general.accentLight }}>
             {profile?.height}
@@ -78,7 +78,7 @@ export default function User() {
               color: Colors.general.accentLight,
             }}
           >
-            Weight:
+            {t("profile.weight")}
           </Text>
           <Text style={{ color: Colors.general.accentLight }}>
             {profile?.weight}
@@ -92,7 +92,7 @@ export default function User() {
               color: Colors.general.accentLight,
             }}
           >
-            Gender:
+            {t("profile.gender")}
           </Text>
           <Text style={{ color: Colors.general.accentLight }}>
             {profile?.gender}

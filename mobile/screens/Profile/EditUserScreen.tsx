@@ -30,8 +30,8 @@ export default function AddProfileScreen(props: any) {
   const [open, setOpen] = useState(false);
   const [gender, setGender] = useState(profile?.gender || null);
   const [items, setItems] = useState([
-    { label: "Male", value: "male" },
-    { label: "Female", value: "female" },
+    { label: t("profile.male"), value: "male" },
+    { label: t("profile.female"), value: "female" },
   ]);
 
   const edit = async () => {
@@ -56,27 +56,27 @@ export default function AddProfileScreen(props: any) {
   return (
     <View style={styles.container}>
       <Input
-        label={"Age"}
-        placeholder={"Age"}
+        label={t("profile.age")}
+        placeholder={t("profile.age")}
         keyboardType={"numeric"}
         value={age}
         onChangeText={(value: number) => setAge(value)}
       />
       <Input
-        label={"Weight"}
-        placeholder={"Weight in kilograms"}
+        label={t("profile.weight_1")}
+        placeholder={t("profile.weight_kg")}
         keyboardType={"numeric"}
         value={weight}
         onChangeText={(value: number) => setWeight(value)}
       />
       <Input
-        label={"Height"}
-        placeholder={"Height in centimeters"}
+        label={t("profile.height")}
+        placeholder={t("profile.height_cm")}
         keyboardType={"numeric"}
         value={height}
         onChangeText={(value: number) => setHeight(value)}
       />
-      <Text style={styles.activity}>Gender</Text>
+      <Text style={styles.activity}>{t("profile.gender")}</Text>
       <DropDownPicker
         style={{
           backgroundColor: Colors[colorScheme].background,
@@ -101,7 +101,7 @@ export default function AddProfileScreen(props: any) {
       <View style={styles.buttonContainer}>
         <View style={{ margin: 5 }}>
           <Button
-            title={"Save"}
+            title={t("profile.save")}
             disabled={!age || !height || !weight || !gender}
             onPress={() => edit()}
           />

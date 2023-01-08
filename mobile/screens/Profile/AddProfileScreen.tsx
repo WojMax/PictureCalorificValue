@@ -11,6 +11,7 @@ import { Slider } from "@rneui/base";
 import useColorScheme from "../../hooks/useColorScheme";
 import { MaterialIcons } from "@expo/vector-icons";
 import DropDownPicker from "react-native-dropdown-picker";
+import t from "../../services/translations";
 
 export default function AddProfileScreen(props: any) {
   const colorScheme = useColorScheme();
@@ -25,8 +26,8 @@ export default function AddProfileScreen(props: any) {
   const [open, setOpen] = useState(false);
   const [gender, setGender] = useState(null);
   const [items, setItems] = useState([
-    { label: "Male", value: "male" },
-    { label: "Female", value: "female" },
+    { label: t("addProfile.male"), value: "male" },
+    { label: t("addProfile.female"), value: "female" },
   ]);
 
   useEffect(() => {
@@ -57,31 +58,28 @@ export default function AddProfileScreen(props: any) {
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>
-        <Text style={styles.title}>Welcome to Calera</Text>
-        <Text style={styles.description}>
-          Provide your data that will allow us to calculate your daily calorie
-          requirements.
-        </Text>
+        <Text style={styles.title}>{t("addProfile.welcome")}</Text>
+        <Text style={styles.description}>{t("addProfile.welcome_txt")}</Text>
       </View>
       <Input
-        label={"Age"}
-        placeholder={"Age"}
+        label={t("addProfile.age")}
+        placeholder={t("addProfile.age")}
         keyboardType={"numeric"}
         onChangeText={(value: number) => setAge(value)}
       />
       <Input
-        label={"Weight"}
-        placeholder={"Weight in kilograms"}
+        label={t("addProfile.weight")}
+        placeholder={t("addProfile.weight_kg")}
         keyboardType={"numeric"}
         onChangeText={(value: number) => setWeight(value)}
       />
       <Input
-        label={"Height"}
-        placeholder={"Height in centimeters"}
+        label={t("addProfile.height")}
+        placeholder={t("addProfile.height_cm")}
         keyboardType={"numeric"}
         onChangeText={(value: number) => setHeight(value)}
       />
-      <Text style={styles.activity}>Gender</Text>
+      <Text style={styles.activity}>{t("addProfile.gender")}</Text>
       <DropDownPicker
         style={{
           backgroundColor: Colors[colorScheme].background,
@@ -104,7 +102,7 @@ export default function AddProfileScreen(props: any) {
         setItems={setItems}
       />
       <View style={{ zIndex: -1 }}>
-        <Text style={styles.activity}>Activity</Text>
+        <Text style={styles.activity}>{t("addProfile.activity")}</Text>
         <Slider
           value={activityID}
           onValueChange={setActivityID}
@@ -122,16 +120,18 @@ export default function AddProfileScreen(props: any) {
           }}
         />
         <View style={styles.activityVal}>
-          <Text style={{ color: Colors[colorScheme].textDark }}>Sedentary</Text>
           <Text style={{ color: Colors[colorScheme].textDark }}>
-            Very active
+            {t("addProfile.activity_sed")}
+          </Text>
+          <Text style={{ color: Colors[colorScheme].textDark }}>
+            {t("addProfile.activity_act")}
           </Text>
         </View>
       </View>
 
       <View style={styles.buttonContainer}>
         <Button
-          title={"Continue"}
+          title={t("addProfile.continue")}
           disabled={!age || !height || !weight || !gender}
           onPress={() => save()}
         />

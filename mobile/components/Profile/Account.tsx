@@ -35,7 +35,7 @@ export default function Account() {
         <Text
           style={[styles.dataText, { color: Colors[colorScheme].textDark }]}
         >
-          Account
+          {t("profile.account")}
         </Text>
       </DefaultView>
       <DefaultView style={styles.data}>

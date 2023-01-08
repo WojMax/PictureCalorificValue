@@ -24,7 +24,7 @@ export default function Objective() {
         <Text
           style={[styles.dataText, { color: Colors[colorScheme].textDark }]}
         >
-          Objective
+          {t("profile.objective")}
         </Text>
         <Entypo
           name="dots-three-horizontal"
