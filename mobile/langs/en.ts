@@ -8,7 +8,7 @@ export const en = {
     toast: "Please choose an image",
     error: "Error",
     add: "Add",
-    addNew: "Add new"
+    addNew: "Add new",
   },
   navigation: {
     home: "Home",
@@ -16,7 +16,7 @@ export const en = {
     profile: "Profile",
     settings: "Settings",
     camera: "Camera",
-    most_popular: "Most Popular"
+    most_popular: "Most Popular",
   },
   camera: {
     return: "Return",
@@ -44,7 +44,7 @@ export const en = {
     editMeal: "Edit meal",
     delete: "Delete meal",
     weight: "Weight",
-    calories_on_100g:"Calories on 100g"
+    calories_on_100g: "Calories on 100g",
   },
   categories: {
     breakfast: "Breakfast",
@@ -62,7 +62,8 @@ export const en = {
   },
   addProfile: {
     welcome: "Welcome to Calera",
-    welcome_txt: "Provide your data that will allow us to calculate your daily calorie requirements.",
+    welcome_txt:
+      "Provide your data that will allow us to calculate your daily calorie requirements.",
     age: "Age",
     weight: "Weight",
     weight_kg: "Weight in kilograms",
@@ -77,7 +78,7 @@ export const en = {
     continue: "Continue",
   },
   profile: {
-    account: "account",
+    account: "Account",
     objective: "Objective",
     user: "User",
     age: "Age:",

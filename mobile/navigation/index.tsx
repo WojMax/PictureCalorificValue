@@ -57,6 +57,13 @@ export default function Navigation({
           component={AddProfileScreen}
           options={{ headerShown: false }}
         />
+        <Stack.Screen
+          name="Settings"
+          component={SettingsScreen}
+          options={{
+            title: t("navigation.settings"),
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -225,13 +232,6 @@ function ProfileStackNavigator() {
             </Pressable>
           ),
         })}
-      />
-      <ProfileStack.Screen
-        name="Settings"
-        component={SettingsScreen}
-        options={{
-          title: t("navigation.settings"),
-        }}
       />
       <ProfileStack.Screen
         name="EditUser"

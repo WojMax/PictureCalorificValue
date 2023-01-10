@@ -24,13 +24,13 @@ const linking: LinkingOptions<RootStackParamList> = {
           ProfileStack: {
             screens: {
               ProfileScreen: "profile",
-              SettingsScreen: "settings",
             },
           },
         },
       },
       Camera: "camera",
       AddProfile: "addProfile",
+      Settings: "settings",
     },
   },
 };

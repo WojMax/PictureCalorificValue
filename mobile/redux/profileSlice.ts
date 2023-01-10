@@ -29,7 +29,6 @@ export const getWeightList = createAsyncThunk("getWeightList", async () => {
     const response = await HttpApi.get("weight");
     let chartWeights: number[] = [];
     let chartDates: string[] = [];
-    console.log(response.data);
     response.data.forEach((value: { weight: number; weight_date: string }) => {
       if (value.weight && value.weight_date) {
         chartWeights.push(value.weight);
