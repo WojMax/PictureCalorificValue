@@ -95,7 +95,9 @@ export default function User() {
             {t("profile.gender")}
           </Text>
           <Text style={{ color: Colors.general.accentLight }}>
-            {profile?.gender}
+            {profile?.gender === "male"
+              ? t("profile.male")
+              : t("profile.female")}
           </Text>
         </DefaultView>
       </DefaultView>
