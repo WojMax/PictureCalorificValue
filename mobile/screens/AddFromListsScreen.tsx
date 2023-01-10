@@ -41,11 +41,11 @@ export default function AddFromListsScreen(props: any) {
     //console.log(calories);
     const date = new Date(selectedDate);
     const transformedDate =
-    date.getUTCFullYear() +
-    "-" +
-    (date.getUTCMonth() + 1) +
-    "-" +
-    date.getDate();
+      date.getUTCFullYear() +
+      "-" +
+      (date.getUTCMonth() + 1) +
+      "-" +
+      date.getDate();
     const meal = {
       mealName: name,
       caloriesOn100g: calories,
@@ -53,7 +53,7 @@ export default function AddFromListsScreen(props: any) {
       dateCreated: transformedDate,
       category: props.route.params.category,
     };
-    
+
     try {
       await HttpApi.put("meal", meal);
       dispatch(getHomeMeals(selectedDate));
@@ -69,6 +69,7 @@ export default function AddFromListsScreen(props: any) {
         <Input
           label={t("addScreen.name")}
           placeholder={props.route.params.name}
+          value={name}
           onChangeText={(value: string) => setName(value)}
         />
         <Input

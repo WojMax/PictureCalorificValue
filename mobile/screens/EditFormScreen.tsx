@@ -74,6 +74,7 @@ export default function EditFormScreen(props: any) {
         <Input
           label={t("editScreen.name")}
           placeholder={props.route.params.name}
+          value={name}
           onChangeText={(value: string) => setName(value)}
         />
         <Input
