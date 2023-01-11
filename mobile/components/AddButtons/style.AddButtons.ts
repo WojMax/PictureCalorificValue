@@ -6,20 +6,21 @@ export const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-around",
-    backgroundColor: Colors.general.accentLight,
   },
   View: {
-    width: "32%",
-    backgroundColor: Colors.general.accentLight,
+    flex: 1,
   },
   Button: {
-    marginVertical: "2%",
+    marginVertical: 6,
+    marginHorizontal: 3,
     alignItems: "center",
-    paddingVertical: 12,
-    borderRadius: 12,
+    paddingVertical: 8,
+    borderRadius: 8,
   },
   Text: {
     color: Colors.general.accent,
+    paddingTop: 4,
+    paddingBottom: 2,
     fontWeight: "bold",
   },
 });

@@ -1,6 +1,4 @@
-import {
-  TouchableOpacity,
-} from "react-native";
+import { TouchableOpacity } from "react-native";
 import { Text, View, useThemeColor } from "../Themed";
 import Colors from "../../constants/Colors";
 import { styles } from "./style.AddButtons";
@@ -9,7 +7,6 @@ import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import t from "../../services/translations";
 import { useColorScheme } from "react-native";
-
 
 type Props = {
   AddFoodOnPress: () => void;
@@ -24,23 +21,8 @@ export default function AddButtons(props: Props) {
     "background"
   );
 
-
   return (
     <View style={styles.mainView}>
-      <View style={styles.View}>
-        <TouchableOpacity
-          style={[{ backgroundColor }, styles.Button]}
-          onPress={props.CameraOnPress}
-        >
-          <MaterialIcons
-            name="add-a-photo"
-            size={40}
-            color={Colors.general.accent}
-            style={{ paddingBottom: 2.7 }}
-          />
-          <Text style={styles.Text}>{t("common.takePhoto")}</Text>
-        </TouchableOpacity>
-      </View>
       <View style={styles.View}>
         <TouchableOpacity
           style={[{ backgroundColor }, styles.Button]}
@@ -48,7 +30,7 @@ export default function AddButtons(props: Props) {
         >
           <MaterialIcons
             name="add-photo-alternate"
-            size={40}
+            size={38}
             color={Colors.general.accent}
             style={{ paddingBottom: 2.7 }}
           />
@@ -62,10 +44,24 @@ export default function AddButtons(props: Props) {
         >
           <Ionicons
             name="md-add-circle-sharp"
-            size={40}
+            size={38}
             color={Colors.general.accent}
           />
           <Text style={styles.Text}>{t("common.addMeal")}</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.View}>
+        <TouchableOpacity
+          style={[{ backgroundColor }, styles.Button]}
+          onPress={props.CameraOnPress}
+        >
+          <MaterialIcons
+            name="add-a-photo"
+            size={38}
+            color={Colors.general.accent}
+            style={{ paddingBottom: 2.7 }}
+          />
+          <Text style={styles.Text}>{t("common.takePhoto")}</Text>
         </TouchableOpacity>
       </View>
     </View>

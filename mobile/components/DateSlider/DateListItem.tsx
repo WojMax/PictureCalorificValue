@@ -21,7 +21,7 @@ export default function DateListItem({ date, DateOnPress }: Props) {
 
   const color = {
     borderColor: Colors[colorScheme].textDark,
-    backgroundColor: Colors[colorScheme].topSurface,
+    backgroundColor: Colors[colorScheme].surface,
   };
   const colorSelected = {
     borderColor: Colors[colorScheme].accent,

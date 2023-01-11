@@ -17,7 +17,7 @@
     ],
     "splash": {
       "resizeMode": "contain",
-      "backgroundColor": "#FBFBFB"
+      "backgroundColor": "#121212"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -31,7 +31,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#121212"
       },
       "permissions": [
         "android.permission.RECORD_AUDIO"

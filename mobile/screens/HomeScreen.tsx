@@ -47,7 +47,7 @@ export default function HomeScreen(props: any) {
       <View
         style={[
           styles.container4,
-          { backgroundColor: Colors[colorScheme].topSurface },
+          { backgroundColor: Colors[colorScheme].surface },
         ]}
       >
         <DateSlider />
@@ -119,7 +119,7 @@ export default function HomeScreen(props: any) {
                 style={[
                   styles.container8,
                   {
-                    backgroundColor: Colors[colorScheme].surface,
+                    backgroundColor: Colors[colorScheme].topSurface,
                   },
                 ]}
               >
