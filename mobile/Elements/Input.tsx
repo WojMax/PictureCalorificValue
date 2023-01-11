@@ -22,7 +22,7 @@ export default function Input(props: Props) {
       placeholder={props.placeholder}
       // @ts-ignore
       keyboardType={props.keyboardType}
-      labelStyle={{ color: Colors.general.accentLight }}
+      labelStyle={{ color: Colors[colorScheme].input }}
       containerStyle={{
         paddingHorizontal: 10,
       }}

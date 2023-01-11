@@ -9,18 +9,20 @@ var colors = {
 export default {
   light: {
     //text
-    text: "#000",
-    textLight: "#6d6d6d",
-    textDark: "#424242",
+    text: "#242426",
+    textLight: "#363638",
+    textDark: "#444446",
     //areas
-    background: "#fff",
-    surface: "#EBEBF0",
-    topSurface: "#D8D8DC",
+    background: "#FBFBFB",
+    surface: "#F2F2F5",
+    topSurface: "#EEEEF2",
     //mainColors
     accent: colors.mainAccent,
     //navButtons
     tabIconDefault: "#ccc",
     tabIconSelected: colors.mainAccent,
+
+    input: "#4295ED",
   },
   dark: {
     //text
@@ -36,6 +38,8 @@ export default {
     //navButtons
     tabIconDefault: "#ccc",
     tabIconSelected: colors.mainAccent,
+
+    input: "#83b9ff",
   },
   general: {
     accent: colors.mainAccent,

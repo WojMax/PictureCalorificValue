@@ -39,7 +39,9 @@ export default function Account() {
         </Text>
       </DefaultView>
       <DefaultView style={styles.data}>
-        <DefaultView style={styles.avatar}></DefaultView>
+        <DefaultView
+          style={[styles.avatar, { backgroundColor: "#4287f520" }]}
+        ></DefaultView>
         <Text style={styles.dataText}> {username} </Text>
       </DefaultView>
     </View>
@@ -63,7 +65,6 @@ const styles = StyleSheet.create({
     margin: 6,
     width: 48,
     height: 48,
-    backgroundColor: Colors.dark.topSurface,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 100,
