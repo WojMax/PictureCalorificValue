@@ -14,21 +14,35 @@ type Props = {
   retake: () => void;
 };
 
-export default function Preview(props: Props) {
+export default function PreviewError(props: Props) {
+  console.log(props);
   return (
     <ImageBackground source={{ uri: props.uri }} style={styles.container}>
       <View style={styles.container}>
         <View style={styles.caloriesTopContainer} />
-        <View style={styles.caloriesMidContainer}>
-          <Text style={styles.text}>{props.name}: </Text>
-          <Text style={styles.text2}>{props.calories} </Text>
-          <View style={styles.caloriesMid2Container}>
-            <Text style={styles.text3}>kcal</Text>
-            <Text style={styles.text3}>100g</Text>
-          </View>
+        <View style={styles.caloriesErrorContainer}>
+          <Text
+            style={{
+              fontSize: 22,
+              color: "white",
+              textAlign: "center",
+            }}
+          >
+            {t("camera.notFood")}
+          </Text>
+          <Text
+            style={{
+              fontSize: 18,
+              paddingTop: 10,
+              color: "#bbb",
+              textAlign: "center",
+            }}
+          >
+            {t("camera.retakePls")}
+          </Text>
         </View>
-        <View style={styles.caloriesBottomContainer}>
-          <View style={styles.buttonContainer}>
+        <View style={styles.caloriesBottom2Container}>
+          <View style={styles.button2Container}>
             <Button
               title={t("camera.return")}
               onPress={props.close}
@@ -36,18 +50,11 @@ export default function Preview(props: Props) {
               outline={true}
             />
           </View>
-          <View style={styles.buttonContainer}>
+          <View style={styles.button2Container}>
             <Button
               title={t("camera.retakePhoto")}
               onPress={props.retake}
               outline={true}
-            />
-          </View>
-          <View style={styles.buttonContainer}>
-            <Button
-              title={t("common.addMeal")}
-              onPress={props.addMeal}
-              color={Colors.general.green}
             />
           </View>
         </View>

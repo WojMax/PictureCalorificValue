@@ -22,6 +22,8 @@ export const en = {
     return: "Return",
     retakePhoto: "Retake photo",
     noAccess: "No access to camera",
+    notFood: "Food not found on this photo.",
+    retakePls: "Please retake photo and try again.",
   },
   addScreen: {
     name: "Name",

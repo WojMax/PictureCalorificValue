@@ -5,7 +5,7 @@ import Preview from "../components/Camera/PhotoPreview";
 import AddButtons from "../components/AddButtons/AddButtons";
 import Colors from "../constants/Colors";
 import * as ImagePicker from "expo-image-picker";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import AddScreenList from "../components/AddScreenLists/AddScreenList";
 import { getFavMeals } from "../redux/favoritesSlice";
 import { getMPMeals } from "../redux/mostPopularSlice";
@@ -14,39 +14,45 @@ import axios from "axios";
 import ActivityIndicator from "../elements/ActivityIndicator";
 import { t } from "i18n-js";
 import useColorScheme from "../hooks/useColorScheme";
+import PreviewError from "../components/Camera/PhotoPreviewError";
 
 export default function AddFormScreen(props: any) {
   const [screen, setScreen] = useState<string>("main");
   const colorScheme = useColorScheme();
-  const [uri, setUri] = useState("");
+  const [uri, setPhoto] = useState("");
   const [calories, setCalories] = useState(0);
+  const [name, setName] = useState("");
   const [imageData, setImageData] = useState();
+
   const pickImage = async () => {
     setScreen("loading");
-    let result = await ImagePicker.launchImageLibraryAsync({
+    const photo = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [3, 2],
+      aspect: [1, 1],
       base64: true,
     });
-    if (!result.cancelled) {
-      // axios
-      //   .post("https://w-maksim-aihrnabprzjvqez9.socketxp.com/picture", result)
-      //   .then((res) => {
-      //     console.log(res.data);
-      //     setCalories(res.data.calories);
-      //     // @ts-ignore
-      //     setUri(result.uri);
-      //     setScreen("preview");
-      //   })
-      //   .catch((er) => {
-      //     console.log(er);
-      //     setScreen("main");
-      //   });
-      var RandomNumber = Math.floor(Math.random() * 200) + 80 ;
-      setCalories(RandomNumber);
-      setUri(result.uri);
-      setScreen("preview");
+    if (!photo.canceled) {
+      setScreen("loading");
+      try {
+        const response = await axios.post(
+          "https://wojmax77-2djyoljuvhzo5vbt.socketxp.com/predict",
+          photo
+        );
+
+        if (!response.data || response.data.category === null) {
+          setScreen("error");
+        } else {
+          setCalories(response.data.calories);
+          setName(response.data.category);
+          // @ts-ignore
+          setPhoto(photo.uri);
+          setScreen("preview");
+        }
+      } catch (error) {
+        setScreen("error");
+        console.log(error);
+      }
     } else {
       setScreen("main");
     }
@@ -80,6 +86,18 @@ export default function AddFormScreen(props: any) {
     return (
       <Preview
         uri={uri}
+        calories={calories}
+        name={name}
+        close={close}
+        retake={pickImage}
+        addMeal={addMeal}
+      />
+    );
+  } else if (screen == "error") {
+    return (
+      <PreviewError
+        uri={uri}
+        name={name}
         calories={calories}
         close={close}
         retake={pickImage}
@@ -120,8 +138,14 @@ export default function AddFormScreen(props: any) {
               { backgroundColor: Colors[colorScheme].topSurface },
               { borderColor: Colors[colorScheme].accent },
             ]}
-            selectedTextStyle={[styles.selectedText,{color: Colors[colorScheme].accent}]}
-            textStyle={[styles.disabledText,{color: Colors[colorScheme].textDark,}]}
+            selectedTextStyle={[
+              styles.selectedText,
+              { color: Colors[colorScheme].accent },
+            ]}
+            textStyle={[
+              styles.disabledText,
+              { color: Colors[colorScheme].textDark },
+            ]}
           />
         </View>
         <View style={styles.container2}>
@@ -177,8 +201,14 @@ export default function AddFormScreen(props: any) {
               { backgroundColor: Colors[colorScheme].topSurface },
               { borderColor: Colors[colorScheme].accent },
             ]}
-            selectedTextStyle={[styles.selectedText,{color: Colors[colorScheme].accent}]}
-            textStyle={[styles.disabledText,{color: Colors[colorScheme].textDark,}]}
+            selectedTextStyle={[
+              styles.selectedText,
+              { color: Colors[colorScheme].accent },
+            ]}
+            textStyle={[
+              styles.disabledText,
+              { color: Colors[colorScheme].textDark },
+            ]}
           />
         </View>
         <View style={styles.container2}>

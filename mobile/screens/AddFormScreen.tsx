@@ -14,7 +14,13 @@ export default function AddFormScreen(props: any) {
   const dispatch = useAppDispatch();
   const selectedDate = useAppSelector((state) => state.homeMeal.date);
 
-  const [name, setName] = useState("");
+  const [name, setName] = useState(
+    props.route.params
+      ? props.route.params.name
+        ? props.route.params.name.toString()
+        : ""
+      : ""
+  );
   const [calories, setCalories] = useState<number>(
     props.route.params
       ? props.route.params.calories
@@ -70,6 +76,7 @@ export default function AddFormScreen(props: any) {
         <Input
           label={t("addScreen.name")}
           placeholder={t("addScreen.enterName")}
+          value={name}
           onChangeText={(value: string) => setName(value)}
         />
         <Input

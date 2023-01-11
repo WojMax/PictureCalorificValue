@@ -8,7 +8,7 @@ export const pl = {
     toast: "Proszę wybrać zdjęcie",
     error: "Błąd",
     add: "Dodaj",
-    addNew: "Dodaj nowy"
+    addNew: "Dodaj nowy",
   },
   navigation: {
     home: "Strona Główna",
@@ -16,12 +16,14 @@ export const pl = {
     profile: "Profil",
     settings: "Ustawienia",
     camera: "Aparat",
-    most_popular: "Najpopularniejsze"
+    most_popular: "Najpopularniejsze",
   },
   camera: {
     return: "Powrót",
     retakePhoto: "Ponów",
     noAccess: "Brak dostępu do kamery",
+    notFood: "Nie znaleziono jedzenia na tym zdjęciu",
+    retakePls: "Powtórz zdjęcie i spróbuj ponownie.",
   },
   addScreen: {
     name: "Nazwa",
@@ -44,7 +46,7 @@ export const pl = {
     editMeal: "Edytuj potrawę",
     delete: "Usuń potrawę",
     weight: "Waga",
-    calories_on_100g:"Kalorie na 100g"
+    calories_on_100g: "Kalorie na 100g",
   },
   categories: {
     breakfast: "Śniadanie",
@@ -62,7 +64,8 @@ export const pl = {
   },
   addProfile: {
     welcome: "Witamy w aplikacji Calera",
-    welcome_txt: "Wprowadź swoje dane, pozwolą nam one wyliczyć Twoje dzienne zapotrzebowanie na kalorie",
+    welcome_txt:
+      "Wprowadź swoje dane, pozwolą nam one wyliczyć Twoje dzienne zapotrzebowanie na kalorie",
     age: "Wiek",
     weight: "Waga",
     weight_kg: "Waga w kilogramach",

@@ -14,6 +14,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import t from "../../services/translations";
 import ActivityIndicator from "../../elements/ActivityIndicator";
 import axios from "axios";
+import PreviewError from "./PhotoPreviewError";
 
 type Photo = {
   uri: string;
@@ -41,6 +42,7 @@ export default function CalorieCamera(props: Props) {
   const [screen, setScreen] = useState<string>("main");
   const [photo, setPhoto] = useState<string>();
   const [calories, setCalories] = useState(0);
+  const [name, setName] = useState("");
 
   //check permission
   useEffect(() => {
@@ -89,22 +91,24 @@ export default function CalorieCamera(props: Props) {
     // @ts-ignore
     const photo = await camera.takePictureAsync({ base64: true });
     setScreen("loading");
-    // axios
-    //   .post("https://w-maksim-aihrnabprzjvqez9.socketxp.com/picture", photo)
-    //   .then((res) => {
-    //     console.log(res.data);
-    //     setCalories(res.data.calories);
-    //     setPhoto(photo.uri);
-    //     setScreen("preview");
-    //   })
-    //   .catch((er) => {
-    //     console.log(er);
-    //     setScreen("main");
-    //   });
-    var RandomNumber = Math.floor(Math.random() * 200) + 80 ;
-      setCalories(RandomNumber);
-      setPhoto(photo.uri);
-      setScreen("preview");
+    try {
+      const response = await axios.post(
+        "https://wojmax77-2djyoljuvhzo5vbt.socketxp.com/predict",
+        photo
+      );
+
+      if (response.data.category === null) {
+        setScreen("error");
+      } else {
+        setCalories(response.data.calories);
+        setName(response.data.category);
+        setPhoto(photo.uri);
+        setScreen("preview");
+      }
+    } catch (error) {
+      retakePhoto();
+      console.log(error);
+    }
   };
 
   const retakePhoto = () => {
@@ -114,6 +118,7 @@ export default function CalorieCamera(props: Props) {
   const addMeal = () => {
     props.navigation.navigate("AddForm", {
       url: "HomeStack",
+      name: name,
       calories: calories,
     });
   };
@@ -128,10 +133,22 @@ export default function CalorieCamera(props: Props) {
     return <ActivityIndicator />;
   } else if (screen == "loading") {
     return <ActivityIndicator text={"Calorie estimation is in progress..."} />;
+  } else if (screen == "error") {
+    return (
+      <PreviewError
+        uri={photo}
+        name={name}
+        calories={calories}
+        close={closeCamera}
+        retake={retakePhoto}
+        addMeal={addMeal}
+      />
+    );
   } else if (screen == "preview") {
     return (
       <Preview
         uri={photo}
+        name={name}
         calories={calories}
         close={closeCamera}
         retake={retakePhoto}
