@@ -1,8 +1,8 @@
 import { View } from "../Themed";
 import Colors from "../../constants/Colors";
 import useColorScheme from "../../hooks/useColorScheme";
-import { useEffect, useState } from "react";
-import { FlatList, StyleSheet } from "react-native";
+import { useEffect, useRef, useState } from "react";
+import { FlatList, StyleSheet, Animated } from "react-native";
 import DateListItem from "./DateListItem";
 import { View as DefaultView } from "react-native";
 import { useAppDispatch } from "../../hooks/useRedux";
@@ -17,11 +17,27 @@ export default function DateSlider() {
     set(new Date());
   }, []);
 
+  const opacityAnimation = useRef(new Animated.Value(0.5)).current;
+  const opacityStyle = { opacity: opacityAnimation };
+  const animateElement = () => {
+    Animated.timing(opacityAnimation, {
+      toValue: 0,
+      duration: 0,
+      useNativeDriver: true,
+    }).start(() => {
+      Animated.timing(opacityAnimation, {
+        toValue: 1,
+        duration: 800,
+        useNativeDriver: true,
+      }).start();
+    });
+  };
+
   const getDatesList = (start: any, end: any): Date[] => {
     for (
-      var arr: Date[] = [], dt = new Date(start);
-      dt <= new Date(end);
-      dt.setDate(dt.getDate() + 1)
+      var arr: Date[] = [], dt = new Date(end);
+      dt >= new Date(start);
+      dt.setDate(dt.getDate() - 1)
     ) {
       arr.push(new Date(dt));
     }
@@ -35,6 +51,7 @@ export default function DateSlider() {
     const dayList = getDatesList(beginDate, futureDate);
     dayList.map((v) => v.toISOString().slice(0, 10)).join("");
     setDates(dayList);
+    animateElement();
   };
 
   const set = (date: Date) => {
@@ -43,16 +60,18 @@ export default function DateSlider() {
 
   return (
     <DefaultView style={styles.container}>
-      <FlatList
-        horizontal={true}
-        inverted
-        contentContainerStyle={{ flexDirection: "row-reverse" }}
-        data={dates}
-        renderItem={({ item }) => (
-          <DateListItem date={item} DateOnPress={() => set(item)} />
-        )}
-        keyExtractor={(item, index) => index.toString()}
-      />
+      <Animated.View style={[opacityStyle]}>
+        <FlatList
+          initialScrollIndex={0}
+          inverted={true}
+          horizontal={true}
+          data={dates}
+          renderItem={({ item }) => (
+            <DateListItem date={item} DateOnPress={() => set(item)} />
+          )}
+          keyExtractor={(item, index) => index.toString()}
+        />
+      </Animated.View>
     </DefaultView>
   );
 }
