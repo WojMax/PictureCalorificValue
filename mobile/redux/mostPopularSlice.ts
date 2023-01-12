@@ -18,21 +18,12 @@ const initialState: MostPopularState = {
   selectedMeal: null,
 };
 
-
-
-
 export const getMPMeals = createAsyncThunk("getMPMeals", async () => {
   let data: { meals: Meal[] } = { meals: [] };
   try {
-    const lang= i18n.locale
-    let lang1=""
-    if(lang==="en-US"){
-      lang1="eng"
-    }
-    else{
-      lang1="pl"
-    }
-    const response = await HttpApi.get("popular",lang1);
+    const lang = i18n.locale === "en-US" ? "eng" : "pl";
+
+    const response = await HttpApi.get("popular", lang);
     data = { meals: response.data };
     return data;
   } catch (error) {

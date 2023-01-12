@@ -20,7 +20,7 @@ export default function AddProfileScreen(props: any) {
   const [age, setAge] = useState(0);
   const [weight, setWeight] = useState(0);
   const [height, setHeight] = useState(0);
-  const [activityID, setActivityID] = useState(0);
+  const [activityID, setActivityID] = useState(1);
 
   //dropdown
   const [open, setOpen] = useState(false);
@@ -46,6 +46,8 @@ export default function AddProfileScreen(props: any) {
         height: height,
         weight: weight,
         activityID: activityID,
+        goal_weight: "NULL",
+        goal_weight_change: "NULL",
       };
       await HttpApi.put("profile", data);
       dispatch(getCaloricDemand());

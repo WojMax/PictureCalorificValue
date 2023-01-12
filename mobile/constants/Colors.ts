@@ -30,9 +30,9 @@ export default {
     textLight: "#bababa",
     textDark: "#8a8d8e",
     //areas
-    background: "#030303",
-    surface: "#1C1C1C",
-    topSurface: "#242424",
+    background: "#030304",
+    surface: "#1C1C1D",
+    topSurface: "#232324",
     //mainColors
     accent: colors.mainAccent,
     //navButtons

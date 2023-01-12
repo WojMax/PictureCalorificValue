@@ -12,14 +12,8 @@ import { useAppDispatch, useAppSelector } from "../../hooks/useRedux";
 
 export default function Objective() {
   const colorScheme = useColorScheme();
-  const dispatch = useAppDispatch();
   const profile = useAppSelector((state) => state.profile.profile);
   const caloricDemand = useAppSelector((state) => state.profile.caloricDemand);
-
-  useEffect(() => {
-    dispatch(getProfile());
-    dispatch(getCaloricDemand());
-  }, []);
 
   return (
     <View
@@ -44,23 +38,32 @@ export default function Objective() {
         />
       </DefaultView>
       <DefaultView style={styles.data}>
-        <Text
-          style={styles.goalWeightText}
-        >
-          {profile?.goal_weight}
+        <Text style={styles.goalWeightText}>
+          {profile?.goal_weight ? profile?.goal_weight : profile?.weight}
+          <Text
+            style={[{ fontSize: 14 }, { color: Colors[colorScheme].textLight }]}
+          >
+            {" "}
+            kg
+          </Text>
         </Text>
         <Text style={styles.goalText}>
-            {profile?.goal==="lose weight"
-              ?t("profile.objective2")
-              :profile?.goal==="gain weight"
-                ?t("profile.objective3")
-                :t("profile.objective1")}
+          {profile?.goal === "lose weight"
+            ? t("profile.objective2")
+            : profile?.goal === "gain weight"
+            ? t("profile.objective3")
+            : t("profile.objective1")}
         </Text>
         <Text style={styles.caloriesText}>
-            {t("profile.objective_calories")}
+          {t("profile.objective_calories")}
         </Text>
-        <Text style={[styles.calories1Text, { color: Colors[colorScheme].textDark }]}>
-            {caloricDemand}
+        <Text
+          style={[
+            styles.calories1Text,
+            { color: Colors[colorScheme].textDark },
+          ]}
+        >
+          {caloricDemand}
         </Text>
       </DefaultView>
     </View>
@@ -81,36 +84,24 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   data: { flex: 5 },
-  avatar: {
-    margin: 4,
-    width: 48,
-    height: 48,
-    backgroundColor: Colors.dark.topSurface,
-    flexDirection:"column",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 100,
-  },
   dataText: {
     fontSize: 14,
   },
   goalText: {
-    fontSize: 15,
+    fontSize: 18,
     color: Colors.general.accentLight,
-    paddingTop:5,
-    paddingBottom:5,
+    paddingBottom: 8,
   },
   caloriesText: {
-    fontSize: 15,
-    paddingTop:5,
+    fontSize: 16,
+    paddingTop: 5,
   },
   calories1Text: {
-    fontSize: 15,
-    paddingTop:3,
+    fontSize: 16,
+    paddingTop: 3,
   },
   goalWeightText: {
     fontSize: 30,
-    paddingTop:5,
   },
   icon: {
     paddingRight: 2,

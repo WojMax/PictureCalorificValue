@@ -10,6 +10,7 @@ import i18n from "i18n-js";
 import Colors from "../constants/Colors";
 import Switch from "../elements/Switch";
 import { Auth } from "aws-amplify";
+import { getMPMeals } from "../redux/mostPopularSlice";
 
 export default function SettingsScreen() {
   const dispatch = useAppDispatch();
@@ -39,6 +40,7 @@ export default function SettingsScreen() {
     dispatch(setLangReducer(userLang));
     await SecureStore.setItemAsync("lang", userLang);
     setLang(userLang);
+    dispatch(getMPMeals());
   };
 
   const changeColorScheme = async () => {

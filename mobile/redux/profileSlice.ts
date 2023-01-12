@@ -1,5 +1,6 @@
 import HttpApi from "../services/Api/HttpApi";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import i18n from "i18n-js";
 
 export type Profile = {
   age: number;
@@ -62,9 +63,10 @@ export const getCaloricDemand = createAsyncThunk(
 );
 
 export const getProfile = createAsyncThunk("getProfile", async () => {
+  const lang = i18n.locale === "en-US" ? "eng" : "pl";
+
   try {
-    const response = await HttpApi.get("profile");
-    console.log(response.data);
+    const response = await HttpApi.get("profile", lang);
     return { profile: response.data };
   } catch (error) {
     console.error(error);
