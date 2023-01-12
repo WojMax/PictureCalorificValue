@@ -92,8 +92,8 @@ def insert_user_data(put_data, userID):
     weekly_exercise = put_data["activityID"]
     goal_weight = put_data["goal_weight"]
     goal_weight_change = put_data["goal_weight_change"]
-
-    if goal_weight == 'Null':
+    print(put_data)
+    if goal_weight.lower() == 'null' or goal_weight is None:
         goal_weight = weight
         goal_weight_change = 0
 
@@ -105,7 +105,8 @@ def insert_user_data(put_data, userID):
                       f'{goal_weight_change}); '
     SQLquery_user_weight_history = f'''INSERT INTO public.user_weight_history(user_id, weight, weight_date)
                                                 VALUES ('{userID}', {weight}, '{current_date}');'''
-
+    print(SQLquery_user)
+    print(SQLquery_user_weight_history)
     return SQLquery_user + SQLquery_user_weight_history
 
 

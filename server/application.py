@@ -270,7 +270,7 @@ def caloric_demand():
             user = Middleware.get_user_ID(application.wsgi_app)
             cursor.execute(
                 f'''SELECT 
-                        U.gender, U.age, U.height, U.weight, E.value
+                        U.gender, U.age, U.height, U.weight, E.value, U.goal_weight_change, U.goal_weight
                     FROM 
                         public.users U 
                     INNER JOIN 
@@ -300,9 +300,9 @@ def caloric_demand():
                 return make_response(jsonify({'code': 'FAILURE', 'error': 'incorrect user values'}), 500)
 
 
-@application.route('/profile', methods=['GET', 'PUT', 'POST'])
+@application.route('/profile/<lang>', methods=['GET'])
 @cross_origin()
-def profile():
+def profile_get(lang):
     if request.method == 'GET':
         connection = connect_to_db()
         cursor = connection.cursor()
@@ -333,9 +333,13 @@ def profile():
             profile_data = cursor.fetchall()
             cursor.close()
             connection.close()
-            return jsonify(sqlfetch_to_json_profile(values=profile_data))
+            return jsonify(sqlfetch_to_json_profile(values=profile_data, language=lang))
 
-    elif request.method == 'PUT':
+
+@application.route('/profile', methods=['PUT', 'POST'])
+@cross_origin()
+def profile():
+    if request.method == 'PUT':
         connection = connect_to_db()
         cursor = connection.cursor()
         try:

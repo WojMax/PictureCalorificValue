@@ -1,11 +1,19 @@
 def calculate_caloric_demand(user_data):
     caloric_demand = -1
-
+    ##BMR is calculated based on Mifflin-St Jeor formula:
+    ##BMR x PAL - difference(goal)
     if '[null]' not in user_data:
         for values in user_data:
             if values[0] == 'female':
-                caloric_demand = (655.1 + (9.563 * values[3]) + (1.850 * values[2]) - (4.676 * values[1])) * values[4]
-            elif values[0] == 'male':
-                caloric_demand = (66.47 + (13.75 * values[3]) + (5.003 * values[2]) - (6.755 * values[1])) * values[4]
+                BMRxPAL = ((9.99 * values[3]) + (6.25 * values[2]) - (4.92 * values[1]) - 161) * values[4]
+            else:
+                BMRxPAL = ((9.99 * values[3]) + (6.25 * values[2]) - (4.92 * values[1]) + 5) * values[4]
+
+            difference = values[5] * 100
+
+            if values[6] >= values[3]:
+                caloric_demand = BMRxPAL + difference
+            else:
+                caloric_demand = BMRxPAL - difference
 
     return caloric_demand

@@ -74,14 +74,40 @@ def sqlfetch_to_json_user_weight(values):
     return json.loads(json_to_send)
 
 
-def sqlfetch_to_json_profile(values):
-    if values[0][3] > values[0][5]:
-        goal = 'lose weight'
-    elif values[0][3] < values[0][5]:
-        goal = 'gain weight'
+def sqlfetch_to_json_profile(values, language):
+    if values[0][3] == values[0][5]:
+        if language == 'pl':
+            goal = 'utrzymać wagę'
+        else:
+            goal = 'maintain weight'
+    elif values[0][3] > values[0][5]:
+        if language == 'pl':
+            goal = 'schudnąć'
+        else:
+            goal = 'lose weight'
     else:
-        goal = 'maintain weight'
+        if language == 'pl':
+            goal = 'przybrać na wadze'
+        else:
+            goal = 'gain weight'
 
-    json_to_send = f'{{"gender":"{str(values[0][0])}", "age":{str(values[0][1])}, "height":{str(values[0][2])}, "weight":{str(values[0][3])}, "exercise":"{str(values[0][4])}", "goal_weight": {values[0][5]}, "goal_weight_change": {values[0][6]}, "goal": {goal}}}'
+    if language == 'pl':
+        if str(values[0][0]) == 'male':
+            values[0][0] = 'mężczyzna'
+        else:
+            values[0][0] = 'kobieta'
+
+        if str(values[0][4]) == 'Sedentary':
+            values[0][4] = 'Siedzący tryb życia'
+        elif str(values[0][4]) == 'Lightly active':
+            values[0][4] = 'Lekko aktywny'
+        elif str(values[0][4]) == 'Moderately active':
+            values[0][4] = 'Średnio aktywny'
+        elif str(values[0][4]) == 'Active':
+            values[0][4] = 'Aktywny'
+        elif str(values[0][4]) == 'Very active':
+            values[0][4] = 'Bardzo aktywny'
+
+    json_to_send = f'{{"gender":"{str(values[0][0])}", "age":{str(values[0][1])}, "height":{str(values[0][2])}, "weight":{str(values[0][3])}, "exercise":"{str(values[0][4])}", "goal_weight":{str(values[0][5])}, "goal_weight_change":{str(values[0][6])}, "goal":"{goal}"}}'
 
     return json.loads(json_to_send)
