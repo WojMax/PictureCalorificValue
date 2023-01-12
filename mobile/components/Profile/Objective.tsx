@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   goalText: {
-    fontSize: 18,
+    fontSize: 16,
     color: Colors.general.accentLight,
     paddingBottom: 8,
   },

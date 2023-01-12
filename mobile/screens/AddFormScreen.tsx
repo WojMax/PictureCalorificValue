@@ -13,6 +13,7 @@ import { getHomeMeals } from "../redux/homeSlice";
 export default function AddFormScreen(props: any) {
   const dispatch = useAppDispatch();
   const selectedDate = useAppSelector((state) => state.homeMeal.date);
+  const category = useAppSelector((state) => state.homeMeal.category);
 
   const [name, setName] = useState(
     props.route.params
@@ -21,7 +22,7 @@ export default function AddFormScreen(props: any) {
         : ""
       : ""
   );
-  const [calories, setCalories] = useState<number>(
+  const [calories, setCalories] = useState(
     props.route.params
       ? props.route.params.calories
         ? props.route.params.calories.toString()
@@ -31,8 +32,8 @@ export default function AddFormScreen(props: any) {
   const [weight, setWeight] = useState(0);
 
   const save = async () => {
+    console.log(category);
     const date = new Date(selectedDate);
-    console.log(date);
     const transformedDate =
       date.getUTCFullYear() +
       "-" +
@@ -42,12 +43,11 @@ export default function AddFormScreen(props: any) {
 
     const meal = {
       mealName: name,
-      caloriesOn100g: calories,
+      caloriesOn100g: Number(calories),
       mealWeight: weight,
       dateCreated: transformedDate,
-      category: props.route.params.category,
+      category: category,
     };
-
     try {
       await HttpApi.put("meal", meal);
       dispatch(getHomeMeals(selectedDate));
@@ -84,7 +84,7 @@ export default function AddFormScreen(props: any) {
           placeholder={t("addScreen.enterCalories")}
           keyboardType={"numeric"}
           value={calories}
-          onChangeText={(value: number) => setCalories(value)}
+          onChangeText={(value: string) => setCalories(value)}
         />
         <Input
           label={t("addScreen.weight")}
@@ -102,10 +102,10 @@ export default function AddFormScreen(props: any) {
           />
         </View>
         <View style={{ margin: 5 }}>
-          <Button 
-          title={t("common.addProduct")}
-          onPress={() => save()} 
-          disabled={!name || !calories || !weight}
+          <Button
+            title={t("common.addProduct")}
+            onPress={() => save()}
+            disabled={!name || !calories || !weight}
           />
         </View>
       </View>

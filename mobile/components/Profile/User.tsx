@@ -44,14 +44,14 @@ export default function User() {
       <DefaultView style={styles.inData}>
         <Text
           style={{
-            fontSize: 15,
+            fontSize: 16,
             paddingRight: 5,
             color: Colors.general.accentLight,
           }}
         >
           {t("profile.age")}
         </Text>
-        <Text style={{ color: Colors.general.accentLight }}>
+        <Text style={{ fontSize: 16, color: Colors.general.accentLight }}>
           {profile?.age}
         </Text>
       </DefaultView>
@@ -59,42 +59,42 @@ export default function User() {
         <DefaultView style={styles.inData}>
           <Text
             style={{
-              fontSize: 15,
+              fontSize: 16,
               paddingRight: 5,
               color: Colors.general.accentLight,
             }}
           >
             {t("profile.height")}
           </Text>
-          <Text style={{ color: Colors.general.accentLight }}>
+          <Text style={{ fontSize: 16, color: Colors.general.accentLight }}>
             {profile?.height}
           </Text>
         </DefaultView>
         <DefaultView style={styles.inData}>
           <Text
             style={{
-              fontSize: 15,
+              fontSize: 16,
               paddingRight: 5,
               color: Colors.general.accentLight,
             }}
           >
             {t("profile.weight")}
           </Text>
-          <Text style={{ color: Colors.general.accentLight }}>
+          <Text style={{ fontSize: 16, color: Colors.general.accentLight }}>
             {profile?.weight}
           </Text>
         </DefaultView>
         <DefaultView style={styles.inData}>
           <Text
             style={{
-              fontSize: 15,
+              fontSize: 16,
               paddingRight: 5,
               color: Colors.general.accentLight,
             }}
           >
             {t("profile.gender")}
           </Text>
-          <Text style={{ color: Colors.general.accentLight }}>
+          <Text style={{ fontSize: 16, color: Colors.general.accentLight }}>
             {profile?.gender === "male"
               ? t("profile.male")
               : t("profile.female")}

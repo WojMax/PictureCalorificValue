@@ -9,7 +9,7 @@ import t from "../services/translations";
 import { useEffect, useState } from "react";
 import Colors from "../constants/Colors";
 import { useAppDispatch, useAppSelector } from "../hooks/useRedux";
-import { getHomeMeals } from "../redux/homeSlice";
+import { getHomeMeals, setCategory } from "../redux/homeSlice";
 import { getCaloricDemand } from "../redux/profileSlice";
 import MealsHomeList from "../components/MealsHomeList/MealsHomeList";
 import { LinearProgress } from "@rneui/themed";
@@ -134,11 +134,12 @@ export default function HomeScreen(props: any) {
                 </Text>
               </DefaultView>
               <TouchableOpacity
-                onPress={() =>
+                onPress={() => {
                   props.navigation.navigate("Add", {
                     category: section.category,
-                  })
-                }
+                  });
+                  dispatch(setCategory(section.category));
+                }}
                 style={[
                   styles.container9,
                   { borderBottomColor: Colors[colorScheme].surface },

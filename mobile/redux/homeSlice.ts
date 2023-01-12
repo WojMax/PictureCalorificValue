@@ -28,6 +28,7 @@ export interface HomeState {
   caloriesCount: number;
   caloricDemand: number;
   date: string;
+  category: string;
 }
 
 const initialState: HomeState = {
@@ -36,6 +37,7 @@ const initialState: HomeState = {
   caloriesCount: 0,
   caloricDemand: 0,
   date: new Date().toString(),
+  category: "",
 };
 
 export const getHomeMeals = createAsyncThunk(
@@ -72,6 +74,10 @@ export const homeMealsSlice = createSlice({
     setDate: (state, action: PayloadAction<string>) => {
       state.date = action.payload;
     },
+    setCategory: (state, action: PayloadAction<any>) => {
+      console.log(action.payload);
+      state.category = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getHomeMeals.fulfilled, (state, { payload }) => {
@@ -91,6 +97,6 @@ export const homeMealsSlice = createSlice({
   },
 });
 
-export const { setHomeMeal, setDate } = homeMealsSlice.actions;
+export const { setHomeMeal, setDate, setCategory } = homeMealsSlice.actions;
 
 export default homeMealsSlice.reducer;
