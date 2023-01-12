@@ -102,7 +102,11 @@ export default function AddFormScreen(props: any) {
           />
         </View>
         <View style={{ margin: 5 }}>
-          <Button title={t("common.addProduct")} onPress={() => save()} />
+          <Button 
+          title={t("common.addProduct")}
+          onPress={() => save()} 
+          disabled={!name || !calories || !weight}
+          />
         </View>
       </View>
     </View>
