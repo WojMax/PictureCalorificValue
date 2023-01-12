@@ -8,6 +8,9 @@ export type Profile = {
   height: number;
   weight: number;
   activityID: number;
+  goal_weight: number;
+  goal_weight_change: number;
+  goal: string;
 };
 
 export interface ProfileState {

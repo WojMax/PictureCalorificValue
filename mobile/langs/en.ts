@@ -91,6 +91,7 @@ export const en = {
     objective1: "Maintain weight",
     objective2: "Lose weight",
     objective3: "Gain weight",
+    objective_calories:"Calories consumed per day:",
     user: "User",
     age: "Age:",
     weight: "Weight:",
