@@ -29,15 +29,16 @@ export default function AddFormScreen(props: any) {
     const photo = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [1, 1],
+      aspect: [3, 2],
       base64: true,
     });
     if (!photo.canceled) {
       setScreen("loading");
       try {
+        setPhoto(photo.uri ? photo.uri : "");
         const response = await axios.post(
-          "https://wojmax77-2djyoljuvhzo5vbt.socketxp.com/predict",
-          photo
+          "https://wojmax777-0hr199lpmuc56gt4.socketxp.com/predict",
+          photo.assets[0]
         );
 
         if (!response.data || response.data.category === null) {
@@ -45,8 +46,6 @@ export default function AddFormScreen(props: any) {
         } else {
           setCalories(response.data.calories);
           setName(response.data.category);
-          // @ts-ignore
-          setPhoto(photo.uri);
           setScreen("preview");
         }
       } catch (error) {
@@ -61,6 +60,7 @@ export default function AddFormScreen(props: any) {
   const addMeal = () => {
     props.navigation.navigate("AddForm", {
       url: "HomeStack",
+      name: name,
       calories: calories,
     });
     setScreen("main");
@@ -116,7 +116,11 @@ export default function AddFormScreen(props: any) {
                 category: props.route.params.category,
               })
             }
-            CameraOnPress={() => props.navigation.navigate("Camera")}
+            CameraOnPress={() =>
+              props.navigation.navigate("Camera", {
+                category: props.route.params.category,
+              })
+            }
             LoadPhotoOnPress={() => pickImage()}
             navigation={props.navigation}
           />

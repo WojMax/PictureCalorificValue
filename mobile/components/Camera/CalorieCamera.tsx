@@ -16,17 +16,7 @@ import ActivityIndicator from "../../elements/ActivityIndicator";
 import axios from "axios";
 import PreviewError from "./PhotoPreviewError";
 
-type Photo = {
-  uri: string;
-  height: number;
-  width: number;
-};
-
-type Props = {
-  navigation: any;
-};
-
-export default function CalorieCamera(props: Props) {
+export default function CalorieCamera(props: any) {
   //permissions
   const [hasPermission, setHasPermission] = useState(false);
   const [camera, setCamera] = useState();
@@ -91,18 +81,17 @@ export default function CalorieCamera(props: Props) {
     // @ts-ignore
     const photo = await camera.takePictureAsync({ base64: true });
     setScreen("loading");
+    setPhoto(photo.uri);
     try {
       const response = await axios.post(
-        "https://wojmax77-2djyoljuvhzo5vbt.socketxp.com/predict",
+        "https://wojmax777-0hr199lpmuc56gt4.socketxp.com/predict",
         photo
       );
-
       if (response.data.category === null) {
         setScreen("error");
       } else {
         setCalories(response.data.calories);
         setName(response.data.category);
-        setPhoto(photo.uri);
         setScreen("preview");
       }
     } catch (error) {
