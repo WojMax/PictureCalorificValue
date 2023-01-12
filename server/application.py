@@ -1,41 +1,36 @@
+import ast
+import base64
+#import tensorflow as tf
+#from keras.models import *
+#from keras.layers import *
+#from keras.callbacks import *
+#from keras.optimizers import *
+#from keras.applications import VGG16
+#from keras.applications.vgg19 import preprocess_input
+#import numpy as np
+import io
 import json
-import boto3, botocore
+import os
+import random
 
+from datetime import date
+
+import boto3
+import botocore
 from flask import Flask, request, jsonify, make_response
 from flask_cors import cross_origin
-from Functions.json_functions import sqlfetch_to_json_meals, sqlfetch_to_json_favourites, sqlfetch_to_json_most_popular
+
 from Functions.db_functions import connect_to_db
+from Functions.json_functions import sqlfetch_to_json_meals, sqlfetch_to_json_favourites, sqlfetch_to_json_most_popular, \
+    sqlfetch_to_json_user_weight, sqlfetch_to_json_profile
+#from Functions.ml_functions import give_prediction, load_model_instance
 from Functions.sql_functions import insert_favourites, delete_favourites, update_favourites, insert_meals, update_meals, \
-    delete_meals, insert_user_data, update_user_data
+    delete_meals, insert_user_data, update_user_data, insert_weight_history, update_goals
 from Functions.user_functions import calculate_caloric_demand
 from Middleware.middleware_tokens import Middleware
 
 application = Flask(__name__, instance_relative_config=True)
 application.wsgi_app = Middleware(application.wsgi_app)
-
-
-#############################
-#  CONNECT TO S3 ML MODEL   #
-#############################
-
-# application.config['S3_BUCKET'] = "S3_BUCKET_NAME"
-# application.config['S3_KEY'] = "AWS_ACCESS_KEY"
-# application.config['S3_SECRET'] = "AWS_ACCESS_SECRET"
-# application.config['S3_LOCATION'] = 'http://{}.s3.amazonaws.com/'.format(S3_BUCKET)
-
-#############################
-#    CONNECT TO COGNITO     #
-#############################
-
-
-# application.config['AWS_DEFAULT_REGION'] = 'eu-central-1'
-# application.config['AWS_COGNITO_DOMAIN'] = 'https://calorie-app-server.auth.eu-central-1.amazoncognito.com'
-# application.config['AWS_COGNITO_USER_POOL_ID'] = 'eu-central-1_RCh3lDhgJ'
-# application.config['AWS_COGNITO_USER_POOL_CLIENT_ID'] = '32q1vjtjc18nftf6r87r6ijj6p'
-# application.config['AWS_COGNITO_USER_POOL_CLIENT_SECRET'] = ''
-# application.config['AWS_COGNITO_REDIRECT_URL'] = 'http://localhost:5000/aws_cognito_redirect'
-
-# aws_auth = AWSCognitoAuthentication(application)
 
 
 @application.route('/')
@@ -265,9 +260,9 @@ def popular(lang):
             return jsonify(sqlfetch_to_json_most_popular(values=most_popular_meals))
 
 
-@application.route('/profile', methods=['GET', 'PUT', 'POST'])
+@application.route('/caloricDemand', methods=['GET'])
 @cross_origin()
-def profile():
+def caloric_demand():
     if request.method == 'GET':
         connection = connect_to_db()
         cursor = connection.cursor()
@@ -304,6 +299,42 @@ def profile():
             else:
                 return make_response(jsonify({'code': 'FAILURE', 'error': 'incorrect user values'}), 500)
 
+
+@application.route('/profile', methods=['GET', 'PUT', 'POST'])
+@cross_origin()
+def profile():
+    if request.method == 'GET':
+        connection = connect_to_db()
+        cursor = connection.cursor()
+        try:
+            user = Middleware.get_user_ID(application.wsgi_app)
+            cursor.execute(
+                f'''SELECT 
+                        U.gender, U.age, U.height, U.weight, E.name, U.goal_weight, U.goal_weight_change
+                    FROM 
+                        public.users U 
+                    INNER JOIN 
+                        public.user_exercise_data E ON U.weekly_exercise = E.id
+                    WHERE
+                        user_id = \'{user}\';''')
+        except Exception as error:
+            print(error)
+            connection.rollback()
+
+        if cursor.rowcount == -1:
+            cursor.close()
+            connection.close()
+            return make_response(jsonify({'code': 'FAILURE'}), 500)
+        elif cursor.rowcount == 0:
+            cursor.close()
+            connection.close()
+            return jsonify({})
+        else:
+            profile_data = cursor.fetchall()
+            cursor.close()
+            connection.close()
+            return jsonify(sqlfetch_to_json_profile(values=profile_data))
+
     elif request.method == 'PUT':
         connection = connect_to_db()
         cursor = connection.cursor()
@@ -326,7 +357,22 @@ def profile():
         connection = connect_to_db()
         cursor = connection.cursor()
         try:
-            cursor.execute(update_user_data(request.data, Middleware.get_user_ID(application.wsgi_app)))
+            user = Middleware.get_user_ID(application.wsgi_app)
+            current_date = date.today()
+
+            cursor.execute(
+                f'''SELECT 
+                        *
+                    FROM 
+                        public.user_weight_history
+                    WHERE 
+                        user_id = '{user}' AND weight_date = '{current_date}';''')
+
+            already_inserted = cursor.rowcount
+            cursor.close()
+
+            cursor = connection.cursor()
+            cursor.execute(update_user_data(request.data, user, already_inserted, current_date))
             connection.commit()
             print("successful sql statement")
             cursor.close()
@@ -337,6 +383,96 @@ def profile():
         except Exception as error:
             print(error)
             print("error occurred, rollback")
+            connection.rollback()
+            cursor.close()
+            connection.close()
+            return make_response(jsonify({'code': 'FAILURE'}), 500)
+
+
+@application.route('/weight', methods=['GET', 'PUT'])
+@cross_origin()
+def get_weight():
+    if request.method == 'GET':
+        connection = connect_to_db()
+        cursor = connection.cursor()
+        try:
+            user = Middleware.get_user_ID(application.wsgi_app)
+            cursor.execute(
+                f'''SELECT 
+                        weight, weight_date
+                    FROM 
+                        public.user_weight_history
+                    WHERE 
+                        user_id = '{user}';''')
+        except Exception as error:
+            print(error)
+            connection.rollback()
+
+        if cursor.rowcount == -1:
+            cursor.close()
+            connection.close()
+            return make_response(jsonify({'code': 'FAILURE'}), 500)
+        elif cursor.rowcount == 0:
+            cursor.close()
+            connection.close()
+            return jsonify({})
+        else:
+            user_weight_data = cursor.fetchall()
+            cursor.close()
+            connection.close()
+            return jsonify(sqlfetch_to_json_user_weight(values=user_weight_data))
+
+    elif request.method == 'PUT':
+        connection = connect_to_db()
+        cursor = connection.cursor()
+        try:
+            user = Middleware.get_user_ID(application.wsgi_app)
+            put_data = ast.literal_eval(request.data.decode("UTF-8"))
+            date = put_data["date"]
+
+            cursor.execute(
+                f'''SELECT 
+                        *
+                    FROM 
+                        public.user_weight_history
+                    WHERE 
+                        user_id = '{user}' AND weight_date = '{date}';''')
+
+            already_inserted = cursor.rowcount
+            cursor.close()
+
+            cursor = connection.cursor()
+            cursor.execute(insert_weight_history(request.data, user, already_inserted))
+            connection.commit()
+            print("successful sql statement")
+            cursor.close()
+            connection.close()
+            return make_response(jsonify({'code': 'SUCCESS'}), 200)
+        except Exception as error:
+            print(error)
+            print("error occurred, rollback")
+            connection.rollback()
+            cursor.close()
+            connection.close()
+            return make_response(jsonify({'code': 'FAILURE'}), 500)
+
+
+@application.route('/goal', methods=['POST'])
+@cross_origin()
+def goal():
+    if request.method == 'POST':
+        connection = connect_to_db()
+        cursor = connection.cursor()
+        try:
+            cursor.execute(update_goals(request.data, Middleware.get_user_ID(application.wsgi_app)))
+            connection.commit()
+            print("successfull sql statement")
+            cursor.close()
+            connection.close()
+            return make_response(jsonify({'code': 'SUCCESS'}), 200)
+        except Exception as error:
+            print("error occured, rollback")
+            print(error)
             connection.rollback()
             cursor.close()
             connection.close()

@@ -62,3 +62,26 @@ def sqlfetch_to_json_most_popular(values):
     json_to_send = json_to_send[:-1]
     json_to_send += ']'
     return json.loads(json_to_send)
+
+
+def sqlfetch_to_json_user_weight(values):
+    json_to_send = '['
+    for entry in values:
+        json_entry = f'{{"weight":{str(entry[0])}, "weight_date":"{str(entry[1])}"}},'
+        json_to_send += json_entry
+    json_to_send = json_to_send[:-1]
+    json_to_send += ']'
+    return json.loads(json_to_send)
+
+
+def sqlfetch_to_json_profile(values):
+    if values[0][3] > values[0][5]:
+        goal = 'lose weight'
+    elif values[0][3] < values[0][5]:
+        goal = 'gain weight'
+    else:
+        goal = 'maintain weight'
+
+    json_to_send = f'{{"gender":"{str(values[0][0])}", "age":{str(values[0][1])}, "height":{str(values[0][2])}, "weight":{str(values[0][3])}, "exercise":"{str(values[0][4])}", "goal_weight": {values[0][5]}, "goal_weight_change": {values[0][6]}, "goal": {goal}}}'
+
+    return json.loads(json_to_send)
