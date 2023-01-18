@@ -15,6 +15,7 @@ import t from "../../services/translations";
 import ActivityIndicator from "../../elements/ActivityIndicator";
 import axios from "axios";
 import PreviewError from "./PhotoPreviewError";
+import { View as DefaultView } from "react-native";
 
 export default function CalorieCamera(props: any) {
   //permissions
@@ -41,41 +42,6 @@ export default function CalorieCamera(props: any) {
       setHasPermission(status == "granted");
     })();
   }, []);
-
-  const setCameraReady = async () => {
-    if (!isRatioSet) {
-      await prepareRatio();
-    }
-  };
-
-  const prepareRatio = async () => {
-    if (Platform.OS === "android") {
-      // @ts-ignore
-      const ratios = await camera.getSupportedRatiosAsync();
-
-      let distances = [];
-      let realRatios = [];
-      let minDistance = null;
-
-      for (const ratio of ratios) {
-        const parts = ratio.split(":");
-        const realRatio = parseInt(parts[0]) / parseInt(parts[1]);
-        realRatios[ratio] = realRatio;
-
-        const distance = screenRatio - realRatio;
-        distances[ratio] = realRatio;
-        if (minDistance == null) {
-          minDistance = ratio;
-        } else {
-          if (distance >= 0 && distance < distances[minDistance]) {
-            minDistance = ratio;
-          }
-        }
-      }
-      setRatio(minDistance);
-      setIsRatioSet(true);
-    }
-  };
 
   const takePhoto = async () => {
     // @ts-ignore
@@ -148,14 +114,16 @@ export default function CalorieCamera(props: any) {
     return (
       <SafeAreaView style={styles.container}>
         <Camera
-          onCameraReady={setCameraReady}
-          ratio={ratio}
+          ratio={"1:1"}
           type={type}
           flashMode={flash}
           ref={(ref: any) => {
             setCamera(ref);
           }}
-          style={styles.container}
+          style={{
+            flex: 1,
+            aspectRatio: 1,
+          }}
         >
           <View style={styles.container}>
             <View style={styles.topContainer} />

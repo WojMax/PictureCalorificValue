@@ -15,7 +15,6 @@ type Props = {
 };
 
 export default function PreviewError(props: Props) {
-  console.log(props);
   return (
     <ImageBackground source={{ uri: props.uri }} style={styles.container}>
       <View style={styles.container}>

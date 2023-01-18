@@ -3,8 +3,8 @@ import Colors from "../../constants/Colors";
 
 export const styles = StyleSheet.create({
   container: {
-    ...StyleSheet.absoluteFillObject,
     backgroundColor: "transparent",
+    flex: 1,
   },
   topContainer: {
     flex: 5,
@@ -12,6 +12,7 @@ export const styles = StyleSheet.create({
   },
   bottomContainer: {
     flex: 2,
+    marginHorizontal: 100,
     flexDirection: "row",
     justifyContent: "space-evenly",
     backgroundColor: "transparent",
