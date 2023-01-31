@@ -17,13 +17,18 @@ is_food_ml_model = is_food.get_model(is_food_model_path)
 category_ml_model = food_category.get_model(category_model_path)
 
 
+@app.route('/', methods=['GET'])
+@cross_origin()
+def status():
+	return 'active'
+	
+
 @app.route('/predict', methods=['POST'])
 @cross_origin()
 def parse_request():
     if request.method == 'POST':
         data = request.data
         pic_json = json.loads(data.decode('utf-8'))
-        # b64_pic = pic_json['assets'][0]['base64']
         b64_pic = pic_json['base64']
         encoded_pic_data = base64.b64decode(b64_pic)
         filename = 'Predict/Data/test-image.jpg'
@@ -43,4 +48,4 @@ def parse_request():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
