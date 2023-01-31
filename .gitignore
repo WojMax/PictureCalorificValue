@@ -10,6 +10,7 @@ npm-debug.*
 *.orig.*
 web-build/
 /server/.idea/workspace.xml
-
+/prediction_server/AWS/secrets.json
+/server/AWS/secrets.json
 # macOS
 .DS_Store

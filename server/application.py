@@ -1,47 +1,46 @@
 import ast
-import base64
-#import tensorflow as tf
-#from keras.models import *
-#from keras.layers import *
-#from keras.callbacks import *
-#from keras.optimizers import *
-#from keras.applications import VGG16
-#from keras.applications.vgg19 import preprocess_input
-#import numpy as np
-import io
 import json
-import os
-import random
 
+from flask_awscognito import AWSCognitoAuthentication
 from datetime import date
 
-import boto3
-import botocore
 from flask import Flask, request, jsonify, make_response
 from flask_cors import cross_origin
 
 from Functions.db_functions import connect_to_db
 from Functions.json_functions import sqlfetch_to_json_meals, sqlfetch_to_json_favourites, sqlfetch_to_json_most_popular, \
     sqlfetch_to_json_user_weight, sqlfetch_to_json_profile
-#from Functions.ml_functions import give_prediction, load_model_instance
 from Functions.sql_functions import insert_favourites, delete_favourites, update_favourites, insert_meals, update_meals, \
     delete_meals, insert_user_data, update_user_data, insert_weight_history, update_goals
 from Functions.user_functions import calculate_caloric_demand
 from Middleware.middleware_tokens import Middleware
 
+
 application = Flask(__name__, instance_relative_config=True)
 application.wsgi_app = Middleware(application.wsgi_app)
 
+with open('AWS/secrets.json', mode='r') as f:
+    keys = json.loads(f.read())
+
+    application.config['AWS_DEFAULT_REGION'] = keys['AWS_DEFAULT_REGION']
+    application.config['AWS_COGNITO_USER_POOL_ID'] = keys['AWS_COGNITO_USER_POOL_ID']
+    application.config['AWS_COGNITO_DOMAIN'] = keys['AWS_COGNITO_DOMAIN']
+    application.config['AWS_COGNITO_USER_POOL_CLIENT_ID'] = keys['AWS_COGNITO_USER_POOL_CLIENT_ID']
+    application.config['AWS_COGNITO_USER_POOL_CLIENT_SECRET'] = keys['AWS_COGNITO_USER_POOL_CLIENT_SECRET']
+    application.config['AWS_COGNITO_REDIRECT_URL'] = keys['AWS_COGNITO_REDIRECT_URL']
+
+
+aws_auth = AWSCognitoAuthentication(application)
+
 
 @application.route('/')
-# @aws_auth.authentication_required
+@aws_auth.authentication_required
 def index():
-    # claims = aws_auth.claims  # also available through g.cognito_claims
-    # return jsonify({'claims': claims})
-    return 'welcome'
+    return 'active'
 
 
 @application.route('/meal/<date>', methods=['GET'])
+@aws_auth.authentication_required
 @cross_origin()
 def get_meal(date):
     if request.method == 'GET':
@@ -76,6 +75,7 @@ def get_meal(date):
 
 
 @application.route('/meal', methods=['PUT', 'POST', 'DELETE'])
+@aws_auth.authentication_required
 @cross_origin()
 def meal():
     if request.method == 'PUT':
@@ -132,6 +132,7 @@ def meal():
 
 
 @application.route('/favourites', methods=['GET', 'PUT', 'DELETE', 'POST'])
+@aws_auth.authentication_required
 @cross_origin()
 def favourites():
     if request.method == 'GET':
@@ -225,6 +226,7 @@ def favourites():
 
 
 @application.route('/popular/<lang>', methods=['GET'])
+@aws_auth.authentication_required
 @cross_origin()
 def popular(lang):
     if request.method == 'GET':
@@ -261,6 +263,7 @@ def popular(lang):
 
 
 @application.route('/caloricDemand', methods=['GET'])
+@aws_auth.authentication_required
 @cross_origin()
 def caloric_demand():
     if request.method == 'GET':
@@ -301,6 +304,7 @@ def caloric_demand():
 
 
 @application.route('/profile/<lang>', methods=['GET'])
+@aws_auth.authentication_required
 @cross_origin()
 def profile_get(lang):
     if request.method == 'GET':
@@ -337,6 +341,7 @@ def profile_get(lang):
 
 
 @application.route('/profile', methods=['PUT', 'POST'])
+@aws_auth.authentication_required
 @cross_origin()
 def profile():
     if request.method == 'PUT':
@@ -394,6 +399,7 @@ def profile():
 
 
 @application.route('/weight', methods=['GET', 'PUT'])
+@aws_auth.authentication_required
 @cross_origin()
 def get_weight():
     if request.method == 'GET':
@@ -462,6 +468,7 @@ def get_weight():
 
 
 @application.route('/goal', methods=['POST'])
+@aws_auth.authentication_required
 @cross_origin()
 def goal():
     if request.method == 'POST':

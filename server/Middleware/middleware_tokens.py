@@ -1,4 +1,3 @@
-from werkzeug.wrappers import Request, Response
 from flask import request
 import jwt
 
@@ -14,6 +13,5 @@ class Middleware:
         token = request.headers['Authorization']
         token = str.replace(token, 'Bearer ', '')
         decoded_token = jwt.decode(token, algorithms=["RS256"], options={"verify_signature": False})
-        # request.environ['cognito_user'] = decoded_token['cognito:username']
 
         return decoded_token['cognito:username']
