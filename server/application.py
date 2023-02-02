@@ -34,7 +34,6 @@ aws_auth = AWSCognitoAuthentication(application)
 
 
 @application.route('/')
-@aws_auth.authentication_required
 def index():
     return 'active'
 
@@ -131,7 +130,7 @@ def meal():
             return make_response(jsonify({'code': 'FAILURE'}), 500)
 
 
-@application.route('/favourites', methods=['GET', 'PUT', 'DELETE', 'POST'])
+@application.route('/favourites', methods=['GET', 'PUT', 'PATCH', 'POST'])
 @aws_auth.authentication_required
 @cross_origin()
 def favourites():
@@ -184,7 +183,7 @@ def favourites():
             connection.close()
             return make_response(jsonify({'code': 'FAILURE'}), 500)
 
-    elif request.method == 'DELETE':
+    elif request.method == 'PATCH':
         # delete favourite meal
         connection = connect_to_db()
         cursor = connection.cursor()

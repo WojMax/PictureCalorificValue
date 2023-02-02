@@ -75,6 +75,9 @@ def sqlfetch_to_json_user_weight(values):
 
 
 def sqlfetch_to_json_profile(values, language):
+    gender = str(values[0][0])
+    exercise = str(values[0][4])
+
     if values[0][3] == values[0][5]:
         if language == 'pl':
             goal = 'utrzymać wagę'
@@ -92,22 +95,22 @@ def sqlfetch_to_json_profile(values, language):
             goal = 'gain weight'
 
     if language == 'pl':
-        if str(values[0][0]) == 'male':
-            values[0][0] = 'mężczyzna'
+        if gender == 'male':
+            gender = 'mężczyzna'
         else:
-            values[0][0] = 'kobieta'
+            gender = 'kobieta'
 
-        if str(values[0][4]) == 'Sedentary':
-            values[0][4] = 'Siedzący tryb życia'
-        elif str(values[0][4]) == 'Lightly active':
-            values[0][4] = 'Lekko aktywny'
-        elif str(values[0][4]) == 'Moderately active':
-            values[0][4] = 'Średnio aktywny'
-        elif str(values[0][4]) == 'Active':
-            values[0][4] = 'Aktywny'
-        elif str(values[0][4]) == 'Very active':
-            values[0][4] = 'Bardzo aktywny'
+        if exercise == 'Sedentary':
+            exercise = 'Siedzący tryb życia'
+        elif exercise == 'Lightly active':
+            exercise = 'Lekko aktywny'
+        elif exercise == 'Moderately active':
+            exercise = 'Średnio aktywny'
+        elif exercise == 'Active':
+            exercise = 'Aktywny'
+        elif exercise == 'Very active':
+            exercise = 'Bardzo aktywny'
 
-    json_to_send = f'{{"gender":"{str(values[0][0])}", "age":{str(values[0][1])}, "height":{str(values[0][2])}, "weight":{str(values[0][3])}, "exercise":"{str(values[0][4])}", "goal_weight":{str(values[0][5])}, "goal_weight_change":{str(values[0][6])}, "goal":"{goal}"}}'
+    json_to_send = f'{{"gender":"{gender}", "age":{str(values[0][1])}, "height":{str(values[0][2])}, "weight":{str(values[0][3])}, "exercise":"{exercise}", "goal_weight":{str(values[0][5])}, "goal_weight_change":{str(values[0][6])}, "goal":"{goal}"}}'
 
     return json.loads(json_to_send)
