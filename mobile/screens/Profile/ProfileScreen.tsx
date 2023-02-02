@@ -1,17 +1,19 @@
 import { ScrollView, StyleSheet, TouchableOpacity } from "react-native";
-import { View } from "../../components/Themed";
+import { Text,View } from "../../components/Themed";
 import Account from "../../components/Profile/Account";
 import Weight from "../../components/Profile/Weight";
 import User from "../../components/Profile/User";
 import Objective from "../../components/Profile/Objective";
 import { Dialog } from "@rneui/themed";
 import React, { useEffect, useState } from "react";
-import { useAppDispatch } from "../../hooks/useRedux";
+import { useAppDispatch, useAppSelector } from "../../hooks/useRedux";
 import {
   getCaloricDemand,
   getProfile,
   getWeightList,
 } from "../../redux/profileSlice";
+import { MaterialIcons } from "@expo/vector-icons";
+import { Slider } from "@rneui/base";
 import useColorScheme from "../../hooks/useColorScheme";
 import Colors from "../../constants/Colors";
 import { View as DefaultView } from "react-native";
@@ -22,14 +24,20 @@ import t from "../../services/translations";
 
 export default function ProfileScreen(props: any) {
   const colorScheme = useColorScheme();
-
+  const weightchange = useAppSelector((state) => state.profile.profile?.goal_weight_change)
   const [weightDialog, setWeightDialog] = useState(false);
   const [weight, setWeight] = useState(0);
+  const [goalDialog, setGoalDialog] = useState(false);
+  const [goalweight, setGoalWeight] = useState(0);
+  const [goalweightchange, setGoalWeightChange] = useState(weightchange);
 
   const dispatch = useAppDispatch();
 
   const toggleWeightDialog = () => {
     setWeightDialog(!weightDialog);
+  };
+  const toggleGoalDialog = () => {
+    setGoalDialog(!goalDialog);
   };
 
   const saveWeight = async () => {
@@ -40,6 +48,18 @@ export default function ProfileScreen(props: any) {
       dispatch(getProfile());
       dispatch(getCaloricDemand());
       toggleWeightDialog();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const saveGoal = async () => {
+    try {
+      const data = { goal_weight: goalweight, goal_weight_change: goalweightchange };
+      await HttpApi.post("goal", data);
+      dispatch(getWeightList());
+      dispatch(getProfile());
+      dispatch(getCaloricDemand());
+      toggleGoalDialog();
     } catch (error) {
       console.error(error);
     }
@@ -66,9 +86,9 @@ export default function ProfileScreen(props: any) {
             <User />
           </TouchableOpacity>
         </View>
-        <View style={styles.containerFullWidth}>
+        <TouchableOpacity style={styles.containerFullWidth} onPress={toggleGoalDialog}>
           <Objective />
-        </View>
+        </TouchableOpacity>
       </ScrollView>
 
       <Dialog
@@ -105,6 +125,68 @@ export default function ProfileScreen(props: any) {
           />
         </Dialog.Actions>
       </Dialog>
+
+      <Dialog
+        isVisible={goalDialog}
+        onBackdropPress={toggleGoalDialog}
+        overlayStyle={{ backgroundColor: Colors[colorScheme].background }}
+      >
+        <Dialog.Title
+          title={t("addProfile.editGoal")}
+          titleStyle={{
+            color: Colors[colorScheme].text,
+          }}
+        />
+        <DefaultView style={{ height: 180, paddingTop: 10 }}>
+          <Input
+            label={t("addProfile.goalWeight")}
+            placeholder={t("addProfile.weight_kg")}
+            keyboardType={"numeric"}
+            onChangeText={(value: number) => setGoalWeight(value)}
+          />
+          <View >
+            <Text style={styles.activity}>{t("addProfile.goalWeightChange")}</Text>
+            <Slider
+              value={goalweightchange}
+              onValueChange={setGoalWeightChange}
+              maximumValue={1}
+              minimumValue={0.1}
+              step={0.1}
+              style={styles.slider}
+              allowTouchTrack
+              trackStyle={{ height: 5, backgroundColor: Colors.general.accent }}
+              thumbStyle={{ height: 20, width: 20, backgroundColor: "transparent" }}
+              thumbProps={{
+                children: (
+                  <MaterialIcons name="stop-circle" size={20} color="white" />
+                ),
+              }}
+            />
+            <View style={styles.activityVal}>
+              <Text style={{ color: Colors[colorScheme].textDark }}>
+                {t("addProfile.goalWeightChange1")}
+              </Text>
+              <Text style={{ color: Colors[colorScheme].textDark }}>
+                {t("addProfile.goalWeightChange2")}
+              </Text>
+            </View>
+          </View>
+        </DefaultView>
+        <Dialog.Actions>
+          <DefaultView style={{ paddingLeft: 5}}>
+            <Button
+              title={t("profile.continue")}
+              disabled={!goalweight}
+              onPress={() => saveGoal()}
+            />
+          </DefaultView>
+          <Button
+            title={t("profile.cancel")}
+            onPress={() => toggleGoalDialog()}
+            color={Colors[colorScheme].background}
+          />
+        </Dialog.Actions>
+      </Dialog>
     </View>
   );
 }
@@ -127,5 +209,21 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     height: 1,
     width: "80%",
+  },
+  activity: {
+    color: Colors.general.accentLight,
+    fontSize: 16,
+    fontWeight: "700",
+    marginLeft: 10,
+  },
+  activityVal: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: 10,
+    marginBottom: 10
+  },
+  slider: {
+    color: Colors.general.accent,
+    marginHorizontal: 10,
   },
 });

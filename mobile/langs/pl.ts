@@ -74,6 +74,7 @@ export const pl = {
     gender: "Płeć",
     male: "Mężczyzna",
     objective: "Wprowadż swój cel",
+    editGoal: "Edytuj swój cel",
     goalWeight: "Ile chcesz ważyć?",
     goalWeightChange:"Tygodniowa zmiana wagi",
     goalWeightChange1: "0,1 kg",
