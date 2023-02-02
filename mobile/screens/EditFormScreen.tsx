@@ -60,7 +60,7 @@ export default function EditFormScreen(props: any) {
     };
     try {
       //console.log(meal)
-      const resp = await HttpApi.delete("meal", { data: meal });
+      const resp = await HttpApi.patch("meal", { data: meal });
       dispatch(getHomeMeals(selectedDate));
       props.navigation.navigate("Home", {});
     } catch (error) {

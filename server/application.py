@@ -73,7 +73,7 @@ def get_meal(date):
             return jsonify(sqlfetch_to_json_meals(values=meals))
 
 
-@application.route('/meal', methods=['PUT', 'POST', 'DELETE'])
+@application.route('/meal', methods=['PUT', 'POST', 'PATCH'])
 @aws_auth.authentication_required
 @cross_origin()
 def meal():
@@ -111,7 +111,7 @@ def meal():
             cursor.close()
             connection.close()
             return make_response(jsonify({'code': 'FAILURE'}), 500)
-    if request.method == 'DELETE':
+    if request.method == 'PATCH':
         connection = connect_to_db()
         cursor = connection.cursor()
         try:

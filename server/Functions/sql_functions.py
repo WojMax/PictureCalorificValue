@@ -34,7 +34,7 @@ def update_meals(post_data, userID):
 
 
 def delete_meals(delete_data):
-    delete_data = ast.literal_eval(delete_data.decode("UTF-8"))
+    delete_data = ast.literal_eval(delete_data.decode("UTF-8"))["data"]
 
     mealId = delete_data["mealID"]
 
@@ -58,7 +58,7 @@ def insert_favourites(put_data, userID):
 
 
 def delete_favourites(delete_data):
-    delete_data = ast.literal_eval(delete_data.decode("UTF-8"))
+    delete_data = ast.literal_eval(delete_data.decode("UTF-8"))["data"]
 
     mealId = delete_data["mealID"]
 

@@ -43,7 +43,7 @@ export default function EditFormScreen(props: any) {
     };
 
     try {
-      const resp = await HttpApi.delete("favourites", { data: meal });
+      const resp = await HttpApi.patch("favourites", { data: meal });
       console.log(resp);
       props.navigation.navigate("Favorites", {});
     } catch (error) {
