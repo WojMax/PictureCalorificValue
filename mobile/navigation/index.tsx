@@ -31,6 +31,7 @@ import t from "../services/translations";
 import EditFormScreen from "../screens/EditFormScreen";
 import EditFavScreen from "../screens/EditFavScreen";
 import AddProfileScreen from "../screens/Profile/AddProfileScreen";
+import AddObjeCtiveScreen from "../screens/Profile/AddObjectiveScreen";
 import EditUserScreen from "../screens/Profile/EditUserScreen";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -55,6 +56,11 @@ export default function Navigation({
         <Stack.Screen
           name="AddProfile"
           component={AddProfileScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="AddObjective"
+          component={AddObjeCtiveScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen

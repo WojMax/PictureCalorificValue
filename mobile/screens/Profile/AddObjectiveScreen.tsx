@@ -17,18 +17,9 @@ export default function AddProfileScreen(props: any) {
   const colorScheme = useColorScheme();
   const dispatch = useAppDispatch();
 
-  const [age, setAge] = useState(0);
-  const [weight, setWeight] = useState(0);
-  const [height, setHeight] = useState(0);
-  const [activityID, setActivityID] = useState(1);
-
-  //dropdown
-  const [open, setOpen] = useState(false);
-  const [gender, setGender] = useState(null);
-  const [items, setItems] = useState([
-    { label: t("addProfile.male"), value: "male" },
-    { label: t("addProfile.female"), value: "female" },
-  ]);
+  const [goalweight, setGoalWeight] = useState(0);
+  const [goalweightchange, setGoalWeightChange] = useState(0.1);
+  
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
@@ -39,71 +30,44 @@ export default function AddProfileScreen(props: any) {
   }, []);
 
   const save = async () => {
-    
-      props.navigation.navigate("AddObjective", {
-        gender: gender,
-        age: age,
-        height: height,
-        weight: weight,
-        activityID: activityID,
-      });
-    
+    try {
+      const data = {
+        gender: props.route.params.gender,
+        age: props.route.params.age,
+        height: props.route.params.height,
+        weight: props.route.params.weight,
+        activityID: props.route.params.activityID,
+        goal_weight: goalweight,
+        goal_weight_change: goalweightchange,
+      };
+      await HttpApi.put("profile", data);
+      dispatch(getCaloricDemand());
+      props.navigation.navigate("Home", {});
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>
-        <Text style={styles.title}>{t("addProfile.welcome")}</Text>
-        <Text style={styles.description}>{t("addProfile.welcome_txt")}</Text>
+        <Text style={styles.title}>{t("addProfile.objective")}</Text>
       </View>
       <Input
-        label={t("addProfile.age")}
-        placeholder={t("addProfile.age")}
-        keyboardType={"numeric"}
-        onChangeText={(value: number) => setAge(value)}
-      />
-      <Input
-        label={t("addProfile.weight")}
+        label={t("addProfile.goalWeight")}
         placeholder={t("addProfile.weight_kg")}
         keyboardType={"numeric"}
-        onChangeText={(value: number) => setWeight(value)}
+        onChangeText={(value: number) => setGoalWeight(value)}
       />
-      <Input
-        label={t("addProfile.height")}
-        placeholder={t("addProfile.height_cm")}
-        keyboardType={"numeric"}
-        onChangeText={(value: number) => setHeight(value)}
-      />
-      <Text style={styles.activity}>{t("addProfile.gender")}</Text>
-      <DropDownPicker
-        style={{
-          backgroundColor: Colors[colorScheme].background,
-          marginBottom: 10,
-        }}
-        textStyle={{
-          color: Colors[colorScheme].text,
-          fontSize: 18,
-        }}
-        placeholderStyle={{ color: Colors[colorScheme].textDark }}
-        dropDownContainerStyle={{
-          backgroundColor: Colors[colorScheme].topSurface,
-        }}
-        selectedItemLabelStyle={{ color: Colors[colorScheme].accent }}
-        open={open}
-        value={gender}
-        items={items}
-        setOpen={setOpen}
-        setValue={setGender}
-        setItems={setItems}
-      />
+      
       <View style={{ zIndex: -1 }}>
-        <Text style={styles.activity}>{t("addProfile.activity")}</Text>
+        <Text style={styles.activity}>{t("addProfile.goalWeightChange")}</Text>
         <Slider
-          value={activityID}
-          onValueChange={setActivityID}
-          maximumValue={5}
-          minimumValue={1}
-          step={1}
+          value={goalweightchange}
+          onValueChange={setGoalWeightChange}
+          maximumValue={1}
+          minimumValue={0.1}
+          step={0.1}
           style={styles.slider}
           allowTouchTrack
           trackStyle={{ height: 5, backgroundColor: Colors.general.accent }}
@@ -116,10 +80,10 @@ export default function AddProfileScreen(props: any) {
         />
         <View style={styles.activityVal}>
           <Text style={{ color: Colors[colorScheme].textDark }}>
-            {t("addProfile.activity_sed")}
+            {t("addProfile.goalWeightChange1")}
           </Text>
           <Text style={{ color: Colors[colorScheme].textDark }}>
-            {t("addProfile.activity_act")}
+            {t("addProfile.goalWeightChange2")}
           </Text>
         </View>
       </View>
@@ -128,7 +92,7 @@ export default function AddProfileScreen(props: any) {
       <View style={styles.buttonContainer}>
         <Button
           title={t("addProfile.continue")}
-          disabled={!age || !height || !weight || !gender}
+          disabled={!goalweight || !goalweightchange}
           onPress={() => save()}
         />
       </View>

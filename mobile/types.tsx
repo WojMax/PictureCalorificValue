@@ -15,6 +15,7 @@ export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
   Camera: undefined;
   AddProfile: undefined;
+  AddObjective: undefined;
   Settings: undefined;
 };
 
