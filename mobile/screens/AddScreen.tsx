@@ -37,7 +37,7 @@ export default function AddFormScreen(props: any) {
       try {
         setPhoto(photo.uri ? photo.uri : "");
         const response = await axios.post(
-          "https://wojmax777-0hr199lpmuc56gt4.socketxp.com/predict",
+          "http://52.91.222.4/predict",
           photo.assets[0]
         );
 
