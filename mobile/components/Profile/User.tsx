@@ -15,6 +15,7 @@ export default function User() {
   const dispatch = useAppDispatch();
   const profile = useAppSelector((state) => state.profile.profile);
 
+
   useEffect(() => {
     dispatch(getProfile());
   }, []);
@@ -100,6 +101,20 @@ export default function User() {
               : t("profile.female")}
           </Text>
         </DefaultView>
+        <DefaultView style={styles.inData}>
+        <Text
+          style={{
+            fontSize: 16,
+            paddingRight: 5,
+            color: Colors.general.accentLight,
+          }}
+        >
+          {t("addProfile.activity")}:
+        </Text>
+        <Text style={{ fontSize: 16, color: Colors.general.accentLight }}>
+          {profile?.exercise}
+        </Text>
+      </DefaultView>
       </DefaultView>
     </View>
   );

@@ -26,6 +26,13 @@ export default function AddProfileScreen(props: any) {
   const [weight, setWeight] = useState(profile?.weight.toString() || 0);
   const [height, setHeight] = useState(profile?.height.toString() || 0);
 
+  const [activityID, setActivityID] = useState(1);
+  var arr = ["Sedentary","Lighty active","Moderately active","Active","Very active"]
+  function getIndex(exercise:any) {
+    return arr.findIndex(obj => obj === exercise)+1;
+  }
+  console.log(profile?.exercise.toString())
+
   //dropdown
   const [open, setOpen] = useState(false);
   const [gender, setGender] = useState(profile?.gender || null);
@@ -41,7 +48,7 @@ export default function AddProfileScreen(props: any) {
         age: Number(age),
         height: Number(height),
         weight: Number(weight),
-        activityID: 1, //profile?.activityID,
+        activityID: activityID,
       };
       await HttpApi.post("profile", data);
       dispatch(getProfile());
@@ -98,6 +105,33 @@ export default function AddProfileScreen(props: any) {
         setValue={setGender}
         setItems={setItems}
       />
+      <View style={{ zIndex: -1 }}>
+        <Text style={styles.activity}>{t("addProfile.activity")}</Text>
+        <Slider
+          value={getIndex(profile?.exercise)}
+          onValueChange={setActivityID}
+          maximumValue={5}
+          minimumValue={1}
+          step={1}
+          style={styles.slider}
+          allowTouchTrack
+          trackStyle={{ height: 5, backgroundColor: Colors.general.accent }}
+          thumbStyle={{ height: 20, width: 20, backgroundColor: "transparent" }}
+          thumbProps={{
+            children: (
+              <MaterialIcons name="stop-circle" size={20} color="white" />
+            ),
+          }}
+        />
+        <View style={styles.activityVal}>
+          <Text style={{ color: Colors[colorScheme].textDark }}>
+            {t("addProfile.activity_sed")}
+          </Text>
+          <Text style={{ color: Colors[colorScheme].textDark }}>
+            {t("addProfile.activity_act")}
+          </Text>
+        </View>
+      </View>
       <View style={styles.buttonContainer}>
         <View style={{ margin: 5 }}>
           <Button
@@ -147,5 +181,6 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     flexDirection: "row",
     paddingHorizontal: 10,
+    paddingTop: 20,
   },
 });
