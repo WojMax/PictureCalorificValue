@@ -2,7 +2,7 @@ import ast
 from datetime import date
 
 
-def insert_meals(put_data, userID):
+def insert_meals(cursor, put_data, userID):
     put_data = ast.literal_eval(put_data.decode("UTF-8"))
 
     mealName = put_data["mealName"]
@@ -11,14 +11,19 @@ def insert_meals(put_data, userID):
     dateCreated = put_data["dateCreated"]
     category = put_data["category"]
 
-    SQLquery_user = f'INSERT INTO public.users(user_id, gender, age, height, weight, weekly_exercise) VALUES (\'{userID}\', \'male\', 20, 180, 75, 3) ON CONFLICT DO NOTHING; '
-    SQLquery_meal = 'INSERT INTO public.user_meal_data (user_id, meal_name, calories, meal_weight, date_created, category) VALUES ' \
-                    + f'(\'{userID}\', \'{mealName}\', {caloriesOn100g}, {mealWeight}, \'{dateCreated}\', \'{category}\');'
+    try:
+        cursor.execute("""
+            INSERT INTO public.user_meal_data (user_id, meal_name, calories, meal_weight, date_created, category) 
+            VALUES (%s, %s, %s, %s, %s, %s);
+            """,
+                       (userID, mealName, caloriesOn100g, mealWeight, dateCreated, category))
+        return 1
+    except Exception as error:
+        print(error)
+        return -1
 
-    return SQLquery_user + SQLquery_meal
 
-
-def update_meals(post_data, userID):
+def update_meals(cursor, post_data, userID):
     post_data = ast.literal_eval(post_data.decode("UTF-8"))
 
     mealID = post_data["mealID"]
@@ -26,63 +31,92 @@ def update_meals(post_data, userID):
     caloriesOn100g = post_data["caloriesOn100g"]
     mealWeight = post_data["mealWeight"]
 
-    SQLquery = f'UPDATE public.user_meal_data\n' \
-               f'SET meal_name=\'{mealName}\', calories={caloriesOn100g}, meal_weight={mealWeight}\n' \
-               f'WHERE id = {mealID} AND user_id = \'{userID}\';'
+    try:
+        cursor.execute("""
+            UPDATE public.user_meal_data
+            SET meal_name = %s, calories = %s, meal_weight = %s 
+            WHERE id = %s AND user_id = %s;
+            """,
+                       (mealName, caloriesOn100g, mealWeight, mealID, userID))
+        return 1
+    except Exception as error:
+        print(error)
+        return -1
 
-    return SQLquery
 
-
-def delete_meals(delete_data):
+def delete_meals(cursor, delete_data):
     delete_data = ast.literal_eval(delete_data.decode("UTF-8"))["data"]
 
     mealId = delete_data["mealID"]
 
-    SQLquery = f'DELETE FROM public.user_meal_data\n' \
-               f'WHERE id = \'{mealId}\';'
+    try:
+        cursor.execute("""
+            DELETE FROM public.user_meal_data
+            WHERE id = %s;
+            """,
+                       (mealId,))
+        return 1
+    except Exception as error:
+        print(error)
+        return -1
 
-    return SQLquery
 
-
-def insert_favourites(put_data, userID):
+def insert_favourites(cursor, put_data, userID):
     put_data = ast.literal_eval(put_data.decode("UTF-8"))
 
     mealName = put_data["mealName"]
     caloriesOn100g = put_data["caloriesOn100g"]
 
-    SQLquery_user = f'INSERT INTO public.users(user_id, gender, age, height, weight, weekly_exercise) VALUES (\'{userID}\', \'male\', 20, 180, 75, 3) ON CONFLICT DO NOTHING; '
-    SQLquery_meal = 'INSERT INTO public.user_favourites_data (user_id, meal_name, calories) VALUES ' \
-                    + f'(\'{userID}\', \'{mealName}\', {caloriesOn100g});'
+    try:
+        cursor.execute("""
+            INSERT INTO public.user_favourites_data (user_id, meal_name, calories) 
+            VALUES (%s, %s, %s);
+            """,
+                       (userID, mealName, caloriesOn100g))
+        return 1
+    except Exception as error:
+        print(error)
+        return -1
 
-    return SQLquery_user + SQLquery_meal
 
-
-def delete_favourites(delete_data):
+def delete_favourites(cursor, delete_data):
     delete_data = ast.literal_eval(delete_data.decode("UTF-8"))["data"]
 
     mealId = delete_data["mealID"]
 
-    SQLquery = f'DELETE FROM public.user_favourites_data\n' \
-               f'WHERE id = \'{mealId}\';'
+    try:
+        cursor.execute("""
+            DELETE FROM public.user_favourites_data 
+            WHERE id = %s;
+            """,
+                       (mealId,))
+        return 1
+    except Exception as error:
+        print(error)
+        return -1
 
-    return SQLquery
 
-
-def update_favourites(post_data, userID):
+def update_favourites(cursor, post_data, userID):
     post_data = ast.literal_eval(post_data.decode("UTF-8"))
 
     mealID = post_data["mealID"]
     mealName = post_data["mealName"]
     caloriesOn100g = post_data["caloriesOn100g"]
 
-    SQLquery = f'UPDATE public.user_favourites_data\n' \
-               f'SET meal_name=\'{mealName}\', calories={caloriesOn100g}\n' \
-               f'WHERE id = {mealID} AND user_id = \'{userID}\';'
+    try:
+        cursor.execute("""
+            UPDATE public.user_favourites_data
+            SET meal_name = %s, calories = %s 
+            WHERE id = %s AND user_id = %s;
+            """,
+                       (mealName, caloriesOn100g, mealID, userID))
+        return 1
+    except Exception as error:
+        print(error)
+        return -1
 
-    return SQLquery
 
-
-def insert_user_data(put_data, userID):
+def insert_user_data(cursor, put_data, userID):
     put_data = ast.literal_eval(put_data.decode("UTF-8"))
 
     gender = put_data["gender"]
@@ -92,25 +126,29 @@ def insert_user_data(put_data, userID):
     weekly_exercise = put_data["activityID"]
     goal_weight = put_data["goal_weight"]
     goal_weight_change = put_data["goal_weight_change"]
-    print(put_data)
+
     if goal_weight.lower() == 'null' or goal_weight is None:
         goal_weight = weight
         goal_weight_change = 0
 
     current_date = date.today()
 
-    SQLquery_user = 'INSERT INTO public.users(user_id, gender, age, height, weight, weekly_exercise, goal_weight, ' \
-                    'goal_weight_change) VALUES ' \
-                    + f'(\'{userID}\', \'{gender}\', {age}, {height}, {weight}, {weekly_exercise}, {goal_weight}, ' \
-                      f'{goal_weight_change}); '
-    SQLquery_user_weight_history = f'''INSERT INTO public.user_weight_history(user_id, weight, weight_date)
-                                                VALUES ('{userID}', {weight}, '{current_date}');'''
-    print(SQLquery_user)
-    print(SQLquery_user_weight_history)
-    return SQLquery_user + SQLquery_user_weight_history
+    try:
+        cursor.execute("""
+            INSERT INTO public.users(user_id, gender, age, height, weight, weekly_exercise, goal_weight, goal_weight_change) 
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s);
+            
+            INSERT INTO public.user_weight_history(user_id, weight, weight_date)
+            VALUES (%s, %s, %s);
+            """,
+                       (userID, gender, age, height, weight, weekly_exercise, goal_weight, goal_weight_change, userID, weight, current_date))
+        return 1
+    except Exception as error:
+        print(error)
+        return -1
 
 
-def update_user_data(post_data, userID, already_inserted, current_date):
+def update_user_data(cursor, post_data, userID, already_inserted, current_date):
     post_data = ast.literal_eval(post_data.decode("UTF-8"))
 
     gender = post_data["gender"]
@@ -120,47 +158,91 @@ def update_user_data(post_data, userID, already_inserted, current_date):
     weekly_exercise = post_data["activityID"]
 
     if already_inserted == 0:
-        SQLquery_user_weight_history = f'''INSERT INTO public.user_weight_history(user_id, weight, weight_date)
-                                            VALUES ('{userID}', {weight}, '{current_date}');'''
+        try:
+            cursor.execute("""
+                INSERT INTO public.user_weight_history(user_id, weight, weight_date)
+                VALUES (%s, %s, %s);
+                
+                UPDATE public.users
+                SET gender = %s, age = %s, height = %s, weight = %s, weekly_exercise = %s
+                WHERE user_id = %s;
+                """,
+                           (userID, weight, current_date, gender, age, height, weight, weekly_exercise, userID))
+            return 1
+        except Exception as error:
+            print(error)
+            return -1
     else:
-        SQLquery_user_weight_history = f'''UPDATE public.user_weight_history
-                                            SET weight={weight}
-                                            WHERE user_id = '{userID}' AND weight_date = '{current_date}';'''
+        try:
+            cursor.execute("""
+                UPDATE public.user_weight_history
+                SET weight = %s
+                WHERE user_id = %s AND weight_date = %s;
 
-    SQLquery_user_data = f'''UPDATE public.users
-                    SET gender='{gender}', age={age}, height={height}, weight={weight}, weekly_exercise={weekly_exercise}
-                    WHERE user_id = '{userID}';'''
+                UPDATE public.users
+                SET gender = %s, age = %s, height = %s, weight = %s, weekly_exercise = %s
+                WHERE user_id = %s;
+                """,
+                           (weight, userID, current_date, gender, age, height, weight, weekly_exercise, userID))
+            return 1
+        except Exception as error:
+            print(error)
+            return -1
 
-    return SQLquery_user_data + SQLquery_user_weight_history
 
-
-def insert_weight_history(put_data, userID, already_inserted):
+def insert_weight_history(cursor, put_data, userID, already_inserted):
     put_data = ast.literal_eval(put_data.decode("UTF-8"))
 
     weight = put_data["weight"]
     date = put_data["date"]
 
     if already_inserted == 0:
-        SQLquery_user_weight_history = f'''INSERT INTO public.user_weight_history(user_id, weight, weight_date)
-                                            VALUES ('{userID}', {weight}, '{date}');'''
+        try:
+            cursor.execute("""
+                INSERT INTO public.user_weight_history(user_id, weight, weight_date)
+                VALUES (%s, %s, %s);
+
+                UPDATE public.users
+                SET weight = %s
+                WHERE user_id = %s;
+                """,
+                           (userID, weight, date, weight, userID))
+            return 1
+        except Exception as error:
+            print(error)
+            return -1
     else:
-        SQLquery_user_weight_history = f'''UPDATE public.user_weight_history
-                                            SET weight={weight}
-                                            WHERE user_id = '{userID}' AND weight_date = '{date}';'''
-    SQLquery_user = f'''UPDATE public.users
-                        SET weight={weight}
-                        WHERE user_id = '{userID}';'''
+        try:
+            cursor.execute("""
+                UPDATE public.user_weight_history
+                SET weight = %s
+                WHERE user_id = %s AND weight_date = %s;
 
-    return SQLquery_user_weight_history + SQLquery_user
+                UPDATE public.users
+                SET weight = %s
+                WHERE user_id = %s;
+                """,
+                           (weight, userID, date, weight, userID))
+            return 1
+        except Exception as error:
+            print(error)
+            return -1
 
 
-def update_goals(post_data, userID):
+def update_goals(cursor, post_data, userID):
     post_data = ast.literal_eval(post_data.decode("UTF-8"))
 
     goal_weight_change = post_data["goal_weight_change"]
     goal_weight = post_data["goal_weight"]
 
-    SQLquery = f'''UPDATE public.users
-                    SET goal_weight_change='{goal_weight_change}', goal_weight={goal_weight}
-                    WHERE user_id = '{userID}';'''
-    return SQLquery
+    try:
+        cursor.execute("""
+            UPDATE public.users
+            SET goal_weight_change = %s, goal_weight = %s 
+            WHERE user_id = %s;
+            """,
+                       (goal_weight_change, goal_weight, userID))
+        return 1
+    except Exception as error:
+        print(error)
+        return -1

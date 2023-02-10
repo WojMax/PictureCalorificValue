@@ -43,7 +43,7 @@ def index():
 @cross_origin()
 def get_meal(date):
     if request.method == 'GET':
-        connection = connect_to_db()
+        connection = connect_to_db(keys)
         cursor = connection.cursor()
         try:
             user = Middleware.get_user_ID(application.wsgi_app)
@@ -78,10 +78,10 @@ def get_meal(date):
 @cross_origin()
 def meal():
     if request.method == 'PUT':
-        connection = connect_to_db()
+        connection = connect_to_db(keys)
         cursor = connection.cursor()
         try:
-            cursor.execute(insert_meals(request.data, Middleware.get_user_ID(application.wsgi_app)))
+            insert_meals(cursor, request.data, Middleware.get_user_ID(application.wsgi_app))
             connection.commit()
             print("successful sql statement")
             cursor.close()
@@ -95,10 +95,10 @@ def meal():
             connection.close()
             return make_response(jsonify({'code': 'FAILURE'}), 500)
     if request.method == 'POST':
-        connection = connect_to_db()
+        connection = connect_to_db(keys)
         cursor = connection.cursor()
         try:
-            cursor.execute(update_meals(request.data, Middleware.get_user_ID(application.wsgi_app)))
+            update_meals(cursor, request.data, Middleware.get_user_ID(application.wsgi_app))
             connection.commit()
             print("successfull sql statement")
             cursor.close()
@@ -112,10 +112,10 @@ def meal():
             connection.close()
             return make_response(jsonify({'code': 'FAILURE'}), 500)
     if request.method == 'PATCH':
-        connection = connect_to_db()
+        connection = connect_to_db(keys)
         cursor = connection.cursor()
         try:
-            cursor.execute(delete_meals(request.data))
+            delete_meals(cursor, request.data)
             connection.commit()
             print("successful sql statement")
             cursor.close()
@@ -135,7 +135,7 @@ def meal():
 @cross_origin()
 def favourites():
     if request.method == 'GET':
-        connection = connect_to_db()
+        connection = connect_to_db(keys)
         cursor = connection.cursor()
         try:
             user = Middleware.get_user_ID(application.wsgi_app)
@@ -166,10 +166,10 @@ def favourites():
 
     if request.method == 'PUT':
         # add new favourite meal
-        connection = connect_to_db()
+        connection = connect_to_db(keys)
         cursor = connection.cursor()
         try:
-            cursor.execute(insert_favourites(request.data, Middleware.get_user_ID(application.wsgi_app)))
+            insert_favourites(cursor, request.data, Middleware.get_user_ID(application.wsgi_app))
             connection.commit()
             print("successful sql statement")
             cursor.close()
@@ -185,10 +185,10 @@ def favourites():
 
     elif request.method == 'PATCH':
         # delete favourite meal
-        connection = connect_to_db()
+        connection = connect_to_db(keys)
         cursor = connection.cursor()
         try:
-            cursor.execute(delete_favourites(request.data))
+            delete_favourites(cursor, request.data)
             connection.commit()
             print("successful sql statement")
             cursor.close()
@@ -204,10 +204,10 @@ def favourites():
 
     elif request.method == 'POST':
         # change favourite meal data
-        connection = connect_to_db()
+        connection = connect_to_db(keys)
         cursor = connection.cursor()
         try:
-            cursor.execute(update_favourites(request.data, Middleware.get_user_ID(application.wsgi_app)))
+            update_favourites(cursor, request.data, Middleware.get_user_ID(application.wsgi_app))
             connection.commit()
             print("successful sql statement")
             cursor.close()
@@ -229,7 +229,7 @@ def favourites():
 @cross_origin()
 def popular(lang):
     if request.method == 'GET':
-        connection = connect_to_db()
+        connection = connect_to_db(keys)
         cursor = connection.cursor()
         try:
             cursor.execute(
@@ -266,7 +266,7 @@ def popular(lang):
 @cross_origin()
 def caloric_demand():
     if request.method == 'GET':
-        connection = connect_to_db()
+        connection = connect_to_db(keys)
         cursor = connection.cursor()
         try:
             user = Middleware.get_user_ID(application.wsgi_app)
@@ -307,7 +307,7 @@ def caloric_demand():
 @cross_origin()
 def profile_get(lang):
     if request.method == 'GET':
-        connection = connect_to_db()
+        connection = connect_to_db(keys)
         cursor = connection.cursor()
         try:
             user = Middleware.get_user_ID(application.wsgi_app)
@@ -344,10 +344,10 @@ def profile_get(lang):
 @cross_origin()
 def profile():
     if request.method == 'PUT':
-        connection = connect_to_db()
+        connection = connect_to_db(keys)
         cursor = connection.cursor()
         try:
-            cursor.execute(insert_user_data(request.data, Middleware.get_user_ID(application.wsgi_app)))
+            insert_user_data(cursor, request.data, Middleware.get_user_ID(application.wsgi_app))
             connection.commit()
             print("successful sql statement")
             cursor.close()
@@ -362,7 +362,7 @@ def profile():
             return make_response(jsonify({'code': 'FAILURE'}), 500)
 
     elif request.method == 'POST':
-        connection = connect_to_db()
+        connection = connect_to_db(keys)
         cursor = connection.cursor()
         try:
             user = Middleware.get_user_ID(application.wsgi_app)
@@ -380,7 +380,7 @@ def profile():
             cursor.close()
 
             cursor = connection.cursor()
-            cursor.execute(update_user_data(request.data, user, already_inserted, current_date))
+            update_user_data(cursor, request.data, user, already_inserted, current_date)
             connection.commit()
             print("successful sql statement")
             cursor.close()
@@ -402,7 +402,7 @@ def profile():
 @cross_origin()
 def get_weight():
     if request.method == 'GET':
-        connection = connect_to_db()
+        connection = connect_to_db(keys)
         cursor = connection.cursor()
         try:
             user = Middleware.get_user_ID(application.wsgi_app)
@@ -432,7 +432,7 @@ def get_weight():
             return jsonify(sqlfetch_to_json_user_weight(values=user_weight_data))
 
     elif request.method == 'PUT':
-        connection = connect_to_db()
+        connection = connect_to_db(keys)
         cursor = connection.cursor()
         try:
             user = Middleware.get_user_ID(application.wsgi_app)
@@ -451,7 +451,7 @@ def get_weight():
             cursor.close()
 
             cursor = connection.cursor()
-            cursor.execute(insert_weight_history(request.data, user, already_inserted))
+            insert_weight_history(cursor, request.data, user, already_inserted)
             connection.commit()
             print("successful sql statement")
             cursor.close()
@@ -471,10 +471,10 @@ def get_weight():
 @cross_origin()
 def goal():
     if request.method == 'POST':
-        connection = connect_to_db()
+        connection = connect_to_db(keys)
         cursor = connection.cursor()
         try:
-            cursor.execute(update_goals(request.data, Middleware.get_user_ID(application.wsgi_app)))
+            update_goals(cursor, request.data, Middleware.get_user_ID(application.wsgi_app))
             connection.commit()
             print("successfull sql statement")
             cursor.close()
