@@ -29,7 +29,7 @@ export default function AddFormScreen(props: any) {
     const photo = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [3, 2],
+      aspect: [1, 1],
       base64: true,
     });
     if (!photo.canceled) {

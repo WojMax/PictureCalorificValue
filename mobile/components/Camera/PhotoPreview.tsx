@@ -16,7 +16,10 @@ type Props = {
 
 export default function Preview(props: Props) {
   return (
-    <ImageBackground source={{ uri: props.uri }} style={styles.container}>
+    <ImageBackground
+      source={{ uri: props.uri }}
+      style={[styles.container, { width: "100%" }]}
+    >
       <View style={styles.container}>
         <View style={styles.caloriesTopContainer} />
         <View style={styles.caloriesMidContainer}>
