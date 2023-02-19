@@ -49,7 +49,7 @@ export default function CalorieCamera(props: any) {
     setScreen("loading");
     setPhoto(photo.uri);
     try {
-      const response = await axios.post("http://52.91.222.4/predict", photo);
+      const response = await axios.post("http://44.205.200.87/predict", photo);
       if (response.data.category === null) {
         setScreen("error");
       } else {

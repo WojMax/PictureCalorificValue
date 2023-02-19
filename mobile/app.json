@@ -2,7 +2,7 @@
   "expo": {
     "name": "Calera",
     "slug": "calera",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -37,7 +37,8 @@
         "android.permission.RECORD_AUDIO"
       ],
       "package": "com.calera1",
-      "softwareKeyboardLayoutMode":"pan"
+      "softwareKeyboardLayoutMode":"pan",
+      "versionCode": 3
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
