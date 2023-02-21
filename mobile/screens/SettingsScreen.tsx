@@ -11,6 +11,7 @@ import Colors from "../constants/Colors";
 import Switch from "../elements/Switch";
 import { Auth } from "aws-amplify";
 import { getMPMeals } from "../redux/mostPopularSlice";
+import { getProfile } from "../redux/profileSlice";
 
 export default function SettingsScreen() {
   const dispatch = useAppDispatch();
@@ -41,6 +42,7 @@ export default function SettingsScreen() {
     await SecureStore.setItemAsync("lang", userLang);
     setLang(userLang);
     dispatch(getMPMeals());
+    dispatch(getProfile());
   };
 
   const changeColorScheme = async () => {

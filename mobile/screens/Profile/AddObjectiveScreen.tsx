@@ -19,7 +19,6 @@ export default function AddProfileScreen(props: any) {
 
   const [goalweight, setGoalWeight] = useState(0);
   const [goalweightchange, setGoalWeightChange] = useState(0.1);
-  
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
@@ -59,7 +58,7 @@ export default function AddProfileScreen(props: any) {
         keyboardType={"numeric"}
         onChangeText={(value: number) => setGoalWeight(value)}
       />
-      
+
       <View style={{ zIndex: -1 }}>
         <Text style={styles.activity}>{t("addProfile.goalWeightChange")}</Text>
         <Slider
@@ -87,7 +86,6 @@ export default function AddProfileScreen(props: any) {
           </Text>
         </View>
       </View>
-      
 
       <View style={styles.buttonContainer}>
         <Button
@@ -126,7 +124,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     paddingHorizontal: 10,
-    marginBottom: 10
+    marginBottom: 10,
   },
   slider: {
     color: Colors.general.accent,
