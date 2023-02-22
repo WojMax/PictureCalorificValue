@@ -26,12 +26,14 @@ export default function AddProfileScreen(props: any) {
   const [weight, setWeight] = useState(profile?.weight.toString() || 0);
   const [height, setHeight] = useState(profile?.height.toString() || 0);
 
-  const [activityID, setActivityID] = useState(1);
-  var arr = ["Sedentary","Lighty active","Moderately active","Active","Very active"]
+  const [activityID, setActivityID] = useState(profile?.activityID || 1);
+  var arr = ["Sedentary","Lighty","Moderately","Active","Very active"]
   function getIndex(exercise:any) {
     return arr.findIndex(obj => obj === exercise)+1;
   }
-  console.log(profile?.exercise.toString())
+
+  
+
 
   //dropdown
   const [open, setOpen] = useState(false);
@@ -40,6 +42,13 @@ export default function AddProfileScreen(props: any) {
     { label: t("profile.male"), value: "male" },
     { label: t("profile.female"), value: "female" },
   ]);
+
+  if (gender == 'mężczyzna'){
+    setGender('male')
+  }
+  else if (gender == 'kobieta'){
+    setGender('female')
+  }
 
   const edit = async () => {
     try {
@@ -108,7 +117,7 @@ export default function AddProfileScreen(props: any) {
       <View style={{ zIndex: -1 }}>
         <Text style={styles.activity}>{t("addProfile.activity")}</Text>
         <Slider
-          value={getIndex(profile?.exercise)}
+          value={profile?.activityID}
           onValueChange={setActivityID}
           maximumValue={5}
           minimumValue={1}
