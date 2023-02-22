@@ -14,3 +14,4 @@ web-build/
 /server/AWS/secrets.json
 # macOS
 .DS_Store
+/mobile/src/aws-exports.js

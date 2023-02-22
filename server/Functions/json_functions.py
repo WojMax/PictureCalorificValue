@@ -101,16 +101,16 @@ def sqlfetch_to_json_profile(values, language):
             gender = 'kobieta'
 
         if exercise == 'Sedentary':
-            exercise = 'Siedzący tryb życia'
-        elif exercise == 'Lightly active':
-            exercise = 'Lekko aktywny'
-        elif exercise == 'Moderately active':
-            exercise = 'Średnio aktywny'
+            exercise = 'Brak'
+        elif exercise == 'Lightly':
+            exercise = 'Mała'
+        elif exercise == 'Moderately':
+            exercise = 'Umiarkowana'
         elif exercise == 'Active':
-            exercise = 'Aktywny'
+            exercise = 'Duża'
         elif exercise == 'Very active':
-            exercise = 'Bardzo aktywny'
+            exercise = 'Bardzo duża'
 
     json_to_send = f'{{"gender":"{gender}", "age":{str(values[0][1])}, "height":{str(values[0][2])}, "weight":{str(values[0][3])}, "exercise":"{exercise}", "goal_weight":{str(values[0][5])}, "goal_weight_change":{str(values[0][6])}, "goal":"{goal}"}}'
-
+    print(json_to_send)
     return json.loads(json_to_send)
