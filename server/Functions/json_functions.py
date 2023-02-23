@@ -95,10 +95,10 @@ def sqlfetch_to_json_profile(values, language):
             goal = 'gain weight'
 
     if language == 'pl':
-        if gender == 'male':
-            gender = 'mężczyzna'
+        if gender.lower() == 'male':
+            gender = 'Mężczyzna'
         else:
-            gender = 'kobieta'
+            gender = 'Kobieta'
 
         if exercise == 'Sedentary':
             exercise = 'Brak'
