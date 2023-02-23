@@ -32,7 +32,6 @@ export default function AddFormScreen(props: any) {
   const [weight, setWeight] = useState(0);
 
   const save = async () => {
-    console.log(category);
     const date = new Date(selectedDate);
     const transformedDate =
       date.getUTCFullYear() +

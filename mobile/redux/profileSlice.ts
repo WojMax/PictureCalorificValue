@@ -36,7 +36,7 @@ export const getWeightList = createAsyncThunk("getWeightList", async () => {
     response.data.forEach((value: { weight: number; weight_date: string }) => {
       if (value.weight && value.weight_date) {
         chartWeights.push(value.weight);
-        chartDates.push(value.weight_date);
+        chartDates.push(value.weight_date.slice(-5));
       }
     });
     return { chartDates, chartWeights };

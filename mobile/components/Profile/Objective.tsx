@@ -14,7 +14,6 @@ export default function Objective() {
   const colorScheme = useColorScheme();
   const profile = useAppSelector((state) => state.profile.profile);
   const caloricDemand = useAppSelector((state) => state.profile.caloricDemand);
-
   return (
     <View
       style={[
@@ -48,11 +47,7 @@ export default function Objective() {
           </Text>
         </Text>
         <Text style={styles.goalText}>
-          {profile?.goal === "lose weight"
-            ? t("profile.objective2")
-            : profile?.goal === "gain weight"
-            ? t("profile.objective3")
-            : t("profile.objective1")}
+          {profile?.goal}
         </Text>
         <Text style={styles.caloriesText}>
           {t("profile.objective_calories")}

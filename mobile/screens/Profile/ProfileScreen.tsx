@@ -24,7 +24,7 @@ import t from "../../services/translations";
 
 export default function ProfileScreen(props: any) {
   const colorScheme = useColorScheme();
-  const weightchange = useAppSelector((state) => state.profile.profile?.goal_weight_change)
+  const weightchange = useAppSelector((state) => state.profile.profile?.goal_weight_change || 1)
   const [weightDialog, setWeightDialog] = useState(false);
   const [weight, setWeight] = useState(0);
   const [goalDialog, setGoalDialog] = useState(false);
