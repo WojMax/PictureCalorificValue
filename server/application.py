@@ -313,7 +313,7 @@ def profile_get(lang):
             user = Middleware.get_user_ID(application.wsgi_app)
             cursor.execute(
                 f'''SELECT 
-                        U.gender, U.age, U.height, U.weight, E.name, U.goal_weight, U.goal_weight_change
+                        U.gender, U.age, U.height, U.weight, E.name, U.goal_weight, U.goal_weight_change, E.id
                     FROM 
                         public.users U 
                     INNER JOIN 

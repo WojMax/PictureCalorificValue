@@ -105,12 +105,12 @@ def sqlfetch_to_json_profile(values, language):
         elif exercise == 'Lightly':
             exercise = 'Mała'
         elif exercise == 'Moderately':
-            exercise = 'Umiarkowana'
+            exercise = 'Średnia'
         elif exercise == 'Active':
             exercise = 'Duża'
         elif exercise == 'Very active':
-            exercise = 'Bardzo duża'
+            exercise = 'Znaczna'
 
-    json_to_send = f'{{"gender":"{gender}", "age":{str(values[0][1])}, "height":{str(values[0][2])}, "weight":{str(values[0][3])}, "exercise":"{exercise}", "goal_weight":{str(values[0][5])}, "goal_weight_change":{str(values[0][6])}, "goal":"{goal}"}}'
+    json_to_send = f'{{"gender":"{gender}", "age":{str(values[0][1])}, "height":{str(values[0][2])}, "weight":{str(values[0][3])}, "exercise":"{exercise}", "goal_weight":{str(values[0][5])}, "goal_weight_change":{str(values[0][6])}, "goal":"{goal}", "activityID":{str(values[0][7])}}} '
     print(json_to_send)
     return json.loads(json_to_send)
